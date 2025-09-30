@@ -15,3 +15,13 @@ XianLai 是一款基于 Vue3 + ElementPlus 和 Spring Cloud Alibaba 的开源、
 ## 前端技术栈
 
 `Vue.js 3.5.12`，`Element Plus 2.9.0`，`Vite 5.4.10`，`Vue Router 4.4.5`，`Pina 2.2.4`，`Sass 1.80.6`，`sass-loader 16.0.3`，`ESLint 9.13.0`，`Prettier 3.3.3`，`Axios 1.7.7`，`vite-awesome-svg-loader 1.3.5`等。
+
+## 开发手册
+
+### 工程开发常用命令
+
+1. `npm install` - 本地安装工程
+2. `npm run dev` - 本地开发态编译运行
+3. `npm run format` - 格式化所有代码
+4. `npm run lint` - 语法和编码规范校验
+5. `npm run build` - 编译和构建
