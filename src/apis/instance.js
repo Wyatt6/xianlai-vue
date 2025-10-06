@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useSystemStore } from '@/stores/system'
-import { useOptionStore } from '@/stores/option'
+import { useSysOptionStore } from '@/stores/sys_option'
 import router from '@/router'
 import Token from '@/utils/token'
 import Logger from '@/utils/logger'
@@ -10,12 +10,12 @@ import { notEmpty } from '@/utils/common'
 
 export function createAxiosInstance() {
   const System = useSystemStore()
-  const Option = useOptionStore()
+  const SysOption = useSysOptionStore()
 
   //axios 配置详见：https://www.axios-http.cn/docs/req_config
   const instance = axios.create({
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    timeout: Option.data.request.timeout
+    timeout: SysOption.data.request.timeout
     // ...其他配置使用axios的默认值
   })
 
@@ -59,7 +59,7 @@ export function createAxiosInstance() {
       const result = response.data
       RequestLogger.receive.info(config, result)
 
-      if (notEmpty(result.data) && notEmpty(result.data.checksum) && !System.checkChecksum(System.checksum, result.data.checksum)) {
+      if (notEmpty(result.data) && notEmpty(result.data.checksum) && System.isChecksumChange(result.data.checksum)) {
         Logger.log('初始化数据checksum发生变化，重新获取初始化数据')
         await System.initialize()
       }

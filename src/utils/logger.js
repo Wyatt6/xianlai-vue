@@ -1,8 +1,8 @@
-import { useOptionStore } from '@/stores/option'
+import { useSysOptionStore } from '@/stores/sys_option'
 
 export default {
   log: (...args) => {
-    if (useOptionStore().data.console.openLog) {
+    if (useSysOptionStore().data.console.openLog) {
       console.log(...args)
     }
   }

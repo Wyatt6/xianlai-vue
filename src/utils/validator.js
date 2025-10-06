@@ -1,11 +1,11 @@
-import { useOptionStore } from '@/stores/option'
+import { useSysOptionStore } from '@/stores/sys_option'
 
 const usernameValidator = () => {
-  const Option = useOptionStore()
+  const SysOption = useSysOptionStore()
   return (rule, value, callback) => {
-    const regexp = new RegExp(`${Option.data.user.username.regexp}`)
+    const regexp = new RegExp(`${SysOption.data.user.username.regexp}`)
     if (!regexp.test(value)) {
-      callback(new Error(Option.data.user.username.tips))
+      callback(new Error(SysOption.data.user.username.tips))
     } else {
       callback()
     }
@@ -13,11 +13,11 @@ const usernameValidator = () => {
 }
 
 const passwordValidator = () => {
-  const Option = useOptionStore()
+  const SysOption = useSysOptionStore()
   return (rule, value, callback) => {
-    const regexp = new RegExp(`${Option.data.user.password.regexp}`)
+    const regexp = new RegExp(`${SysOption.data.user.password.regexp}`)
     if (!regexp.test(value)) {
-      callback(new Error(Option.data.user.password.tips))
+      callback(new Error(SysOption.data.user.password.tips))
     } else {
       callback()
     }
@@ -47,9 +47,9 @@ const emailValidator = () => {
 }
 
 const captchaValidator = () => {
-  const Option = useOptionStore()
+  const SysOption = useSysOptionStore()
   return (rule, value, callback) => {
-    const regexp = new RegExp(`^[a-zA-Z0-9]{${Option.data.captcha.length}}$`)
+    const regexp = new RegExp(`^[a-zA-Z0-9]{${SysOption.data.captcha.length}}$`)
     if (!regexp.test(value)) {
       callback(new Error('验证码格式不正确'))
     } else {

@@ -4,7 +4,7 @@
       <div>
         <h2>使用条款</h2>
       </div>
-      <div v-html="Option.data.content.termsOfUse"></div>
+      <div v-html="SysOption.data.content.termsOfUse"></div>
     </el-scrollbar>
     <template #footer>
       <el-button type="primary" @click="onClose">确定</el-button>
@@ -13,9 +13,9 @@
 </template>
 
 <script setup>
-import { useOptionStore } from '@/stores/option'
+import { useSysOptionStore } from '@/stores/sys_option'
 
-const Option = useOptionStore()
+const SysOption = useSysOptionStore()
 
 defineProps({
   show: {

@@ -2,35 +2,16 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
-import { useOptionStore } from './option'
+import { useSysOptionStore } from './sys_option'
 import { useApiStore } from '@/apis'
 
 export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
-  const data = ref({})
-  const checksum = ref({})
+  const initData = ref({})
 
   function initFail() {
     document.getElementById('init').style.display = 'none'
     document.getElementById('initFail').style.display = 'flex'
-  }
-
-  function checkChecksum(oldChecksum, newChecksum) {
-    const newKeys = Object.keys(newChecksum)
-    for (let i = 0; i < newKeys.length; i++) {
-      const k = newKeys[i]
-      if (!hasText(oldChecksum[k]) || oldChecksum[k] !== newChecksum[k]) {
-        return false
-      }
-    }
-    const oldKeys = Object.keys(oldChecksum)
-    for (let i = 0; i < oldKeys.length; i++) {
-      const k = oldKeys[i]
-      if (!hasText(newChecksum[k]) || newChecksum[k] !== oldChecksum[k]) {
-        return false
-      }
-    }
-    return true
   }
 
   async function initialize(app) {
@@ -45,11 +26,10 @@ export const useSystemStore = defineStore('system', () => {
         .then(async response => {
           const result = response.data
           if (result.success) {
-            if (notEmpty(result.checksum) && notEmpty(result.data)) {
-              data.value = result.data
-              checksum.value = result.checksum
-              if (hasText(result.checksum.options) && notEmpty(result.data.options)) {
-                await useOptionStore().evalData(result.checksum.options, result.data.options)
+            if (notEmpty(result.data) && notEmpty(result.data.checksum)) {
+              initData.value = result.data
+              if (notEmpty(result.data.options) && hasText(result.data.checksum.sysOptionsChecksum)) {
+                await useSysOptionStore().evalData(result.data.options, result.data.checksum.sysOptionsChecksum)
               }
             }
           } else {
@@ -72,13 +52,35 @@ export const useSystemStore = defineStore('system', () => {
     if (app != null) app.mount('#app')
   }
 
+  function getChecksums() {
+    return initData.value.checksum
+  }
+
+  function isChecksumChange(newChecksum) {
+    const oldChecksum = getChecksums()
+    const newKeys = Object.keys(newChecksum)
+    for (let i = 0; i < newKeys.length; i++) {
+      const k = newKeys[i]
+      if (!hasText(oldChecksum[k]) || oldChecksum[k] !== newChecksum[k]) {
+        return true
+      }
+    }
+    const oldKeys = Object.keys(oldChecksum)
+    for (let i = 0; i < oldKeys.length; i++) {
+      const k = oldKeys[i]
+      if (!hasText(newChecksum[k]) || newChecksum[k] !== oldChecksum[k]) {
+        return true
+      }
+    }
+    return false
+  }
+
   async function resetStoreAndStorage() {}
 
   return {
-    data,
-    checksum,
+    initData,
     initialize,
     resetStoreAndStorage,
-    checkChecksum
+    isChecksumChange
   }
 })
