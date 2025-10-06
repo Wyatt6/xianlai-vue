@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
 import { useOptionStore } from './option'
+import { useApiStore } from '@/apis'
 
 export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
@@ -12,6 +13,24 @@ export const useSystemStore = defineStore('system', () => {
   function initFail() {
     document.getElementById('init').style.display = 'none'
     document.getElementById('initFail').style.display = 'flex'
+  }
+
+  function checkChecksum(oldChecksum, newChecksum) {
+    const newKeys = Object.keys(newChecksum)
+    for (let i = 0; i < newKeys.length; i++) {
+      const k = newKeys[i]
+      if (!hasText(oldChecksum[k]) || oldChecksum[k] !== newChecksum[k]) {
+        return false
+      }
+    }
+    const oldKeys = Object.keys(oldChecksum)
+    for (let i = 0; i < oldKeys.length; i++) {
+      const k = oldKeys[i]
+      if (!hasText(newChecksum[k]) || newChecksum[k] !== oldChecksum[k]) {
+        return false
+      }
+    }
+    return true
   }
 
   async function initialize(app) {
@@ -47,12 +66,19 @@ export const useSystemStore = defineStore('system', () => {
         })
     }
 
+    // 加载接口对象
+    useApiStore().evalData()
+
     if (app != null) app.mount('#app')
   }
+
+  async function resetStoreAndStorage() {}
 
   return {
     data,
     checksum,
-    initialize
+    initialize,
+    resetStoreAndStorage,
+    checkChecksum
   }
 })
