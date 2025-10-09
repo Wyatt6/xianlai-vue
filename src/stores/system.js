@@ -4,6 +4,7 @@ import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
 import { useSysOptionStore } from './sys_option'
+import { useApiStore } from '@/apis'
 
 export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
@@ -45,6 +46,9 @@ export const useSystemStore = defineStore('system', () => {
           initing.value = false
         })
     }
+
+    // 加载接口对象
+    useApiStore().evalData()
 
     Logger.log('系统初始化完成')
     if (app != null) app.mount('#app')

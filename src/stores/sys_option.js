@@ -12,6 +12,9 @@ export const useSysOptionStore = defineStore('sysOption', () => {
   const data = ref({
     console: {
       openLog: true
+    },
+    request: {
+      timeout: 10000
     }
   })
   const checksum = ref(null)
