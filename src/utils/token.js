@@ -5,7 +5,7 @@ import Storage from './storage'
  * @param {*} token token令牌值
  */
 function setToken(token) {
-  Storage.set(Storage.keys.TOKEN, token)
+  Storage.set(Storage.keys.TOKEN_KEY, token)
 }
 
 /**
@@ -13,7 +13,7 @@ function setToken(token) {
  * @returns token令牌值
  */
 function getToken() {
-  return Storage.get(Storage.keys.TOKEN)
+  return Storage.get(Storage.keys.TOKEN_KEY)
 }
 
 /**
@@ -29,7 +29,7 @@ function hasToken() {
  * @param {*} expiredTime token过期时间
  */
 function setExpiredTime(expiredTime) {
-  Storage.set(Storage.keys.TOKEN_EXPIRE_TIME, expiredTime)
+  Storage.set(Storage.keys.TOKEN_EXPIRED_TIME_KEY, expiredTime)
 }
 
 /**
@@ -37,7 +37,7 @@ function setExpiredTime(expiredTime) {
  * @returns token过期时间
  */
 function getExpiredTime() {
-  return Storage.get(Storage.keys.TOKEN_EXPIRE_TIME)
+  return Storage.get(Storage.keys.TOKEN_EXPIRED_TIME_KEY)
 }
 
 /**

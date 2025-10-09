@@ -1,5 +1,5 @@
 {
-  "name": "xianlai-vue",
+  "name": "intoeins-web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,6 +17,7 @@
     "pinia": "^2.2.4",
     "sass": "^1.80.6",
     "sass-loader": "^16.0.3",
+    "vite-awesome-svg-loader": "^1.3.5",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   },

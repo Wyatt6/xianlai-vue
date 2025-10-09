@@ -1,0 +1,113 @@
+<template>
+  <el-dialog draggable :model-value="props.show" title="新增权限" @close="onClose">
+    <el-form ref="formRef" :rules="formRules" :model="form" label-width="10rem" label-position="right">
+      <el-form-item label="模块分组">
+        <el-input v-model="form.module" clearable />
+      </el-form-item>
+      <el-form-item label="权限标识" prop="identifier">
+        <el-input v-model="form.identifier" clearable />
+      </el-form-item>
+      <el-form-item label="权限名称">
+        <el-input v-model="form.name" clearable />
+      </el-form-item>
+      <el-form-item label="是否立即生效">
+        <el-switch v-model="form.activated" />
+      </el-form-item>
+      <el-form-item label="备注">
+        <el-input v-model="form.remark" type="textarea" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button type="primary" @click="onConfirm" :loading="loading">确定</el-button>
+      <el-button @click="onClose">取消</el-button>
+    </template>
+  </el-dialog>
+</template>
+
+<script setup>
+import { defineProps, defineEmits, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import Apis from '@/apis'
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+    required: true
+  }
+})
+const emits = defineEmits(['close', 'afterAdd'])
+
+const loading = ref(false)
+const formRef = ref()
+const formRules = ref({
+  identifier: [
+    {
+      required: true,
+      trigger: 'blur', // 移开光标时
+      message: '请输入权限标识'
+    }
+  ]
+})
+const form = ref({
+  module: null,
+  identifier: null,
+  name: null,
+  activated: false,
+  remark: null
+})
+// ----- 监听打开对话框动作 -----
+watch(
+  () => props.show,
+  (value, oldValue) => {
+    if (value === true) {
+      // 初始化
+      form.value.module = null
+      form.value.identifier = null
+      form.value.name = null
+      form.value.activated = false
+      form.value.remark = null
+      loading.value = false
+    }
+  },
+  { immediate: true }
+)
+
+/**
+ * 点击“确定”
+ */
+function onConfirm() {
+  console.groupCollapsed('新增权限')
+  formRef.value.validate(async valid => {
+    if (valid) {
+      console.log('通过表单格式验证')
+      loading.value = true
+      await Apis.iam.permission
+        .addPermission(form.value)
+        .then(res => {
+          if (res && res.success) {
+            console.log('新增权限成功')
+            ElMessage.success('新增权限成功')
+            loading.value = false
+            onClose()
+            emits('afterAdd', res.data.permission.id) // 调用父组件afterAdd事件
+          } else {
+            console.log('新增权限失败')
+            ElMessage.error(res && res.message ? res.message : '新增权限失败')
+          }
+        })
+        .catch(error => {
+          // 异常已统一处理，此处忽略异常
+        })
+      loading.value = false
+    }
+  })
+  console.groupEnd()
+}
+
+// ----- 点击“取消”或关闭对话框 -----
+const onClose = () => {
+  // 调用父组件close事件
+  emits('close')
+}
+</script>

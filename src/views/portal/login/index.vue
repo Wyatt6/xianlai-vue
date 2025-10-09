@@ -2,22 +2,22 @@
   <div class="box-wrap">
     <div class="box-header">
       <div>
-        <span class="title">登录</span>
+        <span class="title">登录 IntoEins</span>
       </div>
       <div>
         <span class="sub-title">没有账号？</span>
-        <span :class="loading ? 'sub-title-link__disabled' : 'sub-title-link'" @click="toRegister()">点此注册</span>
+        <span :class="loading ? 'sub-title-link__disabled' : 'sub-title-link'" @click="toRegister">点此注册</span>
       </div>
     </div>
     <el-form class="form-wrap" ref="formRef" :model="formModel" :rules="formRules" :disabled="loading">
       <el-form-item prop="username">
-        <el-input size="large" placeholder="用户名" v-model="formModel.username" :maxlength="uMaxLen" clearable />
+        <el-input size="large" placeholder="用户名" v-model="formModel.username" maxlength="16" clearable />
       </el-form-item>
       <el-form-item prop="password">
-        <el-input size="large" placeholder="密码" v-model="formModel.password" type="password" :maxlength="pMaxLen" show-password />
+        <el-input size="large" placeholder="密码" v-model="formModel.password" type="password" maxlength="16" show-password />
       </el-form-item>
       <el-form-item prop="captcha">
-        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" :maxlength="SysOption.data.captcha.length" clearable>
+        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" maxlength="5" clearable>
           <template #append>
             <div class="captcha-box">
               <Captcha ref="captchaRef" :loading="loading" />
@@ -30,33 +30,47 @@
       <div>
         <el-checkbox v-model="rememberMe" label="记住我" />
       </div>
-      <div @click="toResetPassword()">
+      <!-- TODO 忘记密码 -->
+      <div @click="ElMessage.warning('功能暂未开放，请联系管理员核实身份')">
         <span class="sub-title-link">已有帐号，忘记密码？</span>
       </div>
     </div>
-    <el-button class="login-btn" type="primary" size="large" :loading="loading" @click="onLogin()">
+    <el-button class="login-btn" type="primary" size="large" :loading="loading" @click="onLogin">
       <span class="login-btn-label">登 录</span>
     </el-button>
+    <el-divider />
+    <div class="footer">
+      <div>
+        <span>&copy; 2025 Wyatt</span>
+      </div>
+      <div>
+        <span>欢迎使用 IntoEins 系统！如有问题，</span>
+        <el-popover trigger="hover" placement="top">
+          <template #reference>
+            <span style="color: #409eff; cursor: pointer">请联系管理员</span>
+          </template>
+          <el-image :src="AdminWechatImg" />
+        </el-popover>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import Captcha from '@/components/Captcha/index.vue'
+import AdminWechatImg from '@/assets/images/admin-wechat.jpg'
 import { ElMessage } from 'element-plus'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import Storage from '@/utils/storage'
+import Routes from '@/router/routes'
 import Validator from '@/utils/validator'
-import Logger from '@/utils/logger'
-import { useSysOptionStore } from '@/stores/sys_option'
-import { useApiStore } from '@/apis'
+import Storage from '@/utils/storage'
+import Apis from '@/apis'
 
-const loading = ref(false)
 const router = useRouter()
+const loading = ref(false)
 const captchaRef = ref()
 const rememberMe = ref(Storage.get(Storage.keys.REMEMBER_USERNAME) != null)
-const SysOption = useSysOptionStore()
-const Api = useApiStore()
 
 const formRef = ref()
 const formModel = ref({
@@ -64,22 +78,18 @@ const formModel = ref({
   password: '',
   captcha: ''
 })
-const uMinLen = SysOption.data.user.username.minLen
-const uMaxLen = SysOption.data.user.username.maxLen
-const pMinLen = SysOption.data.user.password.minLen
-const pMaxLen = SysOption.data.user.password.maxLen
 const formRules = ref({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: uMinLen, max: uMaxLen, message: `长度${uMinLen}至${uMaxLen}位`, trigger: 'change' },
-    { min: uMinLen, max: uMaxLen, message: `长度${uMinLen}至${uMaxLen}位`, trigger: 'blur' },
+    { min: 3, max: 16, message: '长度3至16位', trigger: 'change' },
+    { min: 3, max: 16, message: '长度3至16位', trigger: 'blur' },
     { validator: Validator.username(), trigger: 'change' },
     { validator: Validator.username(), trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: pMinLen, max: pMaxLen, message: `长度${pMinLen}至${pMaxLen}位`, trigger: 'change' },
-    { min: pMinLen, max: pMaxLen, message: `长度${pMinLen}至${pMaxLen}位`, trigger: 'blur' },
+    { min: 6, max: 16, message: '长度6至16位', trigger: 'change' },
+    { min: 6, max: 16, message: '长度6至16位', trigger: 'blur' },
     { validator: Validator.password(), trigger: 'change' },
     { validator: Validator.password(), trigger: 'blur' }
   ],
@@ -89,48 +99,64 @@ const formRules = ref({
   ]
 })
 
+/**
+ * 登录
+ */
 function onLogin() {
-  Logger.log('用户登录')
-  formRef.value.validate(valid => {
+  console.groupCollapsed('用户登录')
+  formRef.value.validate(async valid => {
     if (valid) {
+      console.log('登录信息格式验证通过')
       loading.value = true
-      const input = {
+
+      const userForm = {
         username: formModel.value.username,
         password: formModel.value.password,
         captchaKey: captchaRef.value.captchaKey,
         captcha: formModel.value.captcha
       }
-      Api.request.iam.user
-        .login(null, input)
-        .finally(() => {
-          loading.value = false
-        })
-        .then(result => {
-          if (result && result.success) {
-            Logger.log('登录成功')
-            const { token, tokenExpireTime } = result.data
-            Logger.log('缓存登录数据')
-            Storage.set(Storage.keys.TOKEN, token) // 用来下次自动登录
-            Storage.set(Storage.keys.TOKEN_EXPIRE_TIME, tokenExpireTime)
+      await Apis.iam.user
+        .login(userForm)
+        .then(async res => {
+          if (res && res.success) {
+            console.log('登录认证成功')
+            const { user, token, tokenExpiredTime } = res.data
+
+            // TODO 下次升级时用profile
+            console.log('缓存user对象')
+            Storage.set(Storage.keys.USER, user)
+            console.log('缓存token令牌')
+            Storage.set(Storage.keys.TOKEN_KEY, token) // 用来下次自动登录
+            Storage.set(Storage.keys.TOKEN_EXPIRED_TIME_KEY, tokenExpiredTime)
+            console.log('记住用户名')
             if (rememberMe.value) {
-              Logger.log('记住用户名')
-              Storage.set(Storage.keys.REMEMBER_USERNAME, input.username)
-            } else {
-              Storage.delete(Storage.keys.REMEMBER_USERNAME)
+              Storage.set(Storage.keys.REMEMBER_USERNAME, user.username)
             }
-            Logger.log('跳转到主页面')
-            router.push('/')
+
+            loading.value = false
+            console.log('跳转到主页面')
+            console.groupEnd()
+            router.push(Routes.INDEX)
           } else {
-            Logger.log('登录失败')
-            ElMessage.error(result && result.data && result.data.message ? result.data.message : '登录失败')
+            console.log('登录失败')
+            ElMessage.error(res && res.message ? res.message : '登录失败')
+            loading.value = false
+            console.groupEnd()
+
             // 自动刷新验证码
             captchaRef.value.initCaptcha(true)
             formModel.value.captcha = ''
           }
         })
+        .catch(error => {
+          // 异常已统一处理，此处忽略异常
+
+          loading.value = false
+          console.groupEnd()
+        })
     } else {
-      ElMessage.error('输入格式错误')
-      Logger.log('登录表单数据格式错误')
+      console.log('登录信息格式验证通过失败')
+      console.groupEnd()
     }
   })
 }
@@ -145,15 +171,12 @@ document.onkeydown = event => {
   }
 }
 
+/**
+ * 跳转到注册页面（“点此注册”按钮）
+ */
 function toRegister() {
   if (!loading.value) {
-    router.push('/portal/register')
-  }
-}
-
-function toResetPassword() {
-  if (!loading.value) {
-    router.push('/portal/reset-password')
+    router.push(Routes.REGISTER)
   }
 }
 
@@ -171,6 +194,7 @@ onMounted(() => {
   height: 100%;
 
   .sub-title {
+    color: #40485b;
     font-size: 1.4rem;
   }
 
@@ -195,14 +219,15 @@ onMounted(() => {
     justify-content: space-between;
 
     .title {
-      font-size: 3rem;
+      color: #40485b;
+      font-size: 2.5rem;
       font-weight: bold;
       font-family: Tahoma;
     }
   }
 
   .form-wrap {
-    margin-top: 9rem;
+    margin-top: 7rem;
 
     :deep(.el-input-group__append) {
       padding: 0;
@@ -224,11 +249,20 @@ onMounted(() => {
 
   .login-btn {
     width: 100%;
-    margin-top: 5rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
 
     .login-btn-label {
       font-size: 1.8rem;
     }
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #40485b;
+    font-size: 1.5rem;
   }
 }
 </style>
