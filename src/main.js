@@ -5,7 +5,6 @@ import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import zhCN from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
-import './index.scss'
 import installIcons from './plugins/icons' // 引入图标注册函数
 import installDirectives from './plugins/directives' // 引入自定义指令
 
