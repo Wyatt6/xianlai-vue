@@ -4,15 +4,15 @@ import Storage from '@/utils/storage'
 import Routes from '@/router/routes'
 
 export const useLayoutStore = defineStore('layout', () => {
-  const sidebarExpand = ref(Storage.get(Storage.keys.SIDEBAR_EXPAND) == null ? true : Storage.get(Storage.keys.SIDEBAR_EXPAND))
+  const menubarExpand = ref(Storage.get(Storage.keys.MENUBAR_EXPAND) == null ? true : Storage.get(Storage.keys.MENUBAR_EXPAND))
   const tagList = ref(Storage.get(Storage.keys.TAG_LIST) || [])
 
   /**
    * 切换菜单栏伸缩状态
    */
-  function changeSidebarExpand() {
-    sidebarExpand.value = !sidebarExpand.value
-    Storage.set(Storage.keys.SIDEBAR_EXPAND, sidebarExpand.value)
+  function changeMenubarExpand() {
+    menubarExpand.value = !menubarExpand.value
+    Storage.set(Storage.keys.MENUBAR_EXPAND, menubarExpand.value)
   }
 
   /**
@@ -63,14 +63,13 @@ export const useLayoutStore = defineStore('layout', () => {
    * 重置函数
    */
   function $reset() {
-    console.log('重置layoutStore状态值')
-    sidebarExpand.value = true
+    menubarExpand.value = true
     tagList.value = []
   }
 
   return {
-    sidebarExpand,
-    changeSidebarExpand,
+    menubarExpand,
+    changeMenubarExpand,
     tagList,
     addTag,
     removeTags,
