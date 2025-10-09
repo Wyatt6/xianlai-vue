@@ -20,4 +20,4 @@ app.use(router)
 installIcons(app)
 installDirectives(app)
 
-app.mount('#app')
+// app.mount('#app')
