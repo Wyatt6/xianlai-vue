@@ -1,5 +1,5 @@
 /**
- * 系统参数使用方法：
+ * API使用方法：
  * const Api = useApiStore()
  * Api.request.xxx.xxx(params, data)
  *    .then(result => {
