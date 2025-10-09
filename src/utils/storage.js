@@ -3,7 +3,7 @@ export default {
     TOKEN: 'token',
     TOKEN_EXPIRE_TIME: 'token_expire_time',
     REMEMBER_USERNAME: 'remember_username',
-    SIDEBAR_EXPAND: 'sidebar_expand',
+    MENUBAR_EXPAND: 'sidebar_expand',
     TAG_LIST: 'tag_list',
 
     AUTHORITY: 'system.authority',
