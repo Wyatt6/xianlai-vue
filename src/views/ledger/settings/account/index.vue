@@ -38,7 +38,7 @@
 import { ref } from 'vue'
 import { Plus, Refresh, Open, TurnOff, Edit, Top, Bottom, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const currRowKey = ref()
 const loading = ref(false)
@@ -47,7 +47,7 @@ const loading = ref(false)
 const list = ref([])
 const getAccounts = async () => {
   loading.value = true
-  const { accounts } = await Apis.ledger.account.getAccounts().then(res => {
+  const { accounts } = await Api.request.ledger.account.getAccounts().then(res => {
     if (res && res.success) {
       console.log('成功获取动账账户列表')
       return res.data
@@ -68,7 +68,7 @@ const onAdd = async id => {
       const form = {}
       form.name = input.value
       form.activated = 1
-      await Apis.ledger.account.addAccount(form).then(async res => {
+      await Api.request.ledger.account.addAccount(form).then(async res => {
         if (res && res.success) {
           console.log('成功添加动账账户')
           ElMessage.success('添加成功')
@@ -105,7 +105,7 @@ const onChangeStatus = item => {
         id: item.id,
         activated: !item.activated
       }
-      Apis.ledger.account.editAccount(input).then(res => {
+      Api.request.ledger.account.editAccount(input).then(res => {
         if (res && res.success) {
           console.log('成功更新动账账户数据')
           if (item.activated) {
@@ -141,7 +141,7 @@ const onEdit = item => {
             id: item.id,
             name: input.value
           }
-          Apis.ledger.account.editAccount(form).then(res => {
+          Api.request.ledger.account.editAccount(form).then(res => {
             if (res && res.success) {
               console.log('成功修改动账账户')
               ElMessage.success('修改成功')
@@ -163,7 +163,7 @@ const onEdit = item => {
 
 // ----- 上移、下移操作 -----
 const swapPosition = (id1, id2) => {
-  return Apis.ledger.account.swapPosition(id1, id2).then(res => {
+  return Api.request.ledger.account.swapPosition(id1, id2).then(res => {
     if (res && res.success) {
       console.log('移动成功')
       return res.data
@@ -243,7 +243,7 @@ const onDelete = item => {
     { type: 'warning', dangerouslyUseHTMLString: true }
   )
     .then(() => {
-      Apis.ledger.account.deleteAccount(item.id).then(res => {
+      Api.request.ledger.account.deleteAccount(item.id).then(res => {
         if (res && res.success) {
           console.log('成功删除动账账户')
           ElMessage.success('删除成功')

@@ -24,7 +24,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const props = defineProps({
   show: {
@@ -77,7 +77,7 @@ function onConfirm() {
     if (valid) {
       console.log('通过表单格式验证')
       loading.value = true
-      await Apis.iam.role
+      await Api.request.iam.role
         .addRole(form.value)
         .then(res => {
           if (res && res.success) {

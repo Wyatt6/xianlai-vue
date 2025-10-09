@@ -25,7 +25,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const props = defineProps({
   show: {
@@ -84,7 +84,7 @@ const onConfirm = () => {
       id: props.nowRow.id,
       parentId: newParentId.value
     }
-    Apis.ledger.category.editCategory(input).then(res => {
+    Api.request.ledger.category.editCategory(input).then(res => {
       if (res && res.success) {
         console.log('移动成功')
         ElMessage.success('移动成功')

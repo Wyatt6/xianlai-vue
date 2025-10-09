@@ -65,7 +65,7 @@ import { useRouter } from 'vue-router'
 import Routes from '@/router/routes'
 import Validator from '@/utils/validator'
 import Storage from '@/utils/storage'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const router = useRouter()
 const loading = ref(false)
@@ -115,7 +115,7 @@ function onLogin() {
         captchaKey: captchaRef.value.captchaKey,
         captcha: formModel.value.captcha
       }
-      await Apis.iam.user
+      await Api.request.iam.user
         .login(userForm)
         .then(async res => {
           if (res && res.success) {

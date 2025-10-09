@@ -124,7 +124,7 @@ import AddPermission from './AddPermission.vue'
 import EditPermission from './EditPermission.vue'
 import Perms from '@/plugins/directives/permissions'
 import Storage from '@/utils/storage'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 // ---------- 搜索表单数据定义 ----------
 const searchFormRef = ref()
@@ -185,7 +185,7 @@ async function getList(num, size) {
     }
     console.log('查询条件:', condition)
 
-    await Apis.iam.permission
+    await Api.request.iam.permission
       .getPermissionsByPage(num - 1, size, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(res => {
         if (res && res.success) {
@@ -230,7 +230,7 @@ const showAddPermission = ref(false)
 async function afterAdd(id) {
   formPageNum.value = 1
   // 获取新权限的排名
-  await Apis.iam.permission
+  await Api.request.iam.permission
     .getRowNumStartFrom1(id)
     .then(res => {
       if (res && res.success) {
@@ -272,7 +272,7 @@ function onChangeStatus(row) {
   ElMessageBox.confirm(message, '请确认', { type: 'warning' })
     .then(() => {
       const input = { id: id, activated: !activated }
-      Apis.iam.permission
+      Api.request.iam.permission
         .editPermission(input)
         .then(res => {
           if (res && res.success) {
@@ -331,7 +331,7 @@ function onDelete(row) {
   const message = '是否删除权限【' + identifier + (name ? ' / ' + name : '') + '】？'
   ElMessageBox.confirm(message, '请确认', { type: 'warning' })
     .then(() => {
-      Apis.iam.permission
+      Api.request.iam.permission
         .deletePermission(id)
         .then(res => {
           if (res && res.success) {

@@ -49,7 +49,7 @@
 import { defineProps, defineEmits, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import Perms from '@/plugins/directives/permissions'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const props = defineProps({
   show: {
@@ -76,7 +76,7 @@ const loading = ref(false)
  * 获取全量角色列表
  */
 async function getRoles() {
-  return Apis.iam.role
+  return Api.request.iam.role
     .getRoles()
     .then(res => {
       if (res && res.success) {
@@ -97,7 +97,7 @@ async function getRoles() {
  * @param id 用户ID
  */
 async function getRoleIdsOfUser(id) {
-  return Apis.iam.role
+  return Api.request.iam.role
     .getRoleIdsOfUser(id)
     .then(res => {
       if (res && res.success) {
@@ -176,7 +176,7 @@ async function onConfirm() {
   }
 
   if (bindList.length + cancelList.length > 0) {
-    await Apis.iam.user
+    await Api.request.iam.user
       .updateBinds({
         userId: props.nowRow.id,
         bind: bindList,

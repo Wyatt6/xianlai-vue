@@ -46,7 +46,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const props = defineProps({
   show: {
@@ -141,7 +141,7 @@ const onSave = () => {
 }
 
 const getCategoryTree = async () => {
-  return Apis.ledger.category.getCategoryTree().then(res => {
+  return Api.request.ledger.category.getCategoryTree().then(res => {
     if (res && res.success) {
       console.log('成功获取类别树')
       return res.data.categoryTree
@@ -152,7 +152,7 @@ const getCategoryTree = async () => {
   })
 }
 const getAccountList = async () => {
-  return Apis.ledger.account.getAccounts().then(res => {
+  return Api.request.ledger.account.getAccounts().then(res => {
     if (res && res.success) {
       console.log('成功获取动账账户列表')
       return res.data.accounts

@@ -49,7 +49,7 @@ import ChangeParent from './ChangeParent.vue'
 import { ref } from 'vue'
 import { Plus, Refresh, Open, TurnOff, Edit, Rank, Top, Bottom, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const currRowKey = ref()
 const loading = ref(false)
@@ -58,7 +58,7 @@ const loading = ref(false)
 const tree = ref([])
 const getCategoryTree = async () => {
   loading.value = true
-  const { categoryTree } = await Apis.ledger.category.getCategoryTree().then(res => {
+  const { categoryTree } = await Api.request.ledger.category.getCategoryTree().then(res => {
     if (res && res.success) {
       console.log('成功获取类别树')
       return res.data
@@ -83,7 +83,7 @@ const onChangeParent = item => {
 // ----- 上移、下移操作 -----
 const onMove = (id, mode) => {
   console.groupCollapsed('移动记账类别', 'id=', id, 'mode=', mode)
-  Apis.ledger.category.moveOneRow(id, mode).then(res => {
+  Api.request.ledger.category.moveOneRow(id, mode).then(res => {
     if (res && res.success) {
       console.log('成功移动记账类别')
       ElMessage.success('移动完成')
@@ -106,7 +106,7 @@ const onDelete = item => {
     { type: 'warning', dangerouslyUseHTMLString: true }
   )
     .then(() => {
-      Apis.ledger.category.deleteCategoryTree(item.id).then(res => {
+      Api.request.ledger.category.deleteCategoryTree(item.id).then(res => {
         if (res && res.success) {
           console.log('成功删除记账类别及其子类别')
           ElMessage.success('删除成功')
@@ -138,7 +138,7 @@ const onEdit = item => {
             id: item.id,
             name: input.value
           }
-          Apis.ledger.category.editCategory(form).then(res => {
+          Api.request.ledger.category.editCategory(form).then(res => {
             if (res && res.success) {
               console.log('成功修改记账类别')
               ElMessage.success('修改成功')
@@ -167,7 +167,7 @@ const onChangeStatus = item => {
   const msg2 = '启用后可以继续使用此记账类别及其所有子类别登记新记账明细和管理预算。请确认是否启用此类别及其所有子类别？'
   ElMessageBox.confirm(item.activated ? msg1 : msg2, item.activated ? title1 : title2, { type: 'warning' })
     .then(() => {
-      Apis.ledger.category.changeActivated(item.id, !item.activated).then(res => {
+      Api.request.ledger.category.changeActivated(item.id, !item.activated).then(res => {
         if (res && res.success) {
           console.log('成功更新记账类别数据')
           if (item.activated) {
@@ -205,7 +205,7 @@ const onAdd = (mode, parentId) => {
       }
       if (mode === 'sub') addForm.parentId = parentId
 
-      await Apis.ledger.category.addCategory(addForm).then(async res => {
+      await Api.request.ledger.category.addCategory(addForm).then(async res => {
         if (res && res.success) {
           ElMessage.success('新增成功')
           await getCategoryTree()

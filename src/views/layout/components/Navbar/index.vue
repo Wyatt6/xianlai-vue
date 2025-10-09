@@ -44,7 +44,7 @@ import Routes from '@/router/routes'
 import { useAppStore } from '@/stores/app'
 import { useAuthorityStore } from '@/stores/authority'
 import Storage from '@/utils/storage'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -59,7 +59,7 @@ const username = ref(cachedUser == null ? 'unknown' : cachedUser.username)
 async function logout() {
   console.groupCollapsed('退出登录')
   appStore.setLogoutLock()
-  await Apis.iam.user
+  await Api.request.iam.user
     .logout()
     .then(async res => {
       if (res && res.success) {

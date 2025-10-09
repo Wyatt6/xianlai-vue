@@ -50,7 +50,7 @@
 import { defineProps, defineEmits, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import Perms from '@/plugins/directives/permissions'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const props = defineProps({
   show: {
@@ -77,7 +77,7 @@ const loading = ref(false)
  * 获取全量权限数据
  */
 async function getPermissions() {
-  return Apis.iam.permission
+  return Api.request.iam.permission
     .getPermissions()
     .then(res => {
       if (res && res.success) {
@@ -98,7 +98,7 @@ async function getPermissions() {
  * @param id 角色ID
  */
 async function getPermissionIdsOfRole(id) {
-  return Apis.iam.permission
+  return Api.request.iam.permission
     .getPermissionIdsOfRole(id)
     .then(res => {
       if (res && res.success) {
@@ -175,7 +175,7 @@ async function onConfirm() {
   }
 
   if (grantList.length + cancelList.length > 0) {
-    await Apis.iam.role
+    await Api.request.iam.role
       .updateGrants({
         roleId: props.nowRow.id,
         grant: grantList,

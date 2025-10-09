@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import Storage from '@/utils/storage'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 import { ElMessage } from 'element-plus'
 
 /**
@@ -18,7 +18,7 @@ export const useAuthorityStore = defineStore('authority', () => {
   async function getAuthority() {
     console.groupCollapsed('获取用户授权数据')
     lock.value = true
-    await Apis.iam.user
+    await Api.request.iam.user
       .getAuthority()
       .then(res => {
         if (res && res.success) {
@@ -45,7 +45,7 @@ export const useAuthorityStore = defineStore('authority', () => {
   async function updateAuthority() {
     console.groupCollapsed('刷新用户授权数据')
     lock.value = true
-    await Apis.iam.user
+    await Api.request.iam.user
       .updateAuthority()
       .then(res => {
         if (res && res.success) {

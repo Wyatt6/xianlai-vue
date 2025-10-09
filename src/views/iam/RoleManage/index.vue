@@ -131,7 +131,7 @@ import GrantPermission from './GrantPermission.vue'
 import Perms from '@/plugins/directives/permissions'
 import Storage from '@/utils/storage'
 import { isEmpty } from '@/utils/common'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 // ---------- 搜索表单数据定义 ----------
 const searched = ref(false)
@@ -180,7 +180,7 @@ watch(
  */
 async function getRolesByPage(num, size, condition) {
   // 注意：num是服务器页码，下标从0开始
-  return Apis.iam.role
+  return Api.request.iam.role
     .getRolesByPage(num, size, condition)
     .then(res => {
       if (res && res.success) {
@@ -266,7 +266,7 @@ const showAddRole = ref(false)
 async function afterAdd(id) {
   formPageNum.value = 1
   // 获取新角色的排名
-  await Apis.iam.role
+  await Api.request.iam.role
     .getRowNumStartFrom1(id)
     .then(res => {
       if (res && res.success) {
@@ -317,7 +317,7 @@ function onChangeStatus(row) {
   ElMessageBox.confirm(message, '请确认', { type: 'warning' })
     .then(() => {
       const input = { id: id, activated: !activated }
-      Apis.iam.role
+      Api.request.iam.role
         .editRole(input)
         .then(res => {
           if (res && res.success) {
@@ -369,7 +369,7 @@ function afterEdit(role) {
  * 上移、下移操作
  */
 async function swapPosition(id1, id2) {
-  return Apis.iam.role
+  return Api.request.iam.role
     .swapPosition(id1, id2)
     .then(res => {
       if (res && res.success) {
@@ -486,7 +486,7 @@ function onDelete(row) {
   const message = '是否删除角色【' + identifier + (name ? ' / ' + name : '') + '】？'
   ElMessageBox.confirm(message, '请确认', { type: 'warning' })
     .then(() => {
-      Apis.iam.role
+      Api.request.iam.role
         .deleteRole(id)
         .then(res => {
           if (res && res.success) {

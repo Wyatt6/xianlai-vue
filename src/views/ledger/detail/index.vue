@@ -176,7 +176,7 @@ import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-
 import Storage from '@/utils/storage'
 import { dateHyphenFormatter } from '@/utils/formatter'
 import { isEmpty, getDaysOfMonth } from '@/utils/common'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 // ---------- 数据定义 ----------
 const PAGE_NUM_KEY = 'ledger.detail.pageNum'
@@ -233,7 +233,7 @@ const getSumConditionally = async () => {
       accountId: searchForm.value.accountId,
       description: searchForm.value.description
     }
-    const { debitSum, creditSum } = await Apis.ledger.journal.getSumConditionally(condition).then(res => {
+    const { debitSum, creditSum } = await Api.request.ledger.journal.getSumConditionally(condition).then(res => {
       if (res && res.success) {
         console.log('成功获取总收入和总支出')
         return res.data
@@ -254,7 +254,7 @@ const categoryTree = ref([])
 const getCategoryTree = async () => {
   getCategoryTreeFlag--
   if (getCategoryTreeFlag >= 0) {
-    await Apis.ledger.category.getCategoryTree().then(res => {
+    await Api.request.ledger.category.getCategoryTree().then(res => {
       if (res && res.success) {
         console.log('成功获取类别树')
         categoryTree.value = res.data.categoryTree
@@ -280,7 +280,7 @@ const categoryObjs = ref({})
 const getCategories = async () => {
   getCategoriesFlag--
   if (getCategoriesFlag >= 0) {
-    const { categories } = await Apis.ledger.category.getCategories().then(res => {
+    const { categories } = await Api.request.ledger.category.getCategories().then(res => {
       if (res && res.success) {
         console.log('成功获取类别列表')
         return res.data
@@ -311,7 +311,7 @@ const accountObjs = ref({})
 const getAccounts = async () => {
   getAccountsFlag--
   if (getAccountsFlag >= 0) {
-    const { accounts } = await Apis.ledger.account.getAccounts().then(res => {
+    const { accounts } = await Api.request.ledger.account.getAccounts().then(res => {
       if (res && res.success) {
         console.log('成功获取动账账户列表')
         return res.data
@@ -341,7 +341,7 @@ const getListByPageConditionally = async (num, size, condition) => {
   // 注意：num是服务器页码，下标从0开始
   condition.pageNum = num
   condition.pageSize = size
-  return Apis.ledger.journal.getJournalsByPageConditionally(condition).then(res => {
+  return Api.request.ledger.journal.getJournalsByPageConditionally(condition).then(res => {
     if (res && res.success) {
       console.log('成功获取记账明细分页数据')
       return res.data
@@ -485,7 +485,7 @@ const onAdd = () => {
   showDrawer.value = true
 }
 const addCallback = async input => {
-  await Apis.ledger.journal.addJournal(input).then(async res => {
+  await Api.request.ledger.journal.addJournal(input).then(async res => {
     if (res && res.success) {
       ElMessage.success('记账成功')
       showDrawer.value = false
@@ -506,7 +506,7 @@ const onEdit = row => {
   showDrawer.value = true
 }
 const editCallback = async input => {
-  await Apis.ledger.journal.editJournal(input).then(async res => {
+  await Api.request.ledger.journal.editJournal(input).then(async res => {
     if (res && res.success) {
       ElMessage.success('成功修改记账明细')
       showDrawer.value = false
@@ -522,7 +522,7 @@ const editCallback = async input => {
 
 // ---------- 删除 ----------
 const onDelete = row => {
-  Apis.ledger.journal.deleteJournal(row.id).then(res => {
+  Api.request.ledger.journal.deleteJournal(row.id).then(res => {
     if (res && res.success) {
       ElMessage.success('成功删除记账明细')
       getList(formPageNum.value, formPageSize.value)

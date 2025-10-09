@@ -120,7 +120,7 @@ import { Refresh, Search, Brush, Open, TurnOff } from '@element-plus/icons-vue'
 import BindRole from './BindRole.vue'
 import Perms from '@/plugins/directives/permissions'
 import Storage from '@/utils/storage'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 // ---------- 搜索表单数据定义 ----------
 const searchFormRef = ref()
@@ -182,7 +182,7 @@ async function getList(num, size) {
     }
     console.log('查询条件:', condition)
 
-    await Apis.iam.user
+    await Api.request.iam.user
       .getUsersByPage(num - 1, size, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(res => {
         if (res && res.success) {
@@ -240,7 +240,7 @@ const onChangeStatus = row => {
   ElMessageBox.confirm(message, '请确认', { type: 'warning' })
     .then(() => {
       if (activated) {
-        Apis.iam.user
+        Api.request.iam.user
           .freeze(id)
           .then(res => {
             if (res && res.success) {
@@ -256,7 +256,7 @@ const onChangeStatus = row => {
             // 异常已统一处理，此处忽略异常
           })
       } else {
-        Apis.iam.user
+        Api.request.iam.user
           .unfreeze(id)
           .then(res => {
             if (res && res.success) {

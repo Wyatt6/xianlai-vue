@@ -21,7 +21,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 
 const props = defineProps({
   show: {
@@ -100,7 +100,7 @@ function onConfirm() {
         name: form.value.name,
         remark: form.value.remark
       }
-      await Apis.iam.role
+      await Api.request.iam.role
         .editRole(input)
         .then(res => {
           if (res && res.success) {

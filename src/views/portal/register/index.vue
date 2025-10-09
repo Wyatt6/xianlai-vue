@@ -48,7 +48,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Routes from '@/router/routes'
 import Validator from '@/utils/validator'
-import Apis from '@/apis'
+import { useApiStore } from '@/apis'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
@@ -111,7 +111,7 @@ function onRegister() {
         captchaKey: captchaRef.value.captchaKey,
         captcha: formModel.value.captcha
       }
-      await Apis.iam.user
+      await Api.request.iam.user
         .register(userForm)
         .then(res => {
           if (res && res.success) {
