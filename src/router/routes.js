@@ -1,5 +1,7 @@
 /**
  * 页面URL注册表
+ * URL使用'/'开头的绝对路径，禁止使用相对路径
+ * 在其他任何地方都建议引用URL常量，不建议直接使用URl
  */
 export default {
   PORTAL: '/portal',
