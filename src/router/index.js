@@ -43,6 +43,11 @@ const router = createRouter({
           path: Routes.REGISTER,
           name: 'register',
           component: Register
+        },
+        {
+          path: Routes.RESET_PASSWORD,
+          name: 'reset_password',
+          component: () => import('@/views/portal/reset_password/index.vue')
         }
       ]
     },

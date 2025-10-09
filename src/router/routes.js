@@ -5,6 +5,7 @@ export default {
   PORTAL: '/portal',
   LOGIN: '/portal/login',
   REGISTER: '/portal/register',
+  RESET_PASSWORD: '/portal/reset-password',
 
   INDEX: '/',
   INDEX_REDIRECT: '/homepage',
