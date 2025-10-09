@@ -27,7 +27,15 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  // 代理访问后端系统（开发测试用）
+  // 解决抛出警告“Deprecation Warning: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.”
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
+    }
+  },
+  // 代理访问后端系统（开发测试用，build前需要删除或注释）
   server: {
     proxy: {
       '/api': {
