@@ -15,32 +15,10 @@ import { ref } from 'vue'
 import { createAxiosInstance } from './instance'
 import { isEmpty, hasText, notEmpty } from '@/utils/common'
 
-const apiList = [
-  {
-    description: '获取初始化数据',
-    callPath: 'common.init.getInitData',
-    requestMethod: 'get',
-    url: '/api/common/init/getInitData'
-  },
-  {
-    description: '获取验证码',
-    callPath: 'common.captcha.getCaptcha',
-    requestMethod: 'get',
-    url: '/api/common/captcha/getCaptcha'
-  },
-  {
-    description: '注册新用户',
-    callPath: 'iam.user.register',
-    requestMethod: 'post',
-    url: '/api/iam/user/register'
-  },
-  {
-    description: '用户登录',
-    callPath: 'iam.user.login',
-    requestMethod: 'post',
-    url: '/api/iam/user/login'
-  }
-]
+import CommonApis from './modules/common'
+import IamApis from './modules/iam'
+
+const apiList = [...CommonApis, ...IamApis]
 
 export const useApiStore = defineStore('api', () => {
   const request = ref({})
