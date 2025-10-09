@@ -2,25 +2,25 @@
   <div class="box-wrap">
     <div class="box-header">
       <div>
-        <span class="title">注册 IntoEins 用户</span>
+        <span class="title">注册</span>
       </div>
       <div>
         <span class="sub-title">已有账号？</span>
-        <span :class="loading ? 'sub-title-link__disabled' : 'sub-title-link'" @click="toLogin">点此登录</span>
+        <span :class="loading ? 'sub-title-link__disabled' : 'sub-title-link'" @click="toLogin()">点此登录</span>
       </div>
     </div>
     <el-form class="form-wrap" ref="formRef" :model="formModel" :rules="formRules" :disabled="loading">
       <el-form-item prop="username">
-        <el-input size="large" placeholder="用户名" v-model="formModel.username" maxlength="16" clearable />
+        <el-input size="large" placeholder="用户名" v-model="formModel.username" :maxlength="uMaxLen" clearable />
       </el-form-item>
       <el-form-item prop="password">
-        <el-input size="large" placeholder="密码" v-model="formModel.password" type="password" maxlength="16" show-password />
+        <el-input size="large" placeholder="密码" v-model="formModel.password" type="password" :maxlength="pMaxLen" show-password />
       </el-form-item>
       <el-form-item prop="password2">
-        <el-input size="large" placeholder="再次输入密码" v-model="formModel.password2" maxlength="16" show-password />
+        <el-input size="large" placeholder="再次输入密码" v-model="formModel.password2" :maxlength="pMaxLen" show-password />
       </el-form-item>
       <el-form-item prop="captcha">
-        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" maxlength="5" clearable>
+        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" :maxlength="SysOption.data.captcha.length" clearable>
           <template #append>
             <div class="captcha-box">
               <Captcha ref="captchaRef" :loading="loading" />
@@ -30,12 +30,15 @@
       </el-form-item>
     </el-form>
     <div>
-      <span style="font-size: 1.4rem">提交注册表示您同意</span>
-      <span style="font-size: 1.4rem; cursor: pointer; color: #409eff" @click="showTerms = true">使用条款和隐私保护政策</span>
-      <span style="font-size: 1.4rem">相关约定</span>
-      <Terms :show="showTerms" @close="showTerms = false" />
+      <span class="statement">注册代表您同意</span>
+      <span class="statement" style="cursor: pointer; color: #409eff" @click="showTermsOfUse = true">使用条款</span>
+      <span class="statement">和</span>
+      <span class="statement" style="cursor: pointer; color: #409eff" @click="showPricacyPolicy = true">隐私保护政策</span>
+      <span class="statement">相关约定</span>
+      <TermsOfUse :show="showTermsOfUse" @close="showTermsOfUse = false" />
+      <PrivacyPolicy :show="showPricacyPolicy" @close="showPricacyPolicy = false" />
     </div>
-    <el-button class="register-btn" type="primary" size="large" :loading="loading" @click="onRegister">
+    <el-button class="register-btn" type="primary" size="large" :loading="loading" @click="onRegister()">
       <span class="register-btn-label">立即注册</span>
     </el-button>
   </div>
@@ -43,17 +46,21 @@
 
 <script setup>
 import Captcha from '@/components/Captcha/index.vue'
-import Terms from './Terms.vue'
+import TermsOfUse from './TermsOfUse.vue'
+import PrivacyPolicy from './PrivacyPolicy.vue'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import Routes from '@/router/routes'
+import { useSysOptionStore } from '@/stores/sys_option'
 import Validator from '@/utils/validator'
+import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const loading = ref(false)
 const captchaRef = ref()
+const SysOption = useSysOptionStore()
+const Api = useApiStore()
 
 const formRef = ref()
 const formModel = ref({
@@ -62,18 +69,22 @@ const formModel = ref({
   password2: '',
   captcha: ''
 })
+const uMinLen = SysOption.data.user.username.minLen
+const uMaxLen = SysOption.data.user.username.maxLen
+const pMinLen = SysOption.data.user.password.minLen
+const pMaxLen = SysOption.data.user.password.maxLen
 const formRules = ref({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 16, message: '长度3至16位', trigger: 'change' },
-    { min: 3, max: 16, message: '长度3至16位', trigger: 'blur' },
+    { min: uMinLen, max: uMaxLen, message: `长度${uMinLen}至${uMaxLen}位`, trigger: 'change' },
+    { min: uMinLen, max: uMaxLen, message: `长度${uMinLen}至${uMaxLen}位`, trigger: 'blur' },
     { validator: Validator.username(), trigger: 'change' },
     { validator: Validator.username(), trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 16, message: '长度6至16位', trigger: 'change' },
-    { min: 6, max: 16, message: '长度6至16位', trigger: 'blur' },
+    { min: pMinLen, max: pMaxLen, message: `长度${pMinLen}至${pMaxLen}位`, trigger: 'change' },
+    { min: pMinLen, max: pMaxLen, message: `长度${pMinLen}至${pMaxLen}位`, trigger: 'blur' },
     { validator: Validator.password(), trigger: 'change' },
     { validator: Validator.password(), trigger: 'blur' }
   ],
@@ -96,53 +107,41 @@ const formRules = ref({
   ]
 })
 
-/**
- * 点击注册
- */
 function onRegister() {
-  console.groupCollapsed('注册新用户')
-  formRef.value.validate(async valid => {
+  Logger.log('注册新用户')
+  formRef.value.validate(valid => {
     if (valid) {
-      console.log('注册信息格式验证通过')
       loading.value = true
-      const userForm = {
+      const input = {
         username: formModel.value.username,
         password: formModel.value.password,
         captchaKey: captchaRef.value.captchaKey,
         captcha: formModel.value.captcha
       }
-      await Api.request.iam.user
-        .register(userForm)
-        .then(res => {
-          if (res && res.success) {
-            console.log('注册成功，跳转到登录页面')
-            loading.value = false
-            console.groupEnd()
-            ElMessageBox.alert('欢迎使用 WyLoop 系统，请登陆', '注册成功', {
+      Api.request.iam.user
+        .register(null, input)
+        .finally(() => {
+          loading.value = false
+        })
+        .then(result => {
+          if (result && result.success) {
+            Logger.log('注册成功，跳转到登录页面')
+            ElMessageBox.alert(`欢迎使用「${SysOption.data.system.name}」系统，请登陆`, '注册成功', {
               callback: action => {
-                router.push(Routes.LOGIN)
+                router.push('/portal/login')
               }
             })
           } else {
-            console.log('注册失败')
-            ElMessage.error(res && res.message ? res.message : '注册失败')
-            loading.value = false
-            console.groupEnd()
-
+            Logger.log('注册失败')
+            ElMessage.error(result && result.data && result.data.message ? result.data.message : '注册失败')
             // 自动刷新验证码
             captchaRef.value.initCaptcha(true)
             formModel.value.captcha = ''
           }
         })
-        .catch(error => {
-          // 异常已统一处理，此处忽略异常
-
-          loading.value = false
-          console.groupEnd()
-        })
     } else {
-      console.log('注册信息格式验证失败')
-      console.groupEnd()
+      ElMessage.error('输入格式错误')
+      Logger.log('注册表单数据格式错误')
     }
   })
 }
@@ -157,12 +156,9 @@ document.onkeydown = event => {
   }
 }
 
-/**
- * 跳转到登录页面
- */
 function toLogin() {
   if (!loading.value) {
-    router.push(Routes.LOGIN)
+    router.push('/portal/login')
   }
 }
 
@@ -173,7 +169,8 @@ onMounted(() => {
   captchaRef.value.initCaptcha(true)
 })
 
-const showTerms = ref(false)
+const showTermsOfUse = ref(false)
+const showPricacyPolicy = ref(false)
 </script>
 
 <style lang="scss" scoped>
@@ -182,7 +179,6 @@ const showTerms = ref(false)
   height: 100%;
 
   .sub-title {
-    color: #40485b;
     font-size: 1.4rem;
   }
 
@@ -207,15 +203,14 @@ const showTerms = ref(false)
     justify-content: space-between;
 
     .title {
-      color: #40485b;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: bold;
       font-family: Tahoma;
     }
   }
 
   .form-wrap {
-    margin-top: 7rem;
+    margin-top: 6rem;
 
     :deep(.el-input-group__append) {
       padding: 0;
@@ -227,9 +222,13 @@ const showTerms = ref(false)
     }
   }
 
+  .statement {
+    font-size: 1.4rem;
+  }
+
   .register-btn {
     width: 100%;
-    margin-top: 5rem;
+    margin-top: 6rem;
 
     .register-btn-label {
       font-size: 1.8rem;

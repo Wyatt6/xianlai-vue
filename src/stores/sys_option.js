@@ -10,6 +10,9 @@ import { hasText, isEmpty } from '@/utils/common'
 
 export const useSysOptionStore = defineStore('sysOption', () => {
   const data = ref({
+    system: {
+      name: 'XianLai'
+    },
     console: {
       openLog: true
     },
@@ -46,6 +49,9 @@ export const useSysOptionStore = defineStore('sysOption', () => {
         tips: '仅限大写、小写字母，数字，下划线(_)，特殊字符(.~!@#$%^&*?)'
       }
     },
+    content: {
+      termsOfUse: '使用条款未发布',
+      privacyPolicy: '隐私保护政策未发布'
     }
   })
   const checksum = ref(null)
