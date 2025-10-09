@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
+import Storage from '@/utils/storage'
 import { useSysOptionStore } from './sys_option'
 import { useApiStore } from '@/apis'
 
@@ -75,7 +76,17 @@ export const useSystemStore = defineStore('system', () => {
     return false
   }
 
-  async function resetStoreAndStorage() {}
+  function $reset() {
+    // 锁是不应该被重置的
+  }
+
+  async function resetStoreAndStorage() {
+    $reset()
+
+    const username = Storage.get(Storage.keys.REMEMBER_USERNAME)
+    Storage.clear()
+    if (username != null) Storage.set(Storage.keys.REMEMBER_USERNAME, username)
+  }
 
   return {
     initData,
