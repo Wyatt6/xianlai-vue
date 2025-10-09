@@ -1,11 +1,23 @@
+import { useSysOptionStore } from '@/stores/sys_option'
+
 /**
  * 请求发送日志
  * @param {*} request 请求对象
  */
 function sendInfo(request) {
-  const url = request.baseURL + request.url
-  console.groupCollapsed('Request: [' + request.method.toUpperCase() + '] ' + url + ' ' + request.desc)
-  console.groupEnd()
+  if (useSysOptionStore().data.console.openLog) {
+    let baseUrl = request.baseURL
+    if (baseUrl != null && baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, baseUrl.length - 1)
+    }
+    let pathUrl = request.url
+    if (pathUrl[0] === '/') {
+      pathUrl = pathUrl.slice(1, pathUrl.length)
+    }
+    const url = baseUrl + '/' + pathUrl
+    console.groupCollapsed('%cRequest: [' + request.method.toUpperCase() + '] ' + url + ' ' + request.desc, 'color:black')
+    console.groupEnd()
+  }
 }
 
 /**
@@ -14,15 +26,25 @@ function sendInfo(request) {
  * @param {*} message   异常信息
  */
 function sendError(error, message) {
-  const url = error.config.baseURL + error.config.url
-  console.groupCollapsed('ERROR Request: [' + error.config.method.toUpperCase() + '] ' + url + ' ' + error.config.desc)
-  if (message != null) {
-    console.log('message:', message)
+  if (useSysOptionStore().data.console.openLog) {
+    let baseUrl = error.config.baseURL
+    if (baseUrl != null && baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, baseUrl.length - 1)
+    }
+    let pathUrl = error.config.url
+    if (pathUrl[0] === '/') {
+      pathUrl = pathUrl.slice(1, pathUrl.length)
+    }
+    const url = baseUrl + '/' + pathUrl
+    console.groupCollapsed('%cERROR Request: [' + error.config.method.toUpperCase() + '] ' + url + ' ' + error.config.desc, 'color:red')
+    if (message != null) {
+      console.log('message:', message)
+    }
+    if (error != null) {
+      console.log('error:', error)
+    }
+    console.groupEnd()
   }
-  if (error != null) {
-    console.log('error:', error)
-  }
-  console.groupEnd()
 }
 
 /**
@@ -31,21 +53,28 @@ function sendError(error, message) {
  * @param {*} response  响应对象
  */
 function receiveInfo(request, response) {
-  const url = request.baseURL + request.url
-  console.groupCollapsed('Response: ' + url)
-  if (response && response.traceId != null) {
-    console.log('traceId:', response.traceId)
+  if (useSysOptionStore().data.console.openLog) {
+    let baseUrl = request.baseURL
+    if (baseUrl != null && baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, baseUrl.length - 1)
+    }
+    let pathUrl = request.url
+    if (pathUrl[0] === '/') {
+      pathUrl = pathUrl.slice(1, pathUrl.length)
+    }
+    const url = baseUrl + '/' + pathUrl
+    console.groupCollapsed('%cResponse: ' + url, 'color:green')
+    if (response && response.traceId != null) {
+      console.log('traceId:', response.traceId)
+    }
+    if (response && response.success != null) {
+      console.log('success:', response.success)
+    }
+    if (response && response.data != null && JSON.stringify(response.data) !== '{}') {
+      console.log('data:', response.data)
+    }
+    console.groupEnd()
   }
-  if (response && response.success != null) {
-    console.log('success:', response.success)
-  }
-  if (response && response.message != null) {
-    console.log('message:', response.message)
-  }
-  if (response && response.data != null && JSON.stringify(response.data) !== '{}') {
-    console.log('data:', response.data)
-  }
-  console.groupEnd()
 }
 
 /**
@@ -54,15 +83,25 @@ function receiveInfo(request, response) {
  * @param {*} message   异常信息
  */
 function receiveError(error, message) {
-  const url = error.config.baseURL + error.config.url
-  console.groupCollapsed('ERROR Response: [' + error.response.status + '] ' + url)
-  if (message != null) {
-    console.log('message:', message)
+  if (useSysOptionStore().data.console.openLog) {
+    let baseUrl = error.config.baseURL
+    if (baseUrl != null && baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, baseUrl.length - 1)
+    }
+    let pathUrl = error.config.url
+    if (pathUrl[0] === '/') {
+      pathUrl = pathUrl.slice(1, pathUrl.length)
+    }
+    const url = baseUrl + '/' + pathUrl
+    console.groupCollapsed('%cERROR Response: [' + error.response.status + '] ' + url, 'color:red')
+    if (message != null) {
+      console.log('message:', message)
+    }
+    if (error != null) {
+      console.log('error:', error)
+    }
+    console.groupEnd()
   }
-  if (error != null) {
-    console.log('error:', error)
-  }
-  console.groupEnd()
 }
 
 export default {
