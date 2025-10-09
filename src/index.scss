@@ -1,43 +1,43 @@
-html {
-  // rem单位计算基于html中的font-size，默认font-szie为16px则1rem=16px
-  // 这里font-size设成10px使得1rem=10px方便转换
-  font-size: 10px;
-}
+// html {
+//   // rem单位计算基于html中的font-size，默认font-szie为16px则1rem=16px
+//   // 这里font-size设成10px使得1rem=10px方便转换
+//   font-size: 10px;
+// }
 
-body {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  // Vite创建项目时生成的字体集
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  // 以往自己写的项目常用的字体集
-  // font-family:
-  //   Helvetica Neue,
-  //   Helvetica,
-  //   PingFang SC,
-  //   Hiragino Sans GB,
-  //   Microsoft YaHei,
-  //   Arial,
-  //   sans-serif;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+// body {
+//   width: 100vw;
+//   height: 100vh;
+//   margin: 0;
+//   padding: 0;
+//   // Vite创建项目时生成的字体集
+//   font-family:
+//     Inter,
+//     -apple-system,
+//     BlinkMacSystemFont,
+//     'Segoe UI',
+//     Roboto,
+//     Oxygen,
+//     Ubuntu,
+//     Cantarell,
+//     'Fira Sans',
+//     'Droid Sans',
+//     'Helvetica Neue',
+//     sans-serif;
+//   // 以往自己写的项目常用的字体集
+//   // font-family:
+//   //   Helvetica Neue,
+//   //   Helvetica,
+//   //   PingFang SC,
+//   //   Hiragino Sans GB,
+//   //   Microsoft YaHei,
+//   //   Arial,
+//   //   sans-serif;
+//   text-rendering: optimizeLegibility;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
 
-#app {
-  width: 100%;
-  height: 100%;
-}
+// #app {
+//   width: 100%;
+//   height: 100%;
+// }

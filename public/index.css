@@ -1,0 +1,109 @@
+html {
+  /* rem单位计算基于html中的font-size，默认font-szie为16px则1rem=16px */
+  /* 这里font-size设成10px使得1rem=10px方便转换 */
+  font-size: 10px;
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    /* Vite创建项目时生成的字体集 */
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue',
+      sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    #app {
+      width: 100%;
+      height: 100%;
+
+      .init-wrap {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .init {
+          margin-top: -3rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .init-icon {
+            user-select: none;
+            --icon-size: 5rem;
+            width: var(--icon-size);
+            height: var(--icon-size);
+            /* 2秒一圈，无限循环 */
+            animation: spin 5s linear infinite;
+          }
+
+          .init-title {
+            user-select: none;
+            margin-top: 2rem;
+            font-size: 2rem;
+            color: #606266;
+          }
+
+          .init-sub-title {
+            user-select: none;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+            color: #606266;
+          }
+        }
+
+        .init-fail {
+          margin-top: -3rem;
+          display: none;
+          flex-direction: column;
+          align-items: center;
+
+          .init-icon {
+            user-select: none;
+            --icon-size: 5rem;
+            width: var(--icon-size);
+            height: var(--icon-size);
+          }
+
+          .init-title {
+            user-select: none;
+            margin-top: 2rem;
+            font-size: 2rem;
+            color: #606266;
+          }
+
+          .init-sub-title {
+            user-select: none;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+            color: #606266;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
