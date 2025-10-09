@@ -7,7 +7,7 @@ import { viteAwesomeSvgLoader } from 'vite-awesome-svg-loader'
 // vite配置: https://vite.dev/config/
 // vite-awesome-svg-loader插件配置: https://github.com/matafokka/vite-awesome-svg-loader
 export default defineConfig({
-  plugins: [vue(), viteAwesomeSvgLoader({ defaultImport: 'source' })],1
+  plugins: [vue(), viteAwesomeSvgLoader({ defaultImport: 'source' })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
