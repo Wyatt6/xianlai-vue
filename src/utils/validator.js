@@ -1,8 +1,11 @@
+import { useSysOptionStore } from '@/stores/sys_option'
+
 const usernameValidator = () => {
+  const SysOption = useSysOptionStore()
   return (rule, value, callback) => {
-    const regexp = /^[a-zA-Z_0-9]{3,16}$/
+    const regexp = new RegExp(`${SysOption.data.user.username.regexp}`)
     if (!regexp.test(value)) {
-      callback(new Error('仅限大写、小写字母，数字，下划线（_）'))
+      callback(new Error(SysOption.data.user.username.tips))
     } else {
       callback()
     }
@@ -10,10 +13,11 @@ const usernameValidator = () => {
 }
 
 const passwordValidator = () => {
+  const SysOption = useSysOptionStore()
   return (rule, value, callback) => {
-    const regexp = /^[a-zA-Z_0-9.~!@#$%^&*?]{6,16}$/
+    const regexp = new RegExp(`${SysOption.data.user.password.regexp}`)
     if (!regexp.test(value)) {
-      callback(new Error('仅限大写、小写字母，数字，特殊字符（_.~!@#$%^&*?）'))
+      callback(new Error(SysOption.data.user.password.tips))
     } else {
       callback()
     }
@@ -43,10 +47,22 @@ const emailValidator = () => {
 }
 
 const captchaValidator = () => {
+  const SysOption = useSysOptionStore()
   return (rule, value, callback) => {
-    const regexp = /^[a-zA-Z0-9]{5}$/
+    const regexp = new RegExp(`^[a-zA-Z0-9]{${SysOption.data.captcha.length}}$`)
     if (!regexp.test(value)) {
       callback(new Error('验证码格式不正确'))
+    } else {
+      callback()
+    }
+  }
+}
+
+const emailCodeValidator = () => {
+  return (rule, value, callback) => {
+    const regexp = /^[a-zA-Z0-9]{6}$/
+    if (!regexp.test(value)) {
+      callback(new Error('邮件校验码格式不正确'))
     } else {
       callback()
     }
@@ -58,5 +74,6 @@ export default {
   password: passwordValidator,
   phone: phoneValidator,
   email: emailValidator,
-  captcha: captchaValidator
+  captcha: captchaValidator,
+  emailCode: emailCodeValidator
 }
