@@ -87,11 +87,7 @@ function onConfirm() {
     if (valid) {
       console.log('通过表单格式验证')
       loading.value = true
-      if (
-        form.value.identifier === props.nowRow.identifier &&
-        form.value.name === props.nowRow.name &&
-        form.value.remark === props.nowRow.remark
-      ) {
+      if (form.value.identifier === props.nowRow.identifier && form.value.name === props.nowRow.name && form.value.remark === props.nowRow.remark) {
         console.log('角色无修改')
         console.groupEnd()
         ElMessage.info('角色无修改')

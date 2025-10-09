@@ -83,22 +83,10 @@
                       <el-button v-perm="[Perms.USER_QUERY]" :icon="Search" plain type="primary" @click="onBind(scope.row)" />
                     </el-tooltip>
                     <el-tooltip effect="dark" content="冻结" placement="top" v-if="scope.row.activated">
-                      <el-button
-                        v-perm="[Perms.USER_EDIT]"
-                        :icon="Open"
-                        plain
-                        type="success"
-                        @click="onChangeStatus(scope.row)"
-                      />
+                      <el-button v-perm="[Perms.USER_EDIT]" :icon="Open" plain type="success" @click="onChangeStatus(scope.row)" />
                     </el-tooltip>
                     <el-tooltip effect="dark" content="解冻" placement="top" v-else>
-                      <el-button
-                        v-perm="[Perms.USER_EDIT]"
-                        :icon="TurnOff"
-                        plain
-                        type="danger"
-                        @click="onChangeStatus(scope.row)"
-                      />
+                      <el-button v-perm="[Perms.USER_EDIT]" :icon="TurnOff" plain type="danger" @click="onChangeStatus(scope.row)" />
                     </el-tooltip>
                   </el-button-group>
                 </template>

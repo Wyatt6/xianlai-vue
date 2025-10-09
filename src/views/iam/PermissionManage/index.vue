@@ -3,9 +3,7 @@
     <el-scrollbar class="scrollbar-wrapper">
       <div class="card-wrapper">
         <el-card class="card" shadow="never">
-          <el-button size="small" type="primary" :icon="Plus" v-perm="[Perms.PERMISSION_ADD]" @click="showAddPermission = true">
-            新增
-          </el-button>
+          <el-button size="small" type="primary" :icon="Plus" v-perm="[Perms.PERMISSION_ADD]" @click="showAddPermission = true"> 新增 </el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh"> 刷新 </el-button>
           <el-form
             class="search-box-inline"
@@ -81,32 +79,14 @@
                   {{ new Date(scope.row.createTime).toLocaleString() }}
                 </template>
               </el-table-column>
-              <el-table-column
-                label="操作"
-                align="center"
-                width="140"
-                fixed="right"
-                v-perm="[Perms.PERMISSION_EDIT, Perms.PERMISSION_DELETE]"
-              >
+              <el-table-column label="操作" align="center" width="140" fixed="right" v-perm="[Perms.PERMISSION_EDIT, Perms.PERMISSION_DELETE]">
                 <template #default="scope">
                   <el-button-group size="small">
                     <el-tooltip effect="dark" content="禁用" placement="top" v-if="scope.row.activated">
-                      <el-button
-                        v-perm="[Perms.PERMISSION_EDIT]"
-                        :icon="Open"
-                        plain
-                        type="success"
-                        @click="onChangeStatus(scope.row)"
-                      />
+                      <el-button v-perm="[Perms.PERMISSION_EDIT]" :icon="Open" plain type="success" @click="onChangeStatus(scope.row)" />
                     </el-tooltip>
                     <el-tooltip effect="dark" content="激活" placement="top" v-else>
-                      <el-button
-                        v-perm="[Perms.PERMISSION_EDIT]"
-                        :icon="TurnOff"
-                        plain
-                        type="danger"
-                        @click="onChangeStatus(scope.row)"
-                      />
+                      <el-button v-perm="[Perms.PERMISSION_EDIT]" :icon="TurnOff" plain type="danger" @click="onChangeStatus(scope.row)" />
                     </el-tooltip>
                     <el-button v-perm="[Perms.PERMISSION_EDIT]" :icon="Edit" plain @click="onEdit(scope.row)" />
                     <el-button v-perm="[Perms.PERMISSION_DELETE]" :icon="Delete" type="danger" @click="onDelete(scope.row)" />

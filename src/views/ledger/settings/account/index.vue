@@ -3,15 +3,7 @@
     <el-button size="small" type="primary" :icon="Plus" @click="onAdd()">新增</el-button>
     <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
     <div class="table-wrapper">
-      <el-table
-        height="100%"
-        stripe
-        v-loading="loading"
-        row-key="id"
-        highlight-current-row
-        :current-row-key="currRowKey"
-        :data="list"
-      >
+      <el-table height="100%" stripe v-loading="loading" row-key="id" highlight-current-row :current-row-key="currRowKey" :data="list">
         <el-table-column label="序号" align="center" width="100" type="index" />
         <el-table-column label="动账账户" prop="name" />
         <el-table-column label="状态" align="center" width="100">
@@ -105,8 +97,7 @@ const refresh = async () => {
 const onChangeStatus = item => {
   const title1 = '禁用动账账户'
   const title2 = '启用动账账户'
-  const msg1 =
-    '禁用动账账户不会影响已经登记的记账明细和资产盘点数据，但无法继续使用此动账账户登记新明细或盘点资产。请确认是否禁用？'
+  const msg1 = '禁用动账账户不会影响已经登记的记账明细和资产盘点数据，但无法继续使用此动账账户登记新明细或盘点资产。请确认是否禁用？'
   const msg2 = '启用后可以继续使用此动账账户登记新记账明细和盘点资产。请确认是否启用？'
   ElMessageBox.confirm(item.activated ? msg1 : msg2, item.activated ? title1 : title2, { type: 'warning' })
     .then(() => {

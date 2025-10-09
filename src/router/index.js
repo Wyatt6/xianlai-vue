@@ -248,11 +248,7 @@ router.beforeEach((to, from, next) => {
   if (noLoginRequired.indexOf(to.path) > -1) {
     // ----- 1、访问白名单路径（不需要登录即可访问的路径） -----
     console.log('访问白名单页面')
-    if (
-      (to.path === Routes.PORTAL || to.path === Routes.LOGIN || to.path === Routes.REGISTER) &&
-      Token.hasToken() &&
-      !Token.isExpired()
-    ) {
+    if ((to.path === Routes.PORTAL || to.path === Routes.LOGIN || to.path === Routes.REGISTER) && Token.hasToken() && !Token.isExpired()) {
       console.log('用户已登录，不允许访问登录和注册页面，重定向到主页')
       console.groupEnd()
       next(Routes.INDEX)

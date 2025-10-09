@@ -10,9 +10,7 @@
               <el-button size="small" :icon="expand ? 'ArrowUp' : 'ArrowDown'" @click="onExpand()">
                 {{ expand ? '取消查询' : '详细查询' }}
               </el-button>
-              <el-button size="small" :type="btnType[0]" :bg="btnBg[0]" text @click="onSelectMode(0)" style="margin-left: 3rem">
-                总账本
-              </el-button>
+              <el-button size="small" :type="btnType[0]" :bg="btnBg[0]" text @click="onSelectMode(0)" style="margin-left: 3rem"> 总账本 </el-button>
               <el-button size="small" :type="btnType[1]" :bg="btnBg[1]" text @click="onSelectMode(1)">本月账本</el-button>
               <el-button size="small" :type="btnType[2]" :bg="btnBg[2]" text @click="onSelectMode(2)">上月账本</el-button>
             </div>
@@ -54,12 +52,7 @@
             :model="searchForm"
           >
             <el-form-item label="日期" prop="dateRange">
-              <el-date-picker
-                v-model="searchForm.dateRange"
-                type="daterange"
-                start-placeholder="开始日期（含）"
-                end-placeholder="结束日期（含）"
-              />
+              <el-date-picker v-model="searchForm.dateRange" type="daterange" start-placeholder="开始日期（含）" end-placeholder="结束日期（含）" />
             </el-form-item>
             <el-form-item label="收支类型" prop="type">
               <el-select v-model="searchForm.type" clearable>
@@ -676,9 +669,7 @@ onMounted(() => {
           // 减去调整值: 6.7rem
           --btn-area-height: v-bind(btnAreaHeight);
           --search-box-height: v-bind(searchBoxHeight);
-          height: calc(
-            100vh - $--navbar-height - $--tagbar-height - var(--btn-area-height) - var(--search-box-height) - 4.4rem - 5.7rem
-          );
+          height: calc(100vh - $--navbar-height - $--tagbar-height - var(--btn-area-height) - var(--search-box-height) - 4.4rem - 5.7rem);
         }
 
         .pagination-wrapper {

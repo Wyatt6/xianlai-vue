@@ -14,12 +14,7 @@
         @contextmenu.prevent="openContextMenu($event, index, tag.fullPath)"
       >
         {{ tag.title }}
-        <LocalIcon
-          style="margin-left: 0.3rem"
-          name="ri-close-circle-line"
-          size="1.4rem"
-          @click.prevent.stop="onCloseClick(tag, index)"
-        />
+        <LocalIcon style="margin-left: 0.3rem" name="ri-close-circle-line" size="1.4rem" @click.prevent.stop="onCloseClick(tag, index)" />
       </router-link>
     </el-scrollbar>
     <ContextMenu v-show="visible" :style="menuStyle" :index="selectIndex" :tagPath="selectTagPath" />

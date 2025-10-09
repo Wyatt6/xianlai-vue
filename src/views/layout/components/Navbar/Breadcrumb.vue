@@ -2,11 +2,7 @@
   <el-breadcrumb class="breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in breadcrumbData" :key="item.path">
-        <span
-          class="redirect"
-          v-if="index < breadcrumbData.length - 1 && item.meta.breadcrumbRedirect"
-          @click="router.push(item.path)"
-        >
+        <span class="redirect" v-if="index < breadcrumbData.length - 1 && item.meta.breadcrumbRedirect" @click="router.push(item.path)">
           {{ item.meta.title }}
         </span>
         <span class="no-redirect" v-else>{{ item.meta.title }}</span>

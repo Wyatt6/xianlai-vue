@@ -3,9 +3,7 @@
     <el-scrollbar class="scrollbar-wrapper">
       <div class="card-wrapper">
         <el-card class="card" shadow="never">
-          <el-button size="small" type="primary" :icon="Plus" v-perm="[Perms.ROLE_ADD]" @click="showAddRole = true">
-            新增
-          </el-button>
+          <el-button size="small" type="primary" :icon="Plus" v-perm="[Perms.ROLE_ADD]" @click="showAddRole = true"> 新增 </el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
           <el-form
             class="search-box-inline"
@@ -80,35 +78,17 @@
                   {{ new Date(scope.row.createTime).toLocaleString() }}
                 </template>
               </el-table-column>
-              <el-table-column
-                label="操作"
-                align="center"
-                width="240"
-                fixed="right"
-                v-perm="[Perms.ROLE_QUERY, Perms.ROLE_EDIT, Perms.ROLE_DELETE]"
-              >
+              <el-table-column label="操作" align="center" width="240" fixed="right" v-perm="[Perms.ROLE_QUERY, Perms.ROLE_EDIT, Perms.ROLE_DELETE]">
                 <template #default="scope">
                   <el-button-group size="small">
                     <el-tooltip effect="dark" content="查看授权" placement="top">
                       <el-button v-perm="[Perms.ROLE_QUERY]" :icon="Search" plain type="primary" @click="onGrant(scope.row)" />
                     </el-tooltip>
                     <el-tooltip effect="dark" content="禁用" placement="top" v-if="scope.row.activated">
-                      <el-button
-                        v-perm="[Perms.ROLE_EDIT]"
-                        :icon="Open"
-                        plain
-                        type="success"
-                        @click="onChangeStatus(scope.row)"
-                      />
+                      <el-button v-perm="[Perms.ROLE_EDIT]" :icon="Open" plain type="success" @click="onChangeStatus(scope.row)" />
                     </el-tooltip>
                     <el-tooltip effect="dark" content="激活" placement="top" v-else>
-                      <el-button
-                        v-perm="[Perms.ROLE_EDIT]"
-                        :icon="TurnOff"
-                        plain
-                        type="danger"
-                        @click="onChangeStatus(scope.row)"
-                      />
+                      <el-button v-perm="[Perms.ROLE_EDIT]" :icon="TurnOff" plain type="danger" @click="onChangeStatus(scope.row)" />
                     </el-tooltip>
                     <el-button v-perm="[Perms.ROLE_EDIT]" :icon="Edit" plain @click="onEdit(scope.row)" />
                     <el-button v-perm="[Perms.ROLE_EDIT]" v-if="!searched" :icon="Top" plain @click="moveUp(scope)" />

@@ -3,15 +3,7 @@
     <el-button size="small" type="primary" :icon="Plus" @click="onAdd('root')">新增</el-button>
     <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
     <div class="table-wrapper">
-      <el-table
-        :data="tree"
-        height="100%"
-        stripe
-        row-key="id"
-        highlight-current-row
-        :current-row-key="currRowKey"
-        v-loading="loading"
-      >
+      <el-table :data="tree" height="100%" stripe row-key="id" highlight-current-row :current-row-key="currRowKey" v-loading="loading">
         <el-table-column label="记账类别">
           <template #default="scope">
             {{ scope.row.data.name }}
@@ -48,13 +40,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <ChangeParent
-      :show="showChangeParent"
-      :nowRow="nowRow"
-      :tree="tree"
-      @close="showChangeParent = false"
-      @after="getCategoryTree()"
-    />
+    <ChangeParent :show="showChangeParent" :nowRow="nowRow" :tree="tree" @close="showChangeParent = false" @after="getCategoryTree()" />
   </div>
 </template>
 
