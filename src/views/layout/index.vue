@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap" :class="[layoutStore.sidebarExpand ? '' : 'sidebar-hidden']">
-    <Sidebar />
+    <Menubar />
     <div class="right-wrap">
       <div class="fixed-header">
         <Navbar />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import Sidebar from './components/Sidebar/index.vue'
+import Menubar from './components/Menubar/index.vue'
 import Navbar from './components/Navbar/index.vue'
 import Tagbar from './components/Tagbar/index.vue'
 import Content from './components/Content/index.vue'
