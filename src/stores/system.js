@@ -50,8 +50,32 @@ export const useSystemStore = defineStore('system', () => {
     if (app != null) app.mount('#app')
   }
 
+  function getChecksums() {
+    return initData.value.checksum
+  }
+
+  function isChecksumChange(newChecksum) {
+    const oldChecksum = getChecksums()
+    const newKeys = Object.keys(newChecksum)
+    for (let i = 0; i < newKeys.length; i++) {
+      const k = newKeys[i]
+      if (!hasText(oldChecksum[k]) || oldChecksum[k] !== newChecksum[k]) {
+        return true
+      }
+    }
+    const oldKeys = Object.keys(oldChecksum)
+    for (let i = 0; i < oldKeys.length; i++) {
+      const k = oldKeys[i]
+      if (!hasText(newChecksum[k]) || newChecksum[k] !== oldChecksum[k]) {
+        return true
+      }
+    }
+    return false
+  }
+
   return {
     initData,
-    initialize
+    initialize,
+    isChecksumChange
   }
 })
