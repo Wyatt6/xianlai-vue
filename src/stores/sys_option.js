@@ -15,6 +15,19 @@ export const useSysOptionStore = defineStore('sysOption', () => {
     },
     request: {
       timeout: 10000
+    },
+    portal: {
+      coverImageType: 'local',
+      coverImagePath: '/src/assets/images/portal/default-cover.jpg',
+      coverTitle: '封面标题',
+      coverTitleSize: 5,
+      coverTitleColor: '#ffffff',
+      coverSubTitle: '封面副标题',
+      coverSubTitleSize: 2,
+      coverSubTitleColor: '#ffffff',
+      footerCopyright: '',
+      footerBeianIcp: '',
+      footerBeianGongan: ''
     }
   })
   const checksum = ref(null)
