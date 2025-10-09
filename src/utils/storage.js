@@ -1,12 +1,13 @@
 export default {
   keys: {
-    REMEMBER_USERNAME: 'portal.remember.username',
-    TOKEN_KEY: 'system.token',
-    TOKEN_EXPIRED_TIME_KEY: 'system.token_expired_time',
+    TOKEN: 'token',
+    TOKEN_EXPIRE_TIME: 'token_expire_time',
+    REMEMBER_USERNAME: 'remember_username',
+    SIDEBAR_EXPAND: 'sidebar_expand',
+    TAG_LIST: 'tag_list',
+
     AUTHORITY: 'system.authority',
-    USER: 'system.user',
-    SIDEBAR_EXPAND: 'layout.sidebar_expand',
-    TAG_LIST: 'layout.tag_list'
+    USER: 'system.user'
   },
 
   /**

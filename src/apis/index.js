@@ -27,19 +27,19 @@ const apiList = [
     callPath: 'common.captcha.getCaptcha',
     requestMethod: 'get',
     url: '/api/common/captcha/getCaptcha'
+  },
+  {
+    description: '注册新用户',
+    callPath: 'iam.user.register',
+    requestMethod: 'post',
+    url: '/api/iam/user/register'
+  },
+  {
+    description: '用户登录',
+    callPath: 'iam.user.login',
+    requestMethod: 'post',
+    url: '/api/iam/user/login'
   }
-  //   {
-  //     description: '注册新用户',
-  //     callPath: 'iam.user.register',
-  //     requestMethod: 'post',
-  //     url: '/api/iam/user/register'
-  //   },
-  //   {
-  //     description: '用户登录',
-  //     callPath: 'iam.user.login',
-  //     requestMethod: 'post',
-  //     url: '/api/iam/user/login'
-  //   }
 ]
 
 export const useApiStore = defineStore('api', () => {
