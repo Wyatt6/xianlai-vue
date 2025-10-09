@@ -11,6 +11,24 @@ export function isEmpty(data) {
 }
 
 /**
+ * 判断数据是否非空（null/undefined/{}/[]）
+ * @param {*} data
+ * @returns true-非空；false-空
+ */
+export function notEmpty(data) {
+  return !isEmpty(data)
+}
+
+/**
+ * 检查字符串是否非null且至少含有一个非空白字符
+ * @param {*} data
+ * @returns
+ */
+export function hasText(str) {
+  return str != null && str.length > 0 && str.trim().length > 0
+}
+
+/**
  * 获取某个月有多少天
  * @param {*} year 年份
  * @param {*} month 月份
