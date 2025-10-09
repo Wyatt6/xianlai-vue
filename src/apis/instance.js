@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import { useSystemStore } from '@/stores/system'
 import { useSysOptionStore } from '@/stores/sys_option'
 // import router from '@/router'
-// import Token from '@/utils/token'
+import Token from '@/utils/token'
 import Logger from '@/utils/logger'
 import RequestLogger from './request_logger'
 import { notEmpty, hasText } from '@/utils/common'
@@ -23,17 +23,16 @@ export function createAxiosInstance() {
      * 在发送请求之前做些什么
      */
     async function (config) {
-      // TODO
-      //       if (Token.hasToken()) {
-      //         if (Token.isExpired()) {
-      //           Logger.log('登录已过期，重定向到登录页面')
-      //           await System.resetStoreAndStorage()
-      //           router.push('/portal/login')
-      //           return Promise.reject(new Error('登录已过期，请重新登录'))
-      //         } else {
-      //           config.headers.token = `${Token.getToken()}` // 在报文头中注入token
-      //         }
-      //       }
+      if (Token.hasToken()) {
+        if (Token.isExpired()) {
+          Logger.log('登录已过期，重定向到登录页面')
+          await System.resetStoreAndStorage()
+          router.push('/portal/login')
+          return Promise.reject(new Error('登录已过期，请重新登录'))
+        } else {
+          config.headers.token = `${Token.getToken()}` // 在报文头中注入token
+        }
+      }
       RequestLogger.send.info(config)
       return config
     },
@@ -85,6 +84,29 @@ export function createAxiosInstance() {
         //             return Promise.reject(new Error(result.data.code))
         //           }
         //         }
+
+        //       // 401-未登录：清除缓存，重定向到登录页面
+        //       if (res.data.code === 401) {
+        //         console.log('401-登录已过期，跳转到登陆页面')
+        //         ElMessage.error('登录已过期，请重新登录')
+        //         appStore.setLogoutLock()
+        //         await appStore.initialize()
+        //         console.groupEnd()
+        //         await Router.push(Routes.LOGIN)
+        //         appStore.releaseLogoutLock()
+        //         return Promise.reject(new Error('登录已过期，请重新登录'))
+        //       }
+        //       // 其他只需要提示的错误：400-请求参数错误、403-用户权限不足、500-服务器内部错误
+        //       if (res.data.code === 400 || res.data.code === 500) {
+        //         if (res.message) {
+        //           ElMessage.error(res.message)
+        //           return Promise.reject(new Error(res.message))
+        //         } else {
+        //           ElMessage.error('' + res.data.code + '错误')
+        //           return Promise.reject(new Error(res.data.code))
+        //         }
+        //       }
+
         // 对于以上集中错误处理以外未列出的情况，返回给调用方处理
         return result
       } else {

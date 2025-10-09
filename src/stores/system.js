@@ -3,8 +3,11 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
-import { useSysOptionStore } from './sys_option'
+import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
+import { useSysOptionStore } from './sys_option'
+import { useAuthorityStore } from './authority'
+import { useLayoutStore } from './layout'
 
 export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
@@ -77,9 +80,24 @@ export const useSystemStore = defineStore('system', () => {
     return false
   }
 
+  function $reset() {
+    // 锁是不应该被重置的
+  }
+
+  async function resetStoreAndStorage() {
+    $reset()
+    useAuthorityStore().$reset()
+    useLayoutStore().$reset()
+
+    const username = Storage.get(Storage.keys.REMEMBER_USERNAME)
+    Storage.clear()
+    if (username != null) Storage.set(Storage.keys.REMEMBER_USERNAME, username)
+  }
+
   return {
     initData,
     initialize,
+    resetStoreAndStorage,
     isChecksumChange
   }
 })
