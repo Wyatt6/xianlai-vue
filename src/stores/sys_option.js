@@ -10,6 +10,9 @@ import { hasText, isEmpty } from '@/utils/common'
 
 export const useSysOptionStore = defineStore('sysOption', () => {
   const data = ref({
+    console: {
+      openLog: true
+    }
   })
   const checksum = ref(null)
 

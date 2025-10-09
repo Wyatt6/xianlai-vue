@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
+import Logger from '@/utils/logger'
 import { useSysOptionStore } from './sys_option'
 
 export const useSystemStore = defineStore('system', () => {
@@ -33,7 +34,7 @@ export const useSystemStore = defineStore('system', () => {
             }
           } else {
             initFail()
-            console.log('获取初始数据失败')
+            console.error('获取初始数据失败')
           }
         })
         .catch(error => {
@@ -45,6 +46,7 @@ export const useSystemStore = defineStore('system', () => {
         })
     }
 
+    Logger.log('系统初始化完成')
     if (app != null) app.mount('#app')
   }
 
