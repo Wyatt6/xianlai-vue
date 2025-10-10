@@ -44,6 +44,9 @@ export const useSystemStore = defineStore('system', () => {
               if (notEmpty(result.data.menus) && hasText(result.data.checksum.sysMenusChecksum)) {
                 await useMenuStore().evalData(result.data.menus, result.data.checksum.sysMenusChecksum)
               }
+              // 系统接口
+              if (notEmpty(result.data.apis) && hasText(result.data.checksum.sysApisChecksum)) {
+                await useApiStore().evalData(result.data.apis, result.data.checksum.sysApisChecksum)
               }
             }
           } else {
