@@ -17,7 +17,7 @@
         <el-input size="large" placeholder="密码" v-model="formModel.password" type="password" :maxlength="pMaxLen" show-password />
       </el-form-item>
       <el-form-item prop="captcha">
-        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" :maxlength="SysOption.data.captcha.length" clearable>
+        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" :maxlength="Option.data.captcha.length" clearable>
           <template #append>
             <div class="captcha-box">
               <Captcha ref="captchaRef" :loading="loading" />
@@ -48,14 +48,14 @@ import { useRouter } from 'vue-router'
 import Storage from '@/utils/storage'
 import Validator from '@/utils/validator'
 import Logger from '@/utils/logger'
-import { useSysOptionStore } from '@/stores/sys_option'
+import { useOptionStore } from '@/stores/option'
 import { useApiStore } from '@/apis'
 
 const loading = ref(false)
 const router = useRouter()
 const captchaRef = ref()
 const rememberMe = ref(Storage.get(Storage.keys.REMEMBER_USERNAME) != null)
-const SysOption = useSysOptionStore()
+const Option = useOptionStore()
 const Api = useApiStore()
 
 const formRef = ref()
@@ -64,10 +64,10 @@ const formModel = ref({
   password: '',
   captcha: ''
 })
-const uMinLen = SysOption.data.user.username.minLen
-const uMaxLen = SysOption.data.user.username.maxLen
-const pMinLen = SysOption.data.user.password.minLen
-const pMaxLen = SysOption.data.user.password.maxLen
+const uMinLen = Option.data.user.username.minLen
+const uMaxLen = Option.data.user.username.maxLen
+const pMinLen = Option.data.user.password.minLen
+const pMaxLen = Option.data.user.password.maxLen
 const formRules = ref({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },

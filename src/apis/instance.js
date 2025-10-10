@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useSystemStore } from '@/stores/system'
-import { useSysOptionStore } from '@/stores/sys_option'
+import { useOptionStore } from '@/stores/option'
 // import router from '@/router'
 import Token from '@/utils/token'
 import Logger from '@/utils/logger'
@@ -10,11 +10,11 @@ import { notEmpty, hasText } from '@/utils/common'
 
 export function createAxiosInstance() {
   const System = useSystemStore()
-  const SysOption = useSysOptionStore()
+  const Option = useOptionStore()
   // axios 配置详见：https://www.axios-http.cn/docs/req_config
   const instance = axios.create({
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    timeout: SysOption.data.request.timeout
+    timeout: Option.data.request.timeout
     // ...其他配置使用axios的默认值
   })
   // 添加请求拦截器

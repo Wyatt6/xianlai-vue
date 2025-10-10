@@ -1,14 +1,14 @@
 /**
  * 系统参数使用方法：
- * const SysOption = useSysOptionStore()
- * SysOption.data.xxx.xxx
+ * const Option = useOptionStore()
+ * Option.data.xxx.xxx
  */
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { hasText, isEmpty } from '@/utils/common'
 
-export const useSysOptionStore = defineStore('sysOption', () => {
+export const useOptionStore = defineStore('option', () => {
   const data = ref({
     system: {
       name: 'XianLai'

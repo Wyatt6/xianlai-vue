@@ -1,11 +1,11 @@
-import { useSysOptionStore } from '@/stores/sys_option'
+import { useOptionStore } from '@/stores/option'
 
 /**
  * 请求发送日志
  * @param {*} request 请求对象
  */
 function sendInfo(request) {
-  if (useSysOptionStore().data.console.openLog) {
+  if (useOptionStore().data.console.openLog) {
     let baseUrl = request.baseURL
     if (baseUrl != null && baseUrl.endsWith('/')) {
       baseUrl = baseUrl.slice(0, baseUrl.length - 1)
@@ -26,7 +26,7 @@ function sendInfo(request) {
  * @param {*} message   异常信息
  */
 function sendError(error, message) {
-  if (useSysOptionStore().data.console.openLog) {
+  if (useOptionStore().data.console.openLog) {
     let baseUrl = error.config.baseURL
     if (baseUrl != null && baseUrl.endsWith('/')) {
       baseUrl = baseUrl.slice(0, baseUrl.length - 1)
@@ -53,7 +53,7 @@ function sendError(error, message) {
  * @param {*} response  响应对象
  */
 function receiveInfo(request, response) {
-  if (useSysOptionStore().data.console.openLog) {
+  if (useOptionStore().data.console.openLog) {
     let baseUrl = request.baseURL
     if (baseUrl != null && baseUrl.endsWith('/')) {
       baseUrl = baseUrl.slice(0, baseUrl.length - 1)
@@ -83,7 +83,7 @@ function receiveInfo(request, response) {
  * @param {*} message   异常信息
  */
 function receiveError(error, message) {
-  if (useSysOptionStore().data.console.openLog) {
+  if (useOptionStore().data.console.openLog) {
     let baseUrl = error.config.baseURL
     if (baseUrl != null && baseUrl.endsWith('/')) {
       baseUrl = baseUrl.slice(0, baseUrl.length - 1)

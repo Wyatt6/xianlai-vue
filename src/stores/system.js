@@ -5,7 +5,7 @@ import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
-import { useSysOptionStore } from './sys_option'
+import { useOptionStore } from './option'
 import { useSysPathStore } from './sys_path'
 import { useMenuStore } from './menu'
 import { useAuthorityStore } from './authority'
@@ -36,7 +36,7 @@ export const useSystemStore = defineStore('system', () => {
               initData.value = result.data
               // 系统参数
               if (notEmpty(result.data.options) && hasText(result.data.checksum.sysOptionsChecksum)) {
-                await useSysOptionStore().evalData(result.data.options, result.data.checksum.sysOptionsChecksum)
+                await useOptionStore().evalData(result.data.options, result.data.checksum.sysOptionsChecksum)
                 Logger.log('系统参数初始化完成')
               }
               // 系统路径
@@ -68,10 +68,6 @@ export const useSystemStore = defineStore('system', () => {
           initing.value = false
         })
     }
-
-    // 加载接口对象
-    useApiStore().evalData()
-
     Logger.log('系统初始化完成')
     if (app != null) app.mount('#app')
   }

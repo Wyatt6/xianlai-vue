@@ -20,7 +20,7 @@
         <el-input size="large" placeholder="再次输入密码" v-model="formModel.password2" :maxlength="pMaxLen" show-password />
       </el-form-item>
       <el-form-item prop="captcha">
-        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" :maxlength="SysOption.data.captcha.length" clearable>
+        <el-input size="large" placeholder="验证码" v-model="formModel.captcha" :maxlength="Option.data.captcha.length" clearable>
           <template #append>
             <div class="captcha-box">
               <Captcha ref="captchaRef" :loading="loading" />
@@ -50,7 +50,7 @@ import TermsOfUse from './TermsOfUse.vue'
 import PrivacyPolicy from './PrivacyPolicy.vue'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSysOptionStore } from '@/stores/sys_option'
+import { useOptionStore } from '@/stores/option'
 import Validator from '@/utils/validator'
 import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
@@ -59,7 +59,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter()
 const loading = ref(false)
 const captchaRef = ref()
-const SysOption = useSysOptionStore()
+const Option = useOptionStore()
 const Api = useApiStore()
 
 const formRef = ref()
@@ -69,10 +69,10 @@ const formModel = ref({
   password2: '',
   captcha: ''
 })
-const uMinLen = SysOption.data.user.username.minLen
-const uMaxLen = SysOption.data.user.username.maxLen
-const pMinLen = SysOption.data.user.password.minLen
-const pMaxLen = SysOption.data.user.password.maxLen
+const uMinLen = Option.data.user.username.minLen
+const uMaxLen = Option.data.user.username.maxLen
+const pMinLen = Option.data.user.password.minLen
+const pMaxLen = Option.data.user.password.maxLen
 const formRules = ref({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -126,7 +126,7 @@ function onRegister() {
         .then(result => {
           if (result && result.success) {
             Logger.log('注册成功，跳转到登录页面')
-            ElMessageBox.alert(`欢迎使用「${SysOption.data.system.name}」系统，请登陆`, '注册成功', {
+            ElMessageBox.alert(`欢迎使用「${Option.data.system.name}」系统，请登陆`, '注册成功', {
               callback: action => {
                 router.push('/portal/login')
               }

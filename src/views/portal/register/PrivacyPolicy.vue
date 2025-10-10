@@ -4,7 +4,7 @@
       <div>
         <h2>隐私保护（个人信息保护）政策</h2>
       </div>
-      <div v-html="SysOption.data.content.privacyPolicy"></div>
+      <div v-html="Option.data.content.privacyPolicy"></div>
     </el-scrollbar>
     <template #footer>
       <el-button type="primary" @click="onClose">确定</el-button>
@@ -13,9 +13,9 @@
 </template>
 
 <script setup>
-import { useSysOptionStore } from '@/stores/sys_option'
+import { useOptionStore } from '@/stores/option'
 
-const SysOption = useSysOptionStore()
+const Option = useOptionStore()
 
 defineProps({
   show: {

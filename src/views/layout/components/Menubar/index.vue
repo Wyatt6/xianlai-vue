@@ -3,7 +3,7 @@
     <router-link :to="Routes.INDEX">
       <div class="logo-container">
         <el-avatar class="logo" :size="34" shape="square" :src="logoSrc" />
-        <span class="logo-title">{{ SysOption.data.menubar.logoTitle }}</span>
+        <span class="logo-title">{{ Option.data.menubar.logoTitle }}</span>
       </div>
     </router-link>
     <el-scrollbar>
@@ -29,11 +29,11 @@ import MenuItem from './MenuItem.vue'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
-import { useSysOptionStore } from '@/stores/sys_option'
+import { useOptionStore } from '@/stores/option'
 import { useMenuStore } from '@/stores/menu'
 import Routes from '@/router/routes'
 
-const SysOption = useSysOptionStore()
+const Option = useOptionStore()
 const Menu = useMenuStore()
 const layoutStore = useLayoutStore()
 const route = useRoute()
@@ -52,9 +52,9 @@ const activeMenuPath = computed(() => {
  */
 const logoSrc = ref('/src/assets/images/layout/default-logo.png') // TODO 自定义logo
 
-const logoTitleColor = ref(SysOption.data.menubar.logoTitleColor)
-const logoTitleWeight = ref(SysOption.data.menubar.logoTitleWeight)
-const logoTitleSize = ref(`${SysOption.data.menubar.logoTitleSize}rem`)
+const logoTitleColor = ref(Option.data.menubar.logoTitleColor)
+const logoTitleWeight = ref(Option.data.menubar.logoTitleWeight)
+const logoTitleSize = ref(`${Option.data.menubar.logoTitleSize}rem`)
 </script>
 
 <style lang="scss">
