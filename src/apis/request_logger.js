@@ -14,7 +14,7 @@ function sendInfo(request) {
     if (pathUrl[0] === '/') {
       pathUrl = pathUrl.slice(1, pathUrl.length)
     }
-    const url = baseUrl + '/' + pathUrl
+    const url = baseUrl != null ? baseUrl + '/' + pathUrl : '/' + pathUrl
     console.groupCollapsed('%cRequest: [' + request.method.toUpperCase() + '] ' + url + ' ' + request.desc, 'color:black')
     console.groupEnd()
   }
@@ -35,7 +35,7 @@ function sendError(error, message) {
     if (pathUrl[0] === '/') {
       pathUrl = pathUrl.slice(1, pathUrl.length)
     }
-    const url = baseUrl + '/' + pathUrl
+    const url = baseUrl != null ? baseUrl + '/' + pathUrl : '/' + pathUrl
     console.groupCollapsed('%cERROR Request: [' + error.config.method.toUpperCase() + '] ' + url + ' ' + error.config.desc, 'color:red')
     if (message != null) {
       console.log('message:', message)
@@ -62,7 +62,7 @@ function receiveInfo(request, response) {
     if (pathUrl[0] === '/') {
       pathUrl = pathUrl.slice(1, pathUrl.length)
     }
-    const url = baseUrl + '/' + pathUrl
+    const url = baseUrl != null ? baseUrl + '/' + pathUrl : '/' + pathUrl
     console.groupCollapsed('%cResponse: ' + url, 'color:green')
     if (response && response.traceId != null) {
       console.log('traceId:', response.traceId)
@@ -92,7 +92,7 @@ function receiveError(error, message) {
     if (pathUrl[0] === '/') {
       pathUrl = pathUrl.slice(1, pathUrl.length)
     }
-    const url = baseUrl + '/' + pathUrl
+    const url = baseUrl != null ? baseUrl + '/' + pathUrl : '/' + pathUrl
     console.groupCollapsed('%cERROR Response: [' + error.response.status + '] ' + url, 'color:red')
     if (message != null) {
       console.log('message:', message)
