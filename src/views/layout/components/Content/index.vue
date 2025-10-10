@@ -2,9 +2,9 @@
   <div class="content-wrap">
     <router-view v-slot="{ Component, route }">
       <!-- TODO 使用KeepAlive也无法缓存组件状态，每次路由切换同样需要加载，还会钩子函数执行混乱 -->
-      <!-- <keep-alive> -->
-      <component :is="Component" :key="route.path" />
-      <!-- </keep-alive> -->
+      <keep-alive>
+        <component :is="Component" :key="route.path" />
+      </keep-alive>
     </router-view>
   </div>
 </template>
@@ -45,7 +45,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import '../../index.module.scss';
+@use '../../index.module.scss' as vars;
 
 $--padding-top: 0.5rem;
 $--padding-left-right: 0.8rem;
@@ -53,7 +53,7 @@ $--padding-left-right: 0.8rem;
 .content-wrap {
   width: 100%;
   height: 100%;
-  padding: calc($--navbar-height + $--tagbar-height + $--padding-top) $--padding-left-right 0 $--padding-left-right;
+  padding: calc(vars.$navbar-height + vars.$tagbar-height + $--padding-top) $--padding-left-right 0 $--padding-left-right;
   overflow: hidden;
   box-sizing: border-box;
 }
