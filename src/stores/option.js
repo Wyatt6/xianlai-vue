@@ -62,6 +62,9 @@ export const useOptionStore = defineStore('option', () => {
   })
   const checksum = ref(null)
 
+  /**
+   * 系统参数赋值函数
+   */
   async function evalData(optionData, checksumData) {
     checksum.value = checksumData
     Object.entries(optionData).forEach(([key, valueObj]) => {
