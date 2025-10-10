@@ -52,6 +52,12 @@ export const useSysOptionStore = defineStore('sysOption', () => {
     content: {
       termsOfUse: '使用条款未发布',
       privacyPolicy: '隐私保护政策未发布'
+    },
+    menubar: {
+      logoTitle: 'XianLai',
+      logoTitleColor: '#ffffff',
+      logoTitleWeight: 700,
+      logoTitleSize: 1.8
     }
   })
   const checksum = ref(null)

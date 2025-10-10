@@ -56,6 +56,10 @@ const activeMenuPath = computed(() => {
   const { path } = route
   return path // 对应的是v-for里的key的路径
 })
+
+const logoTitleColor = ref(SysOption.data.menubar.logoTitleColor)
+const logoTitleWeight = ref(SysOption.data.menubar.logoTitleWeight)
+const logoTitleSize = ref(`${SysOption.data.menubar.logoTitleSize}rem`)
 </script>
 
 <style lang="scss">
@@ -156,11 +160,11 @@ const activeMenuPath = computed(() => {
 
     .logo-title {
       font-family: Tahoma;
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.8rem;
       width: calc(vars.$menubar-width - 0.8rem - 34px - 2rem);
       transition: width #{vars.$menubar-transition-duration};
+      color: v-bind(logoTitleColor);
+      font-weight: v-bind(logoTitleWeight);
+      font-size: v-bind(logoTitleSize);
       // 以下3个属性使得标题平滑显示
       height: 2.1rem;
       line-height: 2.1rem;
