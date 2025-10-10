@@ -1,48 +1,48 @@
 // ---------- 菜单栏样式 ----------
-$--sidebar-width: 21rem;
-$--sidebar-width-hidden: 5rem;
-$--sidebar-transition-duration: 0.3s;
-$--sidebar-color: #384e6a; // #465f8c #304156
+$menubar-width: 23rem;
+$menubar-width-hidden: 5rem;
+$menubar-transition-duration: 0.3s;
+$menubar-color: #384e6a; // #465f8c #304156 var(--menu-background)
 
 // ---------- 菜单样式 ----------
-$--menu-item-height: 4rem;
-$--menu-item-margin-left: -0.48rem;
-$--menu-item-padding-right: 0rem; // 无法确定此参数的作用
-$--menu-color: $--sidebar-color;
-$--menu-hover-color: #263445;
-$--menu-text-color: #aab9ca; // #8199b4
-$--menu-active-text-color: #409eff;
-$--menu-active-sub-menu-text-color: #ffffff;
+$menu-item-height: 4rem;
+$menu-item-margin-left: -0.48rem;
+$menu-item-padding-right: 0rem; // 无法确定此参数的作用
+$menu-background-color: $menubar-color; // var(--menu-background);
+$menu-hover-color: #263445; // var(--menu-hover-color); // 没用上
+$menu-text-color: #aab9ca; // var(--menu-text-color);
+$menu-active-text-color: #409eff; // var(--menu-active-text-color);
+$menu-active-sub-menu-text-color: #ffffff; // var(--menu-active-sub-menu-text-color);
 
 // ---------- 导航栏样式 ----------
-$--navbar-height: 4.6rem;
-$--navbar-color: #ffffff;
+$navbar-height: 4.6rem;
+$navbar-color: #ffffff;
 
 // ---------- 标签栏样式 ----------
-$--tagbar-height: 3rem;
-$--tagbar-color: #ffffff;
-$--tagbar-active-tag-color: $--menu-active-text-color;
+$tagbar-height: 3rem;
+$tagbar-color: #ffffff;
+$tagbar-active-tag-color: $menu-active-text-color; // var(--tagbar-active-tag-color);
 
 // 和js共享参数，注意文件名后缀需要是.module.scss
 :export {
-  sidebarWidth: $--sidebar-width;
-  sidebarWidthHidden: $--sidebar-width-hidden;
-  sidebarTransitionDuration: $--sidebar-transition-duration;
-  sidebarColor: $--sidebar-color;
+  menubarWidth: $menubar-width;
+  menubarWidthHidden: $menubar-width-hidden;
+  menubarTransitionDuration: $menubar-transition-duration;
+  menubarColor: $menubar-color;
 
-  menuItemHeight: $--menu-item-height;
-  menuItemMarginLeft: $--menu-item-margin-left;
-  menuItemPaddingRight: $--menu-item-padding-right;
-  menuColor: $--menu-color;
-  menuHoverColor: $--menu-hover-color;
-  menuTextColor: $--menu-text-color;
-  menuActiveTextColor: $--menu-active-text-color;
-  menuActiveSubMenuTextColor: $--menu-active-sub-menu-text-color;
+  menuItemHeight: $menu-item-height;
+  menuItemMarginLeft: $menu-item-margin-left;
+  menuItemPaddingRight: $menu-item-padding-right;
+  menuBackgroundColor: $menu-background-color;
+  menuHoverColor: $menu-hover-color;
+  menuTextColor: $menu-text-color;
+  menuActiveTextColor: $menu-active-text-color;
+  menuActiveSubMenuTextColor: $menu-active-sub-menu-text-color;
 
-  navbarHeight: $--navbar-height;
-  navbarColor: $--navbar-color;
+  navbarHeight: $navbar-height;
+  navbarColor: $navbar-color;
 
-  tagbarHeight: $--tagbar-height;
-  tagbarColor: $--tagbar-color;
-  tagbarActiveTagColor: $--tagbar-active-tag-color;
+  tagbarHeight: $tagbar-height;
+  tagbarColor: $tagbar-color;
+  tagbarActiveTagColor: $tagbar-active-tag-color;
 }
