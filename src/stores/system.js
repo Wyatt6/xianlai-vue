@@ -6,7 +6,7 @@ import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
 import { useOptionStore } from './option'
-import { useSysPathStore } from './sys_path'
+import { usePathStore } from './path'
 import { useMenuStore } from './menu'
 import { useAuthorityStore } from './authority'
 import { useLayoutStore } from './layout'
@@ -41,7 +41,7 @@ export const useSystemStore = defineStore('system', () => {
               }
               // 系统路径
               if (notEmpty(result.data.paths) && hasText(result.data.checksum.sysPathsChecksum)) {
-                await useSysPathStore().evalData(result.data.paths, result.data.checksum.sysPathsChecksum)
+                await usePathStore().evalData(result.data.paths, result.data.checksum.sysPathsChecksum)
                 Logger.log('系统路径初始化完成')
               }
               // 系统菜单
