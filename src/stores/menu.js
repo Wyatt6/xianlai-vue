@@ -7,7 +7,7 @@
 import { notEmpty } from '@/utils/common'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useSysPathStore } from './sys_path'
+import { useSysPathStore } from './path'
 
 export const useMenuStore = defineStore('menu', () => {
   const data = ref([])
