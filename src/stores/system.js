@@ -40,6 +40,10 @@ export const useSystemStore = defineStore('system', () => {
               // 系统路径
               if (notEmpty(result.data.paths) && hasText(result.data.checksum.sysPathsChecksum)) {
                 await useSysPathStore().evalData(result.data.paths, result.data.checksum.sysPathsChecksum)
+              // 系统菜单
+              if (notEmpty(result.data.menus) && hasText(result.data.checksum.sysMenusChecksum)) {
+                await useMenuStore().evalData(result.data.menus, result.data.checksum.sysMenusChecksum)
+              }
               }
             }
           } else {

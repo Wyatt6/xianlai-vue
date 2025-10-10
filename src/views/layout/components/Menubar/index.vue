@@ -17,7 +17,7 @@
         :default-active="activeMenuPath"
         router
       >
-        <MenuItem v-for="item in SysMenu.data" :key="item.path" :menu="item" />
+        <MenuItem v-for="item in Menu.data" :key="item.path" :menu="item" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -30,11 +30,11 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
 import { useSysOptionStore } from '@/stores/sys_option'
-import { useSysMenuStore } from '@/stores/sys_menu'
+import { useMenuStore } from '@/stores/menu'
 import Routes from '@/router/routes'
 
 const SysOption = useSysOptionStore()
-const SysMenu = useSysMenuStore()
+const Menu = useMenuStore()
 const layoutStore = useLayoutStore()
 const route = useRoute()
 

@@ -1,7 +1,7 @@
 /**
  * 系统菜单使用方法：
- * const SysMenu = useSysMenuStore()
- * SysMenu.data.xxx.xxx
+ * const Menu = useMenuStore()
+ * Menu.data.xxx.xxx
  */
 
 import { notEmpty } from '@/utils/common'
@@ -9,7 +9,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useSysPathStore } from './sys_path'
 
-export const useSysMenuStore = defineStore('sysMenu', () => {
+export const useMenuStore = defineStore('sysMenu', () => {
   const data = ref([])
   const checksum = ref(null)
 
