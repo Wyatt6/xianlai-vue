@@ -17,7 +17,7 @@
         :default-active="activeMenuPath"
         router
       >
-        <MenuItem v-for="item in menus" :key="item.path" :menu="item" />
+        <MenuItem v-for="item in Menus" :key="item.path" :menu="item" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -27,25 +27,15 @@
 import Vars from '../../index.module.scss'
 import MenuItem from './MenuItem.vue'
 import { ref, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
-import Routes from '@/router/routes'
-import Menu from '@/utils/menu'
 import { useSysOptionStore } from '@/stores/sys_option'
+import Routes from '@/router/routes'
+import Menus from './menus'
 
 const SysOption = useSysOptionStore()
 const layoutStore = useLayoutStore()
-const router = useRouter()
 const route = useRoute()
-
-/**
- * 获取菜单数据（树形结构形成的森林）
- * 由于路由表中有很多路径并不是用来显示菜单的，只是用来跳转用，所以要把真正用来显示菜单的路由筛选出来
- */
-const menus = computed(() => {
-  const routes = Menu.getRouteRoots(router.getRoutes()) // getRoutes()返回扁平化的路由，即子路由也被提到第一级了
-  return Menu.routesToMenus(routes)
-})
 
 /**
  * 默认激活（高亮）的菜单项
@@ -157,14 +147,14 @@ const logoTitleSize = ref(`${SysOption.data.menubar.logoTitleSize}rem`)
     align-items: center;
 
     .logo {
-      margin-left: 0.8rem;
+      margin-left: 1.5rem;
       margin-right: 1rem;
       transition: margin-right #{vars.$menubar-transition-duration};
     }
 
     .logo-title {
       font-family: Tahoma;
-      width: calc(vars.$menubar-width - 0.8rem - 34px - 2rem);
+      width: calc(vars.$menubar-width - 1rem - 3.4rem - 3rem);
       transition: width #{vars.$menubar-transition-duration};
       color: v-bind(logoTitleColor);
       font-weight: v-bind(logoTitleWeight);
@@ -179,31 +169,24 @@ const logoTitleSize = ref(`${SysOption.data.menubar.logoTitleSize}rem`)
   .el-scrollbar {
     height: calc(100% - 5.4rem);
   }
-
-  .el-menu {
-    width: vars.$menubar-width !important;
-    transition: width #{vars.$menubar-transition-duration};
-  }
 }
 
 // 菜单栏收起状态
 .menubar-hidden {
   width: vars.$menubar-width-hidden !important;
 
-  .logo {
-    margin-right: 0 !important;
-  }
+  .logo-container {
+    .logo {
+      margin-right: 0 !important;
+    }
 
-  .logo-title {
-    width: 0 !important;
+    .logo-title {
+      width: 0 !important;
+    }
   }
 
   .el-scrollbar {
     height: calc(100% - 5.4rem);
-  }
-
-  .el-menu {
-    width: vars.$menubar-width-hidden !important;
   }
 }
 </style>

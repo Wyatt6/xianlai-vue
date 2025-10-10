@@ -1,25 +1,25 @@
 <template>
-  <el-sub-menu v-if="menu.children.length > 0" :index="menu.path">
+  <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="menu.path">
     <template #title>
-      <div v-if="menu.meta.icon" class="icon-wrap">
-        <el-icon v-if="menu.meta.icon.includes('el-icon')" size="2rem">
-          <component :is="menu.meta.icon.substring(8, menu.meta.icon.length)" />
+      <div v-if="menu.icon" class="icon-wrap">
+        <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
+          <component :is="menu.icon.substring(8, menu.icon.length)" />
         </el-icon>
-        <LocalIcon v-else class="custom-icon" :name="menu.meta.icon" size="2rem" />
+        <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
       </div>
-      <span class="title">{{ menu.meta.title }}</span>
+      <span class="title">{{ menu.title }}</span>
     </template>
-    <menu-item v-for="item in menu.children" :key="item.path" :menu="item" />
+    <MenuItem v-for="item in menu.children" :key="item.path" :menu="item" />
   </el-sub-menu>
   <el-menu-item v-else :index="menu.path">
-    <div v-if="menu.meta.icon" class="icon-wrap">
-      <el-icon v-if="menu.meta.icon.includes('el-icon')" size="2rem">
-        <component :is="menu.meta.icon.substring(8, menu.meta.icon.length)" />
+    <div v-if="menu.icon" class="icon-wrap">
+      <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
+        <component :is="menu.icon.substring(8, menu.icon.length)" />
       </el-icon>
-      <LocalIcon v-else class="custom-icon" :name="menu.meta.icon" size="2rem" />
+      <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
     </div>
     <template #title>
-      <span class="title">{{ menu.meta.title }}</span>
+      <span class="title">{{ menu.title }}</span>
     </template>
   </el-menu-item>
 </template>
@@ -46,6 +46,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .icon-wrap {
+  margin-left: 0.65rem;
   margin-right: 1rem;
 
   :deep(.el-icon) {
