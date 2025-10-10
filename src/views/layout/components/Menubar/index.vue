@@ -1,14 +1,14 @@
 <template>
-  <div class="sidebar-wrap" :class="[layoutStore.sidebarExpand ? '' : 'sidebar-hidden']">
+  <div class="menubar-wrap" :class="[layoutStore.menubarExpand ? '' : 'menubar-hidden']">
     <router-link :to="Routes.INDEX">
       <div class="logo-container">
         <el-avatar class="logo" :size="34" shape="square" :src="LogoImg" />
-        <span class="logo-title">IntoEins</span>
+        <span class="logo-title">{{ SysOption.data.menubar.logoTitle }}</span>
       </div>
     </router-link>
     <el-scrollbar>
       <el-menu
-        :collapse="!layoutStore.sidebarExpand"
+        :collapse="!layoutStore.menubarExpand"
         :unique-opend="true"
         popper-effect="dark"
         :background-color="MenuStyles.menuColor"
@@ -27,12 +27,14 @@
 import MenuStyles from '../../index.module.scss'
 import LogoImg from '@/assets/images/logo.png'
 import MenuItem from './MenuItem.vue'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
 import Routes from '@/router/routes'
 import Menu from '@/utils/menu'
+import { useSysOptionStore } from '@/stores/sys_option'
 
+const SysOption = useSysOptionStore()
 const layoutStore = useLayoutStore()
 const router = useRouter()
 const route = useRoute()
@@ -59,29 +61,29 @@ const activeMenuPath = computed(() => {
 <style lang="scss">
 // 菜单栏收起状态二级菜单样式（通过修改全局el-popper实现自定义样式）
 // 注意：这里的style标签没有限定词scoped，表明这是个全局的样式
-@import '../../index.module.scss';
+@use '../../index.module.scss' as vars;
 
 .el-popper {
   border: none !important;
 
   .el-menu-item {
-    height: $--menu-item-height !important;
-    line-height: $--menu-item-height !important;
+    height: vars.$menu-item-height !important;
+    line-height: vars.$menu-item-height !important;
   }
 
   .el-sub-menu__title {
-    height: $--menu-item-height !important;
-    line-height: $--menu-item-height !important;
+    height: vars.$menu-item-height !important;
+    line-height: vars.$menu-item-height !important;
   }
 
   .is-active .el-sub-menu__title {
-    color: $--menu-active-sub-menu-text-color !important;
+    color: vars.$menu-active-sub-menu-text-color !important;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-@import '../../index.module.scss';
+@use '../../index.module.scss' as vars;
 
 // 去除菜单右侧白色边框
 .el-menu {
@@ -90,10 +92,10 @@ const activeMenuPath = computed(() => {
 
 // 菜单项（el-menu-item)样式
 :deep(.el-menu-item) {
-  height: $--menu-item-height !important;
-  line-height: $--menu-item-height !important;
-  margin-left: $--menu-item-margin-left !important;
-  padding-right: $--menu-item-padding-right !important;
+  height: vars.$menu-item-height !important;
+  line-height: vars.$menu-item-height !important;
+  margin-left: vars.$menu-item-margin-left !important;
+  padding-right: vars.$menu-item-padding-right !important;
 
   span {
     width: 100%;
@@ -104,10 +106,10 @@ const activeMenuPath = computed(() => {
 // 子菜单项（el-sub-menu)样式
 :deep(.el-sub-menu) {
   .el-sub-menu__title {
-    height: $--menu-item-height !important;
-    line-height: $--menu-item-height !important;
-    margin-left: $--menu-item-margin-left !important;
-    padding-right: $--menu-item-padding-right !important;
+    height: vars.$menu-item-height !important;
+    line-height: vars.$menu-item-height !important;
+    margin-left: vars.$menu-item-margin-left !important;
+    padding-right: vars.$menu-item-padding-right !important;
 
     span {
       width: calc(100% - 5.8rem);
@@ -123,8 +125,8 @@ const activeMenuPath = computed(() => {
 }
 
 // 菜单栏展开状态
-.sidebar-wrap {
-  width: $--sidebar-width;
+.menubar-wrap {
+  width: vars.$menubar-width;
   height: 100%;
   position: fixed;
   top: 0;
@@ -132,8 +134,8 @@ const activeMenuPath = computed(() => {
   left: 0;
   z-index: 1001;
   overflow: hidden;
-  background-color: $--sidebar-color;
-  transition: width #{$--sidebar-transition-duration};
+  background-color: vars.$menubar-color;
+  transition: width #{vars.$menubar-transition-duration};
 
   // 取消链接的下划线
   a:-webkit-any-link {
@@ -145,20 +147,20 @@ const activeMenuPath = computed(() => {
     padding: 1rem 0 1rem 0;
     display: flex;
     align-items: center;
-    justify-content: center;
 
     .logo {
-      margin-right: 1.5rem;
-      transition: margin-right #{$--sidebar-transition-duration};
+      margin-left: 0.8rem;
+      margin-right: 1rem;
+      transition: margin-right #{vars.$menubar-transition-duration};
     }
 
     .logo-title {
       font-family: Tahoma;
-      width: 10rem;
-      transition: width #{$--sidebar-transition-duration};
       color: #fff;
       font-weight: 700;
       font-size: 1.8rem;
+      width: calc(vars.$menubar-width - 0.8rem - 34px - 2rem);
+      transition: width #{vars.$menubar-transition-duration};
       // 以下3个属性使得标题平滑显示
       height: 2.1rem;
       line-height: 2.1rem;
@@ -171,14 +173,14 @@ const activeMenuPath = computed(() => {
   }
 
   .el-menu {
-    width: $--sidebar-width !important;
-    transition: width #{$--sidebar-transition-duration};
+    width: vars.$menubar-width !important;
+    transition: width #{vars.$menubar-transition-duration};
   }
 }
 
 // 菜单栏收起状态
-.sidebar-hidden {
-  width: $--sidebar-width-hidden !important;
+.menubar-hidden {
+  width: vars.$menubar-width-hidden !important;
 
   .logo {
     margin-right: 0 !important;
@@ -193,7 +195,7 @@ const activeMenuPath = computed(() => {
   }
 
   .el-menu {
-    width: $--sidebar-width-hidden !important;
+    width: vars.$menubar-width-hidden !important;
   }
 }
 </style>
