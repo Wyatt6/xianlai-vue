@@ -1,16 +1,19 @@
 /**
  * 系统路径使用方法：
- * const SysPath = useSysPathStore()
- * SysPath.data.xxx.xxx
+ * const Path = usePathStore()
+ * Path.data.xxx.xxx
  */
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useSysPathStore = defineStore('sysPath', () => {
+export const usePathStore = defineStore('path', () => {
   const data = ref({})
   const checksum = ref(null)
 
+  /**
+   * 系统路径赋值函数
+   */
   async function evalData(pathData, checksumData) {
     checksum.value = checksumData
     pathData.forEach(item => {

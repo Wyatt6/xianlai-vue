@@ -7,14 +7,14 @@
 import { notEmpty } from '@/utils/common'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useSysPathStore } from './path'
+import { usePathStore } from './path'
 
 export const useMenuStore = defineStore('menu', () => {
   const data = ref([])
   const checksum = ref(null)
 
   function dfsPath(nowMenu) {
-    nowMenu.path = useSysPathStore().data[nowMenu.pathName]
+    nowMenu.path = usePathStore().data[nowMenu.pathName]
     if (notEmpty(nowMenu.children)) {
       nowMenu.children.forEach(item => {
         dfsPath(item)
