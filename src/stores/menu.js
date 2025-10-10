@@ -9,7 +9,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useSysPathStore } from './sys_path'
 
-export const useMenuStore = defineStore('sysMenu', () => {
+export const useMenuStore = defineStore('menu', () => {
   const data = ref([])
   const checksum = ref(null)
 
@@ -22,6 +22,9 @@ export const useMenuStore = defineStore('sysMenu', () => {
     }
   }
 
+  /**
+   * 系统菜单赋值函数
+   */
   async function evalData(menuData, checksumData) {
     checksum.value = checksumData
     if (notEmpty(menuData)) {
