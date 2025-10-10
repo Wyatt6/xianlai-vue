@@ -112,7 +112,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import '../../index.module.scss';
+@use '../../index.module.scss' as vars;
 
 // 链接取消下划线
 a {
@@ -132,8 +132,8 @@ a {
 
 .tagbar-wrap {
   width: 100%;
-  height: $--tagbar-height;
-  background: $--tagbar-color;
+  height: vars.$tagbar-height;
+  background: vars.$tagbar-color;
   border-bottom: 1px solid #d8dce5;
   box-shadow:
     0 1px 3px 0 rgba(0, 0, 0, 0.12),
