@@ -1,5 +1,5 @@
 <template>
-  <div class="hamburger-wrap" @click="layoutStore.changeSidebarExpand()">
+  <div class="hamburger-wrap" @click="layoutStore.changeMenubarExpand()">
     <LocalIcon class="hamburger" :name="iconName" />
   </div>
 </template>
@@ -19,7 +19,7 @@ const layoutStore = useLayoutStore()
  * 根据展开收起状态显示对应的图标
  */
 const iconName = computed(() => {
-  return layoutStore.sidebarExpand ? 'ri-menu-fold-fill' : 'ri-menu-unfold-fill'
+  return layoutStore.menubarExpand ? 'ri-menu-fold-fill' : 'ri-menu-unfold-fill'
 })
 </script>
 

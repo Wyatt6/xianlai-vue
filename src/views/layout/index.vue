@@ -1,21 +1,20 @@
 <template>
   <div class="page-wrap" :class="[layoutStore.menubarExpand ? '' : 'menubar-hidden']">
     <Menubar />
-    <!-- <Sidebar :menus="menus" /> -->
     <div class="right-wrap">
-      <el-button @click="layoutStore.changeMenubarExpand()">展开/收起</el-button>
-      <!-- <div class="fixed-header">
+      <!-- <el-button @click="layoutStore.changeMenubarExpand()">展开/收起</el-button> -->
+      <div class="fixed-header">
         <Navbar />
-        <Tagbar />
+        <!-- <Tagbar /> -->
       </div>
-      <Content /> -->
+      <!-- <Content /> -->
     </div>
   </div>
 </template>
 
 <script setup>
 import Menubar from './components/Menubar/index.vue'
-// import Navbar from './components/Navbar/index.vue'
+import Navbar from './components/Navbar/index.vue'
 // import Tagbar from './components/Tagbar/index.vue'
 // import Content from './components/Content/index.vue'
 import { watch } from 'vue'
