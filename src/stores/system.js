@@ -6,6 +6,7 @@ import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
 import { useSysOptionStore } from './sys_option'
+import { useSysPathStore } from './sys_path'
 import { useAuthorityStore } from './authority'
 import { useLayoutStore } from './layout'
 
@@ -32,8 +33,13 @@ export const useSystemStore = defineStore('system', () => {
           if (result.success) {
             if (notEmpty(result.data) && notEmpty(result.data.checksum)) {
               initData.value = result.data
+              // 系统参数
               if (notEmpty(result.data.options) && hasText(result.data.checksum.sysOptionsChecksum)) {
                 await useSysOptionStore().evalData(result.data.options, result.data.checksum.sysOptionsChecksum)
+              }
+              // 系统路径
+              if (notEmpty(result.data.paths) && hasText(result.data.checksum.sysPathsChecksum)) {
+                await useSysPathStore().evalData(result.data.paths, result.data.checksum.sysPathsChecksum)
               }
             }
           } else {
