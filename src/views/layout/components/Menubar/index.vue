@@ -2,7 +2,7 @@
   <div class="menubar-wrap" :class="[layoutStore.menubarExpand ? '' : 'menubar-hidden']">
     <router-link :to="Routes.INDEX">
       <div class="logo-container">
-        <el-avatar class="logo" :size="34" shape="square" :src="LogoImg" />
+        <el-avatar class="logo" :size="34" shape="square" :src="logoSrc" />
         <span class="logo-title">{{ SysOption.data.menubar.logoTitle }}</span>
       </div>
     </router-link>
@@ -11,9 +11,9 @@
         :collapse="!layoutStore.menubarExpand"
         :unique-opend="true"
         popper-effect="dark"
-        :background-color="MenuStyles.menuColor"
-        :text-color="MenuStyles.menuTextColor"
-        :active-text-color="MenuStyles.menuActiveTextColor"
+        :background-color="Vars.menuBackgroundColor"
+        :text-color="Vars.menuTextColor"
+        :active-text-color="Vars.menuActiveTextColor"
         :default-active="activeMenuPath"
         router
       >
@@ -24,8 +24,7 @@
 </template>
 
 <script setup>
-import MenuStyles from '../../index.module.scss'
-import LogoImg from '@/assets/images/logo.png'
+import Vars from '../../index.module.scss'
 import MenuItem from './MenuItem.vue'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -56,6 +55,11 @@ const activeMenuPath = computed(() => {
   const { path } = route
   return path // 对应的是v-for里的key的路径
 })
+
+/**
+ * 菜单栏Logo
+ */
+const logoSrc = ref('/src/assets/images/layout/default-logo.png') // TODO 自定义logo
 
 const logoTitleColor = ref(SysOption.data.menubar.logoTitleColor)
 const logoTitleWeight = ref(SysOption.data.menubar.logoTitleWeight)
