@@ -10,6 +10,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item divided @click="logout()">
+              <LocalIcon class="dropdown-item-icon" name="ri-logout-box-r-line" size="1.5rem" color="#f56c6c" />
               <span style="color: #f56c6c">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -113,5 +114,9 @@ async function logout() {
       }
     }
   }
+}
+
+.dropdown-item-icon {
+  margin-right: 0.5rem;
 }
 </style>
