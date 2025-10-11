@@ -15,6 +15,14 @@ import { useLayoutStore } from './layout'
 export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
   const initData = ref({})
+  const logoutLock = ref(false)
+
+  function setLogoutLock() {
+    logoutLock.value = true
+  }
+  function releaseLogoutLock() {
+    logoutLock.value = false
+  }
 
   function initFail() {
     document.getElementById('init').style.display = 'none'
@@ -118,6 +126,8 @@ export const useSystemStore = defineStore('system', () => {
 
   return {
     initData,
+    setLogoutLock,
+    releaseLogoutLock,
     initialize,
     resetStoreAndStorage,
     isChecksumChange
