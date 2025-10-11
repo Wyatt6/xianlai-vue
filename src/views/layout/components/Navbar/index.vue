@@ -4,7 +4,7 @@
     <div class="navbar-right">
       <el-dropdown class="dropdown-menu-wrap" trigger="click">
         <div class="username-wrap">
-          <span style="color: #303133; font-size: 1.7rem" class="username-box">{{ username }}</span>
+          <span style="color: #303133; font-size: 1.5rem" class="username-box">{{ username }}</span>
           <LocalIcon name="ri-arrow-drop-down-fill" size="2.5rem" color="#303133" />
         </div>
         <template #dropdown>
