@@ -13,11 +13,11 @@ export const useMenuStore = defineStore('menu', () => {
   const data = ref([])
   const checksum = ref(null)
 
-  function dfsPath(nowMenu) {
+  function dfsMenu(nowMenu) {
     nowMenu.path = usePathStore().data[nowMenu.pathName]
     if (notEmpty(nowMenu.children)) {
       nowMenu.children.forEach(item => {
-        dfsPath(item)
+        dfsMenu(item)
       })
     }
   }
@@ -29,7 +29,7 @@ export const useMenuStore = defineStore('menu', () => {
     checksum.value = checksumData
     if (notEmpty(menuData)) {
       menuData.forEach(item => {
-        dfsPath(item)
+        dfsMenu(item)
       })
       data.value = menuData
     }
