@@ -2,6 +2,10 @@ export default {
   keys: {
     TOKEN: 'token',
     TOKEN_EXPIRE_TIME: 'token_expire_time',
+    USER: 'user',
+    PROFILE: 'profile',
+    DEPARTMENT: 'department',
+    POSITION: 'position',
     REMEMBER_USERNAME: 'remember_username',
     MENUBAR_EXPAND: 'sidebar_expand',
     TAG_LIST: 'tag_list',
