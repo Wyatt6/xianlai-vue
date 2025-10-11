@@ -40,7 +40,7 @@ export const useApiStore = defineStore('api', () => {
               return axiosInstance(config)
             }
           } else {
-            if (isEmpty(now[paths[i]])) now[paths[i]] = {}
+            if (now[paths[i]] == null) now[paths[i]] = {}
             now = now[paths[i]]
           }
         }

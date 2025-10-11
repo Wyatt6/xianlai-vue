@@ -84,7 +84,7 @@ export const useOptionStore = defineStore('option', () => {
               now[keys[i]] = valueObj.value
             }
           } else {
-            if (isEmpty(now[keys[i]])) now[keys[i]] = {}
+            if (now[keys[i]] == null) now[keys[i]] = {}
             now = now[keys[i]]
           }
         }
