@@ -30,10 +30,11 @@ import { usePathStore } from '@/stores/path'
 import { useAuthorityStore } from '@/stores/authority'
 import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
-import { useApiStore } from '@/apis'
 
 const router = useRouter()
-const appStore = useAppStore()
+const System = useSystemStore()
+const Api = useApiStore()
+const Path = usePathStore()
 const authorityStore = useAuthorityStore()
 
 const username = ref('unknown')
@@ -42,7 +43,6 @@ const username = ref('unknown')
  * 退出登录
  */
 async function logout() {
-  // console.groupCollapsed('退出登录')
   // appStore.setLogoutLock()
   // await Api.request.iam.user
   //   .logout()
@@ -63,7 +63,19 @@ async function logout() {
   //     // 异常已统一处理，此处忽略异常
   //   })
   // appStore.releaseLogoutLock()
-  // console.groupEnd()
+
+  Logger.log('退出登录')
+  System.setLogoutLock()
+  await Api.request.iam.user.logout().then(async result => {
+    if (result && result.success) {
+      Logger.log('退出登录成功，返回到登录页面')
+      await System.resetStoreAndStorage()
+      await router.push(Path.data.LOGIN)
+    } else {
+      Logger.log('退出登录失败')
+    }
+  })
+  System.releaseLogoutLock()
 }
 </script>
 
