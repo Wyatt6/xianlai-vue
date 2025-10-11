@@ -69,7 +69,7 @@ export const useRouterStore = defineStore('router', () => {
        * @param {*} next 是否要去？
        */
       router.value.beforeEach((to, from, next) => {
-        console.groupCollapsed('路由前置守卫程序 ' + from.path + ' ---> ' + to.path)
+        Logger.log('路由前置守卫程序 ' + from.path + ' ---> ' + to.path, '')
         const Path = usePathStore()
         if (to.meta.needLogin) {
           // 分支1: 访问非白名单路径，须先登录，否则重定向到登录页面
