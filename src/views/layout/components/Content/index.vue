@@ -16,29 +16,28 @@
  */
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { tagPathException } from '@/router/tag_path_exception'
 import { useLayoutStore } from '@/stores/layout'
+import { hasText, notEmpty } from '@/utils/common'
 
 const route = useRoute()
-const layoutStore = useLayoutStore()
 
 /**
- * 根据路由路径判断是否应该显示为页面标签
- * @param {*} path 路由路径
- * @returns true-应该显示为页面标签；false-不应该显示为页面标签
+ * 判断是否应该显示为页面标签
  */
-function isTag(path) {
-  return !tagPathException.includes(path)
+function showTag(route) {
+  return notEmpty(route.meta) && route.meta.showTag
 }
 
 // 监听主内容区路由变化，如果要添加页面标签则添加
 watch(
   route,
   (value, oldValue) => {
-    if (!isTag(value.path)) return
+    if (!showTag(value)) return
     const { fullPath, meta, name, params, path, query } = value
-    const title = value.meta.title
-    layoutStore.addTag({ fullPath, meta, name, params, path, query, title })
+    let title = fullPath
+    if (hasText(name)) title = name
+    if (notEmpty(meta) && hasText(meta.tagTitle)) title = meta.tagTitle
+    useLayoutStore().addTag({ fullPath, meta, name, params, path, query, title })
   },
   { immediate: true }
 )
