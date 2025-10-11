@@ -27,43 +27,29 @@ import { useRouter } from 'vue-router'
 import { useApiStore } from '@/apis'
 import { useSystemStore } from '@/stores/system'
 import { usePathStore } from '@/stores/path'
-import { useAuthorityStore } from '@/stores/authority'
 import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
+import { hasText, notEmpty } from '@/utils/common'
 
 const router = useRouter()
 const System = useSystemStore()
 const Api = useApiStore()
 const Path = usePathStore()
-const authorityStore = useAuthorityStore()
 
 const username = ref('unknown')
+if (notEmpty(Storage.get(Storage.keys.USER))) {
+  const user = Storage.get(Storage.keys.USER)
+  if (hasText(user.username)) username.value = user.username
+}
+if (notEmpty(Storage.get(Storage.keys.PROFILE))) {
+  const profile = Storage.get(Storage.keys.PROFILE)
+  if (hasText(profile.nickname)) username.value = profile.nickname
+}
 
 /**
  * 退出登录
  */
 async function logout() {
-  // appStore.setLogoutLock()
-  // await Api.request.iam.user
-  //   .logout()
-  //   .then(async res => {
-  //     if (res && res.success) {
-  //       console.log('退出登录成功')
-  //       console.log('返回到登录页面')
-  //       appStore.setLogoutLock()
-  //       await appStore.initialize()
-  //       console.groupEnd()
-  //       await router.push(Routes.LOGIN)
-  //       appStore.releaseLogoutLock()
-  //     } else {
-  //       console.log('退出登录失败')
-  //     }
-  //   })
-  //   .catch(error => {
-  //     // 异常已统一处理，此处忽略异常
-  //   })
-  // appStore.releaseLogoutLock()
-
   Logger.log('退出登录')
   System.setLogoutLock()
   await Api.request.iam.user.logout().then(async result => {
