@@ -7,14 +7,12 @@ import installDirectives from './plugins/directives' // 引入自定义指令
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import router from './router'
 import { useSystemStore } from './stores/system'
 
 const app = createApp(App)
 
 app.use(ElementPlus, { locale: zhCN })
 app.use(createPinia())
-app.use(router)
 installIcons(app)
 installDirectives(app)
 

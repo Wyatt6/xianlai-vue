@@ -5,6 +5,7 @@ import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
+import { useRouterStore } from '@/router'
 import { useOptionStore } from './option'
 import { usePathStore } from './path'
 import { useMenuStore } from './menu'
@@ -54,6 +55,11 @@ export const useSystemStore = defineStore('system', () => {
                 await useApiStore().evalData(result.data.apis, result.data.checksum.sysApisChecksum)
                 Logger.log('系统接口初始化完成')
               }
+              // 系统路由
+              if (notEmpty(result.data.routes) && hasText(result.data.checksum.sysRoutesChecksum)) {
+                await useRouterStore().evalData(result.data.routes, result.data.checksum.sysRoutesChecksum)
+                Logger.log('系统路由初始化完成')
+              }
             }
           } else {
             initFail()
@@ -69,6 +75,7 @@ export const useSystemStore = defineStore('system', () => {
         })
     }
     Logger.log('系统初始化完成')
+    app.use(useRouterStore().getRouter())
     if (app != null) app.mount('#app')
   }
 
