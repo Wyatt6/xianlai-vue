@@ -16,12 +16,13 @@
  */
 import { defineProps } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import Routes from '@/router/routes'
 import { useLayoutStore } from '@/stores/layout'
+import { usePathStore } from '@/stores/path'
 
 const router = useRouter()
 const route = useRoute()
 const layoutStore = useLayoutStore()
+const Path = usePathStore()
 
 const props = defineProps({
   index: {
@@ -57,7 +58,7 @@ function onRefreshClick() {
 
 async function onCloseAllClick() {
   await layoutStore.removeTags({ mode: 'all' })
-  router.push(Routes.INDEX)
+  router.push(Path.data.INDEX)
 }
 
 async function onCloseRightClick() {

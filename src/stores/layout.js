@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import Storage from '@/utils/storage'
-import Routes from '@/router/routes'
+import { usePathStore } from './path'
 
 export const useLayoutStore = defineStore('layout', () => {
   const menubarExpand = ref(Storage.get(Storage.keys.MENUBAR_EXPAND) == null ? true : Storage.get(Storage.keys.MENUBAR_EXPAND))
@@ -39,7 +39,7 @@ export const useLayoutStore = defineStore('layout', () => {
     } else if (mode === 'all') {
       let tagIndex = -1
       for (let i = 0; i < tagList.value.length; i++) {
-        if (tagList.value[i].fullPath === Routes.INDEX) {
+        if (tagList.value[i].fullPath === usePathStore().data.INDEX) {
           tagIndex = i
           break
         }

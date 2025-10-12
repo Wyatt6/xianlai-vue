@@ -28,11 +28,12 @@ import ContextMenu from './ContextMenu.vue'
 import { ref, reactive, watch } from 'vue'
 import { useLayoutStore } from '@/stores/layout'
 import { useRouter, useRoute } from 'vue-router'
-import Routes from '@/router/routes'
+import { usePathStore } from '@/stores/path'
 
 const layoutStore = useLayoutStore()
 const router = useRouter()
 const route = useRoute()
+const Path = usePathStore()
 
 /**
  * 标签是否被选中
@@ -59,9 +60,9 @@ async function onCloseClick(tag, index) {
       router.push(layoutStore.tagList[index - 1].fullPath) // 注意这里的tagList已经是新的
     } else {
       // 如果左边也已经没有了标签：如果最后要关闭的是主页，不执行关闭；否则关闭标签后，回到主页
-      if (tag.fullPath !== Routes.INDEX && tag.fullPath !== Routes.INDEX_REDIRECT) {
+      if (tag.fullPath !== Path.data.INDEX && tag.fullPath !== Path.data.INDEX_REDIRECT) {
         await layoutStore.removeTags({ mode: 'index', index })
-        router.push(Routes.INDEX)
+        router.push(Path.data.INDEX)
       }
     }
   } else {

@@ -1,6 +1,6 @@
 <template>
   <div class="menubar-wrap" :class="[layoutStore.menubarExpand ? '' : 'menubar-hidden']">
-    <router-link :to="Routes.INDEX">
+    <router-link :to="Path.data.INDEX">
       <div class="logo-container">
         <el-avatar class="logo" :size="34" shape="square" :src="logoSrc" />
         <span class="logo-title">{{ Option.data.menubar.logoTitle }}</span>
@@ -31,10 +31,11 @@ import { useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
 import { useOptionStore } from '@/stores/option'
 import { useMenuStore } from '@/stores/menu'
-import Routes from '@/router/routes'
+import { usePathStore } from '@/stores/path'
 
 const Option = useOptionStore()
 const Menu = useMenuStore()
+const Path = usePathStore()
 const layoutStore = useLayoutStore()
 const route = useRoute()
 

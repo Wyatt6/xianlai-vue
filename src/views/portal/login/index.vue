@@ -50,6 +50,7 @@ import Validator from '@/utils/validator'
 import Logger from '@/utils/logger'
 import { useOptionStore } from '@/stores/option'
 import { useApiStore } from '@/apis'
+import { usePathStore } from '@/stores/path'
 
 const loading = ref(false)
 const router = useRouter()
@@ -57,6 +58,7 @@ const captchaRef = ref()
 const rememberMe = ref(Storage.get(Storage.keys.REMEMBER_USERNAME) != null)
 const Option = useOptionStore()
 const Api = useApiStore()
+const Path = usePathStore()
 
 const formRef = ref()
 const formModel = ref({
@@ -125,7 +127,7 @@ function onLogin() {
               Storage.delete(Storage.keys.REMEMBER_USERNAME)
             }
             Logger.log('跳转到主页面')
-            router.push('/')
+            router.push(Path.data.INDEX)
           } else {
             Logger.log('登录失败')
             ElMessage.error(result && result.data && result.data.message ? result.data.message : '登录失败')
@@ -153,13 +155,13 @@ document.onkeydown = event => {
 
 function toRegister() {
   if (!loading.value) {
-    router.push('/portal/register')
+    router.push(Path.data.REGISTER)
   }
 }
 
 function toResetPassword() {
   if (!loading.value) {
-    router.push('/portal/reset-password')
+    router.push(Path.data.RESET_PASSWORD)
   }
 }
 

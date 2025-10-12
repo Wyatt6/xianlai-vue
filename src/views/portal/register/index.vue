@@ -54,6 +54,7 @@ import { useOptionStore } from '@/stores/option'
 import Validator from '@/utils/validator'
 import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
+import { usePathStore } from '@/stores/path'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
@@ -61,6 +62,7 @@ const loading = ref(false)
 const captchaRef = ref()
 const Option = useOptionStore()
 const Api = useApiStore()
+const Path = usePathStore()
 
 const formRef = ref()
 const formModel = ref({
@@ -128,7 +130,7 @@ function onRegister() {
             Logger.log('注册成功，跳转到登录页面')
             ElMessageBox.alert(`欢迎使用「${Option.data.system.name}」系统，请登陆`, '注册成功', {
               callback: action => {
-                router.push('/portal/login')
+                router.push(Path.data.LOGIN)
               }
             })
           } else {
@@ -158,7 +160,7 @@ document.onkeydown = event => {
 
 function toLogin() {
   if (!loading.value) {
-    router.push('/portal/login')
+    router.push(Path.data.LOGIN)
   }
 }
 
