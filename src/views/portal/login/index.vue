@@ -108,11 +108,13 @@ function onLogin() {
         .then(result => {
           if (result && result.success) {
             Logger.log('登录成功')
-            const { token, tokenExpireTime, user, profile, department, position } = result.data
+            const { token, tokenExpireTime, user, roles, permissions, profile, department, position } = result.data
             Logger.log('缓存登录数据')
             Storage.set(Storage.keys.TOKEN, token) // 用来下次自动登录
             Storage.set(Storage.keys.TOKEN_EXPIRE_TIME, tokenExpireTime)
             Storage.set(Storage.keys.USER, user)
+            Storage.set(Storage.keys.ROLES, roles)
+            Storage.set(Storage.keys.PERMISSIONS, permissions)
             Storage.set(Storage.keys.PROFILE, profile)
             Storage.set(Storage.keys.DEPARTMENT, department)
             Storage.set(Storage.keys.POSITION, position)

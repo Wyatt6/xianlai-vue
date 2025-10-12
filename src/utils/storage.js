@@ -3,6 +3,8 @@ export default {
     TOKEN: 'token',
     TOKEN_EXPIRE_TIME: 'token_expire_time',
     USER: 'user',
+    ROLES: 'roles',
+    PERMISSIONS: 'permissions',
     PROFILE: 'profile',
     DEPARTMENT: 'department',
     POSITION: 'position',
