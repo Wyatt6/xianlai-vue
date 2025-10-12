@@ -1,29 +1,27 @@
 <template>
-  <div v-if="showMenu">
-    <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="menu.path">
-      <template #title>
-        <div v-if="menu.icon" class="icon-wrap">
-          <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
-            <component :is="menu.icon.substring(8, menu.icon.length)" />
-          </el-icon>
-          <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
-        </div>
-        <span class="title">{{ menu.title }}</span>
-      </template>
-      <MenuItem v-for="item in menu.children" :key="item.path" :menu="item" />
-    </el-sub-menu>
-    <el-menu-item v-else :index="menu.path">
+  <el-sub-menu v-if="showMenu && menu.children && menu.children.length > 0" :index="menu.path">
+    <template #title>
       <div v-if="menu.icon" class="icon-wrap">
         <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
           <component :is="menu.icon.substring(8, menu.icon.length)" />
         </el-icon>
         <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
       </div>
-      <template #title>
-        <span class="title">{{ menu.title }}</span>
-      </template>
-    </el-menu-item>
-  </div>
+      <span class="title">{{ menu.title }}</span>
+    </template>
+    <MenuItem v-for="item in menu.children" :key="item.path" :menu="item" />
+  </el-sub-menu>
+  <el-menu-item v-else-if="showMenu" :index="menu.path">
+    <div v-if="menu.icon" class="icon-wrap">
+      <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
+        <component :is="menu.icon.substring(8, menu.icon.length)" />
+      </el-icon>
+      <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
+    </div>
+    <template #title>
+      <span class="title">{{ menu.title }}</span>
+    </template>
+  </el-menu-item>
 </template>
 
 <script setup>
