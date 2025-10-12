@@ -47,7 +47,7 @@ watch(
 @use '../../index.module.scss' as vars;
 
 $--padding-top: 0.5rem;
-$--padding-left-right: 0.8rem;
+$--padding-left-right: 0.7rem;
 
 .content-wrap {
   width: 100%;
