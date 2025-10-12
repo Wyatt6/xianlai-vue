@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
@@ -82,10 +81,6 @@ export const useSystemStore = defineStore('system', () => {
     }
     Logger.log('系统初始化完成')
     if (app != null) {
-      // 全局注册ElementPlus提供的图标
-      for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-        app.component(key, component)
-      }
       // 注册router插件
       app.use(useRouterStore().getRouter())
       app.mount('#app')
