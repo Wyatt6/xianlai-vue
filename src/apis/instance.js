@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useSystemStore } from '@/stores/system'
 import { useOptionStore } from '@/stores/option'
+import { useResetStore } from '@/stores/reset'
 // import router from '@/router'
 import Token from '@/utils/token'
 import Logger from '@/utils/logger'
@@ -11,6 +12,7 @@ import { notEmpty, hasText } from '@/utils/common'
 export function createAxiosInstance() {
   const System = useSystemStore()
   const Option = useOptionStore()
+  const Reset = useResetStore()
   // axios 配置详见：https://www.axios-http.cn/docs/req_config
   const instance = axios.create({
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -26,7 +28,7 @@ export function createAxiosInstance() {
       if (Token.hasToken()) {
         if (Token.isExpired()) {
           Logger.log('登录已过期，重定向到登录页面')
-          await System.resetStoreAndStorage()
+          await Reset.resetStoreAndStorage()
           router.push('/portal/login')
           return Promise.reject(new Error('登录已过期，请重新登录'))
         } else {
@@ -69,7 +71,7 @@ export function createAxiosInstance() {
         //           Logger.log('401-登录已过期，跳转到登陆页面')
         //           ElMessage.error('登录已过期，请重新登录')
         //           System.setLogoutLock()
-        //           await System.resetStoreAndStorage()
+        //           await Reset.resetStoreAndStorage()
         //           await router.push('/portal/login')
         //           System.releaseLogoutLock()
         //           return Promise.reject(new Error('登录已过期，请重新登录'))
