@@ -1,5 +1,5 @@
 <template>
-  <div class="hamburger-wrap" @click="layoutStore.changeMenubarExpand()">
+  <div class="hamburger-wrap" @click="Layout.changeMenubarExpand()">
     <LocalIcon class="hamburger" :name="iconName" />
   </div>
 </template>
@@ -13,13 +13,13 @@ import LocalIcon from '@/components/LocalIcon/index.vue'
 import { computed } from 'vue'
 import { useLayoutStore } from '@/stores/layout'
 
-const layoutStore = useLayoutStore()
+const Layout = useLayoutStore()
 
 /**
  * 根据展开收起状态显示对应的图标
  */
 const iconName = computed(() => {
-  return layoutStore.menubarExpand ? 'ri-menu-fold-fill' : 'ri-menu-unfold-fill'
+  return Layout.menubarExpand ? 'ri-menu-fold-fill' : 'ri-menu-unfold-fill'
 })
 </script>
 

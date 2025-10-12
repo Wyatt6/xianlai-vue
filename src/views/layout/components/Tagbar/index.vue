@@ -8,7 +8,7 @@
           backgroundColor: isActive(tag) ? TagStyles.tagbarActiveTagColor : '',
           borderColor: isActive(tag) ? TagStyles.tagbarActiveTagColor : ''
         }"
-        v-for="(tag, index) in layoutStore.tagList"
+        v-for="(tag, index) in Layout.tagList"
         :key="tag.fullPath"
         :to="{ path: tag.fullPath }"
         @contextmenu.prevent="openContextMenu($event, index, tag.fullPath)"
@@ -30,7 +30,7 @@ import { useLayoutStore } from '@/stores/layout'
 import { useRouter, useRoute } from 'vue-router'
 import { usePathStore } from '@/stores/path'
 
-const layoutStore = useLayoutStore()
+const Layout = useLayoutStore()
 const router = useRouter()
 const route = useRoute()
 const Path = usePathStore()
@@ -51,22 +51,22 @@ async function onCloseClick(tag, index) {
   // 如果关闭的是激活页面
   if (isActive(tag)) {
     // 则将其右边第一个页面作为新的激活页面
-    if (index + 1 < layoutStore.tagList.length) {
-      await layoutStore.removeTags({ mode: 'index', index })
-      router.push(layoutStore.tagList[index].fullPath) // 注意这里的tagList已经是新的
+    if (index + 1 < Layout.tagList.length) {
+      await Layout.removeTags({ mode: 'index', index })
+      router.push(Layout.tagList[index].fullPath) // 注意这里的tagList已经是新的
     } else if (index > 0) {
       // 如果右边已经没有了标签，则将其左边第一个页面作为新的激活页面
-      await layoutStore.removeTags({ mode: 'index', index })
-      router.push(layoutStore.tagList[index - 1].fullPath) // 注意这里的tagList已经是新的
+      await Layout.removeTags({ mode: 'index', index })
+      router.push(Layout.tagList[index - 1].fullPath) // 注意这里的tagList已经是新的
     } else {
       // 如果左边也已经没有了标签：如果最后要关闭的是主页，不执行关闭；否则关闭标签后，回到主页
       if (tag.fullPath !== Path.data.INDEX && tag.fullPath !== Path.data.INDEX_REDIRECT) {
-        await layoutStore.removeTags({ mode: 'index', index })
+        await Layout.removeTags({ mode: 'index', index })
         router.push(Path.data.INDEX)
       }
     }
   } else {
-    layoutStore.removeTags({ mode: 'index', index })
+    Layout.removeTags({ mode: 'index', index })
   }
 }
 

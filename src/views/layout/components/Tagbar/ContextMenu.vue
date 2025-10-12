@@ -21,7 +21,7 @@ import { usePathStore } from '@/stores/path'
 
 const router = useRouter()
 const route = useRoute()
-const layoutStore = useLayoutStore()
+const Layout = useLayoutStore()
 const Path = usePathStore()
 
 const props = defineProps({
@@ -57,13 +57,13 @@ function onRefreshClick() {
 }
 
 async function onCloseAllClick() {
-  await layoutStore.removeTags({ mode: 'all' })
+  await Layout.removeTags({ mode: 'all' })
   router.push(Path.data.INDEX)
 }
 
 async function onCloseRightClick() {
-  const activeIndex = getTagIndexByPath(layoutStore.tagList, route.path)
-  await layoutStore.removeTags({ mode: 'right', index: props.index })
+  const activeIndex = getTagIndexByPath(Layout.tagList, route.path)
+  await Layout.removeTags({ mode: 'right', index: props.index })
   // 如果激活页面标签在当前页面标签的右边，则跳转到该当前页面
   if (activeIndex > props.index) {
     router.push(props.tagPath)
@@ -71,7 +71,7 @@ async function onCloseRightClick() {
 }
 
 const onCloseOtherClick = async () => {
-  await layoutStore.removeTags({ mode: 'other', index: props.index })
+  await Layout.removeTags({ mode: 'other', index: props.index })
   // 如果在未激活的页面标签关闭其他标签，则跳转到该标签的页面
   if (!(props.tagPath === route.path)) {
     router.push(props.tagPath)
