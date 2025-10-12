@@ -1,10 +1,10 @@
-import { useAuthorityStore } from '@/stores/authority'
+import Storage from '@/utils/storage'
 
 export function validRoleOr(el, binding) {
   // 指令绑定的角色名数组
   const roleNames = binding.value
   // 用户所绑定的角色列表
-  const roles = useAuthorityStore().authority.roles
+  const roles = Storage.get(Storage.keys.ROLES)
 
   // 要求绑定值是数组形式
   if (roleNames && roleNames instanceof Array) {
@@ -28,7 +28,7 @@ export function validRoleAnd(el, binding) {
   // 指令绑定的角色名数组
   const roleNames = binding.value
   // 用户所绑定的角色列表
-  const roles = useAuthorityStore().authority.roles
+  const roles = Storage.get(Storage.keys.ROLES)
 
   // 要求绑定值是数组形式
   if (roleNames && roleNames instanceof Array) {

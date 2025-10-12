@@ -1,10 +1,10 @@
-import { useAuthorityStore } from '@/stores/authority'
+import Storage from '@/utils/storage'
 
 export function validPermissionOr(el, binding) {
   // 指令绑定的权限名数组
   const permissionNames = binding.value
   // 用户所绑定的权限列表
-  const permissions = useAuthorityStore().authority.permissions
+  const permissions = Storage.get(Storage.keys.PERMISSIONS)
 
   // 要求绑定值是数组形式
   if (permissionNames && permissionNames instanceof Array) {
@@ -28,7 +28,7 @@ export function validPermissionAnd(el, binding) {
   // 指令绑定的权限名数组
   const permissionNames = binding.value
   // 用户所绑定的权限列表
-  const permissions = useAuthorityStore().authority.permissions
+  const permissions = Storage.get(Storage.keys.PERMISSIONS)
 
   // 要求绑定值是数组形式
   if (permissionNames && permissionNames instanceof Array) {
