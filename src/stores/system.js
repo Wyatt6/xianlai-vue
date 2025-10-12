@@ -16,6 +16,7 @@ export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
   const initData = ref({})
   const logoutLock = ref(false)
+  const icons = ref([])
 
   function setLogoutLock() {
     logoutLock.value = true
@@ -33,6 +34,12 @@ export const useSystemStore = defineStore('system', () => {
     // 获取初始化数据
     if (!initing.value) {
       initing.value = true
+
+      // 本地图标
+      // 导入图标目录下所有svg文件的路径信息
+      // 详见: https://vitejs.dev/guide/features#glob-import
+      icons.value = import.meta.glob('@/assets/icons/*.svg')
+
       await axios
         .get('/api/common/init/getInitData', {
           headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -83,8 +90,11 @@ export const useSystemStore = defineStore('system', () => {
         })
     }
     Logger.log('系统初始化完成')
-    app.use(useRouterStore().getRouter())
-    if (app != null) app.mount('#app')
+
+    if (app != null) {
+      app.use(useRouterStore().getRouter())
+      app.mount('#app')
+    }
   }
 
   function getChecksums() {
@@ -126,6 +136,7 @@ export const useSystemStore = defineStore('system', () => {
 
   return {
     initData,
+    icons,
     setLogoutLock,
     releaseLogoutLock,
     initialize,
