@@ -6,8 +6,8 @@ import { usePathStore } from '@/stores/path'
 import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
 import Token from '@/utils/token'
+import Storage from '@/utils/storage'
 import { useAppStore } from '@/stores/app'
-import { useAuthorityStore } from '@/stores/authority'
 
 const viewComponents = import.meta.glob('@/views/**/*.vue')
 
@@ -54,6 +54,14 @@ export const useRouterStore = defineStore('router', () => {
   }
 
   /**
+   * 检查用户是否有权限访问该页面路由
+   */
+  function canAccessRoute(routePermission) {
+    const permissions = Storage.get(Storage.keys.PERMISSIONS)
+    return permissions.indexOf(routePermission) > -1
+  }
+
+  /**
    * 获取router实例
    */
   function getRouter() {
@@ -77,7 +85,6 @@ export const useRouterStore = defineStore('router', () => {
           // 分支1: 访问非白名单路径，须先登录，否则重定向到登录页面
           Logger.log('访问非白名单页面')
           const appStore = useAppStore()
-          const authorityStore = useAuthorityStore()
           if (Token.hasToken() && !Token.isExpired()) {
             Logger.log('用户已登录，token未过期')
             // TODO
@@ -125,20 +132,3 @@ export const useRouterStore = defineStore('router', () => {
     getRouter
   }
 })
-
-// /**
-//  * 检查用户是否有权限访问该页面URL
-//  * @param {*} permissions 用户的权限列表
-//  * @param {*} routeName   要访问的页面名称
-//  * @returns
-//  */
-// function checkRouteAccessPermission(routeName) {
-//   console.log('检查用户是否有权限访问该页面URL')
-//   let result = false
-//   useAuthorityStore().authority.permissions.forEach(item => {
-//     if (routeName === item) {
-//       result = true
-//     }
-//   })
-//   return result
-// }
