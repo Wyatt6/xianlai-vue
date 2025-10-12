@@ -13,6 +13,4 @@ const app = createApp(App)
 app.use(ElementPlus, { locale: zhCN })
 app.use(createPinia())
 installDirectives(app)
-
-const systemStore = useSystemStore()
-await systemStore.initialize(app)
+await useSystemStore().initialize(app)
