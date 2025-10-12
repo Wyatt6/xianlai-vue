@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap" :class="[layoutStore.menubarExpand ? '' : 'menubar-hidden']">
+  <div class="page-wrap" :class="[useLayoutStore().menubarExpand ? '' : 'menubar-hidden']">
     <Menubar />
     <div class="right-wrap">
       <div class="fixed-header">
@@ -17,8 +17,6 @@ import Navbar from './components/Navbar/index.vue'
 import Tagbar from './components/Tagbar/index.vue'
 import Content from './components/Content/index.vue'
 import { useLayoutStore } from '@/stores/layout'
-
-const layoutStore = useLayoutStore()
 </script>
 
 <style lang="scss" scoped>
