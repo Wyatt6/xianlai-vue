@@ -59,20 +59,11 @@ export const useLayoutStore = defineStore('layout', () => {
     Storage.set(Storage.keys.TAG_LIST, tagList.value)
   }
 
-  /**
-   * 重置函数
-   */
-  function $reset() {
-    menubarExpand.value = true
-    tagList.value = []
-  }
-
   return {
     menubarExpand,
     changeMenubarExpand,
     tagList,
     addTag,
-    removeTags,
-    $reset
+    removeTags
   }
 })

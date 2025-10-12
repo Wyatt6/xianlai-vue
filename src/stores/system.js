@@ -4,14 +4,11 @@ import axios from 'axios'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
-import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
 import { useRouterStore } from '@/router'
 import { useOptionStore } from './option'
 import { usePathStore } from './path'
 import { useMenuStore } from './menu'
-import { useAuthorityStore } from './authority'
-import { useLayoutStore } from './layout'
 
 export const useSystemStore = defineStore('system', () => {
   const initing = ref(false)
@@ -118,26 +115,11 @@ export const useSystemStore = defineStore('system', () => {
     return false
   }
 
-  function $reset() {
-    // 锁是不应该被重置的
-  }
-
-  async function resetStoreAndStorage() {
-    $reset()
-    useAuthorityStore().$reset()
-    useLayoutStore().$reset()
-
-    const username = Storage.get(Storage.keys.REMEMBER_USERNAME)
-    Storage.clear()
-    if (username != null) Storage.set(Storage.keys.REMEMBER_USERNAME, username)
-  }
-
   return {
     initData,
     setLogoutLock,
     releaseLogoutLock,
     initialize,
-    resetStoreAndStorage,
     isChecksumChange
   }
 })

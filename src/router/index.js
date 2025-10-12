@@ -3,11 +3,11 @@ import { ref } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { usePathStore } from '@/stores/path'
+import { useResetStore } from '@/stores/reset'
 import { notEmpty, hasText } from '@/utils/common'
 import Logger from '@/utils/logger'
 import Token from '@/utils/token'
 import Storage from '@/utils/storage'
-import { useAppStore } from '@/stores/app'
 
 const viewComponents = import.meta.glob('@/views/**/*.vue')
 
@@ -78,13 +78,12 @@ export const useRouterStore = defineStore('router', () => {
        * @param {*} from 从哪里来
        * @param {*} next 是否要去？
        */
-      router.value.beforeEach((to, from, next) => {
+      router.value.beforeEach(async (to, from, next) => {
         Logger.log('路由前置守卫程序 ' + from.path + ' ---> ' + to.path, '')
         const Path = usePathStore()
         if (to.meta.needLogin) {
           // 分支1: 访问非白名单路径，须先登录，否则重定向到登录页面
           Logger.log('访问非白名单页面')
-          const appStore = useAppStore()
           if (Token.hasToken() && !Token.isExpired()) {
             Logger.log('用户已登录，token未过期')
             if (to.meta.needPermission && !canAccessRoute(to.meta.permission)) {
@@ -101,7 +100,7 @@ export const useRouterStore = defineStore('router', () => {
             } else {
               ElMessage.error('登录已过期，请重新登录')
             }
-            appStore.initialize()
+            await useResetStore().resetStoreAndStorage()
             next(Path.data.LOGIN)
           }
         } else {

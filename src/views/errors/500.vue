@@ -16,8 +16,10 @@
 import { useRouter } from 'vue-router'
 import { useSystemStore } from '@/stores/system'
 import { usePathStore } from '@/stores/path'
+import { useResetStore } from '@/stores/reset'
 
 const System = useSystemStore()
+const Reset = useResetStore()
 const router = useRouter()
 
 /**
@@ -25,7 +27,7 @@ const router = useRouter()
  */
 async function reLogin() {
   System.setLogoutLock()
-  await System.resetStoreAndStorage()
+  await Reset.resetStoreAndStorage()
   router.push(usePathStore().data.LOGIN)
   System.releaseLogoutLock()
 }

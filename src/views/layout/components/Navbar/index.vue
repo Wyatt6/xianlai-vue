@@ -28,6 +28,7 @@ import { useRouter } from 'vue-router'
 import { useApiStore } from '@/apis'
 import { useSystemStore } from '@/stores/system'
 import { usePathStore } from '@/stores/path'
+import { useResetStore } from '@/stores/reset'
 import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { hasText, notEmpty } from '@/utils/common'
@@ -36,6 +37,7 @@ const router = useRouter()
 const System = useSystemStore()
 const Api = useApiStore()
 const Path = usePathStore()
+const Reset = useResetStore()
 
 const username = ref('unknown')
 if (notEmpty(Storage.get(Storage.keys.USER))) {
@@ -56,7 +58,7 @@ async function logout() {
   await Api.request.iam.user.logout().then(async result => {
     if (result && result.success) {
       Logger.log('退出登录成功，返回到登录页面')
-      await System.resetStoreAndStorage()
+      await Reset.resetStoreAndStorage()
       await router.push(Path.data.LOGIN)
     } else {
       Logger.log('退出登录失败')
