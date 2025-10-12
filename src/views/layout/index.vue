@@ -16,27 +16,9 @@ import Menubar from './components/Menubar/index.vue'
 import Navbar from './components/Navbar/index.vue'
 import Tagbar from './components/Tagbar/index.vue'
 import Content from './components/Content/index.vue'
-import { watch } from 'vue'
-import { useAppStore } from '@/stores/app'
-import { useAuthorityStore } from '@/stores/authority'
 import { useLayoutStore } from '@/stores/layout'
 
-const appStore = useAppStore()
-const authorityStore = useAuthorityStore()
 const layoutStore = useLayoutStore()
-
-/**
- * 获取授权数据
- */
-// watch(
-//   () => authorityStore.exist,
-//   (value, oldValue) => {
-//     if (!value && !authorityStore.lock && !appStore.logoutLock) {
-//       authorityStore.getAuthority()
-//     }
-//   },
-//   { immediate: true }
-// )
 </script>
 
 <style lang="scss" scoped>
