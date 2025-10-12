@@ -10,10 +10,7 @@ export default {
     POSITION: 'position',
     REMEMBER_USERNAME: 'remember_username',
     MENUBAR_EXPAND: 'sidebar_expand',
-    TAG_LIST: 'tag_list',
-
-    AUTHORITY: 'system.authority',
-    USER: 'system.user'
+    TAG_LIST: 'tag_list'
   },
 
   /**
