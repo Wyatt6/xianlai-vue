@@ -6,7 +6,7 @@
         <div class="err-content__headline">抱歉，找不到页面......</div>
         <div class="err-content__info">请检查您输入的URL是否正确，或单击下面的按钮返回主页。</div>
         <el-button size="large" round type="primary" @click="router.go(-1)">返回之前的页面</el-button>
-        <el-button size="large" round @click="router.push(Routes.INDEX)">回到主页</el-button>
+        <el-button size="large" round @click="router.push(usePathStore().data.INDEX)">回到主页</el-button>
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import Routes from '@/router/routes'
+import { usePathStore } from '@/stores/path'
 const router = useRouter()
 </script>
 

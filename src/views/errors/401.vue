@@ -6,7 +6,7 @@
         <div class="err-content__headline">抱歉，您没有访问该页面的权限......</div>
         <div class="err-content__info">请检查您输入的URL是否正确，或联系管理员获得访问权限。</div>
         <el-button size="large" round type="primary" @click="router.go(-1)">返回之前的页面</el-button>
-        <el-button size="large" round @click="router.push(Routes.INDEX)">回到主页</el-button>
+        <el-button size="large" round @click="router.push(usePathStore().data.INDEX)">回到主页</el-button>
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import Routes from '@/router/routes'
+import { usePathStore } from '@/stores/path'
 const router = useRouter()
 </script>
 

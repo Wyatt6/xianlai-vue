@@ -6,7 +6,7 @@
         <div class="err-content__headline">抱歉，连接服务器失败，请稍后重试......</div>
         <div class="err-content__info">请单击下面的按钮尝试重建连接。</div>
         <el-button type="primary" size="large" round @click="router.go(-1)">重新连接</el-button>
-        <el-button size="large" round @click="reLogin">重新登录</el-button>
+        <el-button size="large" round @click="reLogin()">重新登录</el-button>
       </div>
     </div>
   </div>
@@ -14,20 +14,20 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import Routes from '@/router/routes'
-import { useAppStore } from '@/stores/app'
+import { useSystemStore } from '@/stores/system'
+import { usePathStore } from '@/stores/path'
 
-const appStore = useAppStore()
+const System = useSystemStore()
 const router = useRouter()
 
 /**
  * 重新登录
  */
 async function reLogin() {
-  appStore.setLogoutLock()
-  await appStore.initialize()
-  router.push(Routes.LOGIN)
-  appStore.releaseLogoutLock()
+  System.setLogoutLock()
+  await System.resetStoreAndStorage()
+  router.push(usePathStore().data.LOGIN)
+  System.releaseLogoutLock()
 }
 </script>
 
