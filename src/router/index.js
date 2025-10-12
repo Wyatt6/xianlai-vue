@@ -87,7 +87,6 @@ export const useRouterStore = defineStore('router', () => {
           const appStore = useAppStore()
           if (Token.hasToken() && !Token.isExpired()) {
             Logger.log('用户已登录，token未过期')
-            // TODO
             if (to.meta.needPermission && !canAccessRoute(to.meta.permission)) {
               Logger.log('用户无权限访问此非白名单页面，跳转到401页面')
               next(Path.data.NOT_AUTHORIZED_EMBEDDED)
