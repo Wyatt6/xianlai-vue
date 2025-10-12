@@ -16,7 +16,6 @@
  */
 import { ref, watch } from 'vue'
 import { SvgIcon } from 'vite-awesome-svg-loader/vue-integration'
-import { useSystemStore } from '@/stores/system'
 
 const svgCode = ref('')
 
@@ -29,6 +28,10 @@ const props = defineProps({
   }
 })
 
+// 导入图标目录下所有svg文件的路径信息
+// 详见: https://vitejs.dev/guide/features#glob-import
+const icons = import.meta.glob('@/assets/icons/*.svg')
+
 /**
  * 图标名称变更时的处理
  * 通过正则表达式判断目标图标文件，并解出svg代码赋值给svgCode进行渲染
@@ -36,7 +39,6 @@ const props = defineProps({
  * @param name 图标名称
  */
 async function onNameChange(name) {
-  const icons = useSystemStore().icons
   for (const path in icons) {
     const regexp = new RegExp('^.*/assets/icons/' + name + '.svg$')
     if (regexp.test(path)) {
