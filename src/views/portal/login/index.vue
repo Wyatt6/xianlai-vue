@@ -130,7 +130,7 @@ function onLogin() {
             router.push(Path.data.INDEX)
           } else {
             Logger.log('登录失败')
-            ElMessage.error(result && result.data && result.data.message ? result.data.message : '登录失败')
+            ElMessage.error(result && result.data && result.data.failMessage ? result.data.failMessage : '登录失败')
             // 自动刷新验证码
             captchaRef.value.initCaptcha(true)
             formModel.value.captcha = ''
