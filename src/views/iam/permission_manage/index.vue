@@ -20,7 +20,7 @@
             <el-input v-model="searchForm.name" clearable />
           </el-form-item>
           <el-form-item>
-            <el-button :icon="Search" @click="getList(1, formPageSize)">搜索</el-button>
+            <el-button :icon="Search" @click="onSearch()">搜索</el-button>
             <el-button :icon="Brush" @click="reset()">重置</el-button>
           </el-form-item>
         </el-form>
@@ -74,22 +74,34 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Refresh, Search, Brush, Open, TurnOff, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddPermission from './AddPermission.vue'
 import EditPermission from './EditPermission.vue'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
+import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
 
 // ---------- 搜索表单数据定义 ----------
+const SEARCHED_KEY = 'iam.permission_manage.searched'
+const SEARCH_FORM_KEY = 'iam.permission_manage.searchForm'
+const searched = ref(Storage.get(SEARCHED_KEY) || false)
 const searchFormRef = ref()
 const deafultSearchForm = {
   identifier: null,
   name: null
 }
-const searchForm = ref(deafultSearchForm)
+const searchForm = ref(Storage.get(SEARCHED_KEY) ? Storage.get(SEARCH_FORM_KEY) : deafultSearchForm)
+watch(
+  () => searched.value,
+  (value, oldValue) => {
+    Storage.set(SEARCHED_KEY, value)
+    Storage.set(SEARCH_FORM_KEY, searchForm.value)
+  },
+  { immediate: true }
+)
 
 // ---------- 表格数据定义 ----------
 const PAGE_NUM_KEY = 'iam.permission_manage.pageNum'
@@ -159,9 +171,20 @@ async function getList(num, size) {
 getList(formPageNum.value, formPageSize.value)
 
 /**
+ * 搜索
+ */
+function onSearch() {
+  searched.value = false
+  if (notEmpty(searchForm.value.identifier)) searched.value = true
+  if (notEmpty(searchForm.value.name)) searched.value = true
+  getList(1, formPageSize.value)
+}
+
+/**
  * 重置
  */
 function reset() {
+  searched.value = false
   searchForm.value = deafultSearchForm
   searchFormRef.value.resetFields()
   getList(1, formPageSize.value)
@@ -172,6 +195,9 @@ function reset() {
  */
 const showAddPermission = ref(false)
 async function afterAdd(id) {
+  searched.value = false
+  searchForm.value = deafultSearchForm
+  searchFormRef.value.resetFields()
   formPageNum.value = 1
   // 获取新权限的排名
   await Api.request.iam.permission.getRowNumStartFrom1({ permissionId: id }).then(result => {
