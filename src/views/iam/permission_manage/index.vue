@@ -70,7 +70,7 @@
       </el-card>
     </div>
     <AddPermission :show="showAddPermission" @close="showAddPermission = false" @afterAdd="afterAdd" />
-    <!-- <EditPermission :show="showEditPermission" :nowRow="nowRow" @close="showEditPermission = false" @afterEdit="afterEdit" /> -->
+    <EditPermission :show="showEditPermission" :nowRow="nowRow" @close="showEditPermission = false" @afterEdit="afterEdit" />
   </div>
 </template>
 
@@ -79,7 +79,7 @@ import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Open, TurnOff, Edit, Delete } from '@element-plus/icons-vue'
 import AddPermission from './AddPermission.vue'
-// import EditPermission from './EditPermission.vue'
+import EditPermission from './EditPermission.vue'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
@@ -215,20 +215,18 @@ function onEdit(row) {
   showEditPermission.value = true
   nowRow.value = row
 }
-// // 编辑权限后处理，回显数据
-// function afterEdit(permission) {
-//   console.log('回显编辑后的权限信息')
-//   for (let i = 0; i < formList.value.length; i++) {
-//     if (permission.id === formList.value[i].id) {
-//       formList.value[i].module = permission.module
-//       formList.value[i].identifier = permission.identifier
-//       formList.value[i].name = permission.name
-//       formList.value[i].remark = permission.remark
-//       break
-//     }
-//   }
-//   currRowKey.value = permission.id
-// }
+// 编辑权限后处理，回显数据
+function afterEdit(permission) {
+  for (let i = 0; i < formList.value.length; i++) {
+    if (permission.id === formList.value[i].id) {
+      formList.value[i].identifier = permission.identifier
+      formList.value[i].name = permission.name
+      formList.value[i].description = permission.description
+      break
+    }
+  }
+  currRowKey.value = permission.id
+}
 
 /**
  * 删除权限
