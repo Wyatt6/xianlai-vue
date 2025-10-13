@@ -1,6 +1,9 @@
 <template>
   <el-dialog draggable :model-value="props.show" title="新增权限" @close="onClose()">
     <el-form ref="formRef" :rules="formRules" :model="form" label-width="10rem" label-position="right">
+      <el-form-item label="排序ID" prop="sortId">
+        <el-input v-model="form.sortId" clearable />
+      </el-form-item>
       <el-form-item label="权限标识" prop="identifier">
         <el-input v-model="form.identifier" clearable />
       </el-form-item>
@@ -38,15 +41,11 @@ const emits = defineEmits(['close', 'afterAdd'])
 const loading = ref(false)
 const formRef = ref()
 const formRules = ref({
-  identifier: [
-    {
-      required: true,
-      trigger: 'blur', // 移开光标时
-      message: '请输入权限标识'
-    }
-  ]
+  sortId: [{ required: true, trigger: 'blur', message: '请输入排序ID' }],
+  identifier: [{ required: true, trigger: 'blur', message: '请输入权限标识' }]
 })
 const form = ref({
+  sortId: 1,
   identifier: null,
   name: null,
   description: null
@@ -57,6 +56,7 @@ watch(
   (value, oldValue) => {
     if (value === true) {
       // 初始化
+      form.value.sortId = 1
       form.value.identifier = null
       form.value.name = null
       form.value.description = null

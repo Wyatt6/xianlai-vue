@@ -13,9 +13,6 @@
           ref="searchFormRef"
           :model="searchForm"
         >
-          <el-form-item label="权限ID" prop="id">
-            <el-input v-model="searchForm.id" clearable />
-          </el-form-item>
           <el-form-item label="权限标识" prop="identifier">
             <el-input v-model="searchForm.identifier" clearable />
           </el-form-item>
@@ -40,7 +37,7 @@
             border
           >
             <el-table-column label="序号" align="center" width="70" type="index" :index="getIndex" />
-            <el-table-column label="权限ID" align="center" prop="id" width="150" />
+            <el-table-column label="排序ID" align="center" prop="sortId" width="150" />
             <el-table-column label="权限标识" prop="identifier" width="380" />
             <el-table-column label="权限名称" prop="name" width="250" />
             <el-table-column label="权限说明" prop="description" />
@@ -89,7 +86,6 @@ const Api = useApiStore()
 // ---------- 搜索表单数据定义 ----------
 const searchFormRef = ref()
 const deafultSearchForm = {
-  id: null,
   identifier: null,
   name: null
 }
@@ -132,7 +128,6 @@ async function getList(num, size) {
   if (!loading.value) {
     loading.value = true
     const condition = {
-      id: searchForm.value.id,
       identifier: searchForm.value.identifier,
       name: searchForm.value.name
     }
@@ -219,6 +214,7 @@ function onEdit(row) {
 function afterEdit(permission) {
   for (let i = 0; i < formList.value.length; i++) {
     if (permission.id === formList.value[i].id) {
+      formList.value[i].sortId = permission.sortId
       formList.value[i].identifier = permission.identifier
       formList.value[i].name = permission.name
       formList.value[i].description = permission.description
@@ -234,7 +230,7 @@ function afterEdit(permission) {
  */
 function onDelete(row) {
   const { id, identifier, name } = row
-  const message = '删除后数据不可恢复！！<br>请确认是否删除权限【' + identifier + (name ? ' / ' + name : '') + '】？'
+  const message = '删除后数据不可恢复！<br>请确认是否删除权限【' + identifier + (name ? ' / ' + name : '') + '】？'
   ElMessageBox.confirm(message, '删除权限', { type: 'warning', dangerouslyUseHTMLString: true })
     .then(() => {
       Api.request.iam.permission.deletePermission({ permissionId: id }).then(result => {

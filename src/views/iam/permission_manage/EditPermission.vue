@@ -1,6 +1,9 @@
 <template>
   <el-dialog draggable :model-value="props.show" :title="title" @close="onClose">
     <el-form ref="formRef" :rules="formRules" :model="form" label-width="10rem" label-position="right">
+      <el-form-item label="排序ID" prop="sortId">
+        <el-input v-model="form.sortId" clearable />
+      </el-form-item>
       <el-form-item label="权限标识" prop="identifier">
         <el-input v-model="form.identifier" clearable />
       </el-form-item>
@@ -44,15 +47,11 @@ const title = ref('')
 // -----
 const formRef = ref(null)
 const formRules = ref({
-  identifier: [
-    {
-      required: true,
-      trigger: 'blur', // 移开光标时
-      message: '请输入权限标识'
-    }
-  ]
+  sortId: [{ required: true, trigger: 'blur', message: '请输入排序ID' }],
+  identifier: [{ required: true, trigger: 'blur', message: '请输入权限标识' }]
 })
 const form = ref({
+  sortId: 1,
   identifier: null,
   name: null,
   description: null
@@ -63,6 +62,7 @@ const loading = ref(false)
 const initForm = () => {
   title.value = '编辑权限【' + props.nowRow.identifier + (props.nowRow.name ? ' / ' + props.nowRow.name : '') + '】'
   // 用当前权限数据渲染表单初始数据
+  form.value.sortId = props.nowRow.sortId
   form.value.identifier = props.nowRow.identifier
   form.value.name = props.nowRow.name
   form.value.description = props.nowRow.description
@@ -88,6 +88,7 @@ const onConfirm = () => {
       Logger.log('通过表单格式验证')
       loading.value = true
       if (
+        form.value.sortId === props.nowRow.sortId &&
         form.value.identifier === props.nowRow.identifier &&
         form.value.name === props.nowRow.name &&
         form.value.description === props.nowRow.description
@@ -101,7 +102,8 @@ const onConfirm = () => {
         id: props.nowRow.id,
         identifier: form.value.identifier,
         name: form.value.name,
-        description: form.value.description
+        description: form.value.description,
+        sortId: form.value.sortId
       }
       await Api.request.iam.permission
         .editPermission(null, input)
