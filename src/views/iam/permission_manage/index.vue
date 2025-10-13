@@ -244,18 +244,16 @@ function onDelete(row) {
   const message = '删除后数据不可恢复！！<br>请确认是否删除权限【' + identifier + (name ? ' / ' + name : '') + '】？'
   ElMessageBox.confirm(message, '删除权限', { type: 'warning', dangerouslyUseHTMLString: true })
     .then(() => {
-      Api.request.iam.permission
-      //         .deletePermission(id)
-      //         .then(result => {
-      //           if (result && result.success) {
-      //             const succMesg = '成功删除权限【' + identifier + (name ? ' / ' + name : '') + '】'
-      //             ElMessage.success(succMesg)
-      //             getList(formPageNum.value, formPageSize.value)
-      //           } else {
-      //             console.log('删除权限失败')
-      //             ElMessage.error(result && result.message ? result.message : '删除权限失败')
-      //           }
-      //         })
+      Api.request.iam.permission.deletePermission({ permissionId: id }).then(result => {
+        if (result && result.success) {
+          const succMesg = '成功删除权限【' + identifier + (name ? ' / ' + name : '') + '】'
+          ElMessage.success(succMesg)
+          getList(formPageNum.value, formPageSize.value)
+        } else {
+          Logger.log('删除权限失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除权限失败')
+        }
+      })
     })
     .catch(() => {
       // 点击“取消”不做动作
