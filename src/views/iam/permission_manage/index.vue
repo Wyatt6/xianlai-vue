@@ -39,8 +39,8 @@
             v-loading="loading"
             border
           >
-            <el-table-column label="序号" align="center" width="75" type="index" :index="getIndex" />
-            <el-table-column label="权限ID" align="center" prop="id" width="120" />
+            <el-table-column label="序号" align="center" width="70" type="index" :index="getIndex" />
+            <el-table-column label="权限ID" align="center" prop="id" width="150" />
             <el-table-column label="权限标识" prop="identifier" width="380" />
             <el-table-column label="权限名称" prop="name" width="250" />
             <el-table-column label="权限说明" prop="description" />
@@ -69,7 +69,7 @@
         </div>
       </el-card>
     </div>
-    <!-- <AddPermission :show="showAddPermission" @close="showAddPermission = false" @afterAdd="afterAdd" /> -->
+    <AddPermission :show="showAddPermission" @close="showAddPermission = false" @afterAdd="afterAdd()" />
     <!-- <EditPermission :show="showEditPermission" :nowRow="nowRow" @close="showEditPermission = false" @afterEdit="afterEdit" /> -->
   </div>
 </template>
@@ -78,7 +78,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Open, TurnOff, Edit, Delete } from '@element-plus/icons-vue'
-// import AddPermission from './AddPermission.vue'
+import AddPermission from './AddPermission.vue'
 // import EditPermission from './EditPermission.vue'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
@@ -176,30 +176,26 @@ function reset() {
  * 新增权限
  */
 const showAddPermission = ref(false)
-// async function afterAdd(id) {
-//   formPageNum.value = 1
-//   // 获取新权限的排名
-//   await Api.request.iam.permission
-//     .getRowNumStartFrom1(id)
-//     .then(result => {
-//       if (result && result.success) {
-//         console.log('成功获取新权限的排名')
-//         const { rowNum } = result.data
-//         formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-//       } else {
-//         console.log('获取新权限的排名失败')
-//       }
-//     })
-//     .catch(error => {
-//       // 异常已统一处理，此处忽略异常
-//     })
-//   // 查询新权限所在分页
-//   searchForm.value = deafultSearchForm
-//   searchFormRef.value.resetFields()
-//   await getList(formPageNum.value, formPageSize.value)
-//   // 选中最新增加的权限记录
-//   currRowKey.value = id
-// }
+async function afterAdd(id) {
+  formPageNum.value = 1
+  // 获取新权限的排名
+  // await Api.request.iam.permission.getRowNumStartFrom1(id)
+  //     .then(result => {
+  //       if (result && result.success) {
+  //         console.log('成功获取新权限的排名')
+  //         const { rowNum } = result.data
+  //         formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
+  //       } else {
+  //         console.log('获取新权限的排名失败')
+  //       }
+  //     })
+  // 查询新权限所在分页
+  searchForm.value = deafultSearchForm
+  searchFormRef.value.resetFields()
+  await getList(formPageNum.value, formPageSize.value)
+  // 选中最新增加的权限记录
+  currRowKey.value = id
+}
 
 /**
  * 刷新表格
