@@ -69,7 +69,7 @@
         </div>
       </el-card>
     </div>
-    <AddPermission :show="showAddPermission" @close="showAddPermission = false" @afterAdd="afterAdd()" />
+    <AddPermission :show="showAddPermission" @close="showAddPermission = false" @afterAdd="afterAdd" />
     <!-- <EditPermission :show="showEditPermission" :nowRow="nowRow" @close="showEditPermission = false" @afterEdit="afterEdit" /> -->
   </div>
 </template>
@@ -179,16 +179,15 @@ const showAddPermission = ref(false)
 async function afterAdd(id) {
   formPageNum.value = 1
   // 获取新权限的排名
-  // await Api.request.iam.permission.getRowNumStartFrom1(id)
-  //     .then(result => {
-  //       if (result && result.success) {
-  //         console.log('成功获取新权限的排名')
-  //         const { rowNum } = result.data
-  //         formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-  //       } else {
-  //         console.log('获取新权限的排名失败')
-  //       }
-  //     })
+  await Api.request.iam.permission.getRowNumStartFrom1({ permissionId: id }).then(result => {
+    if (result && result.success) {
+      Logger.log('成功获取新权限的排名')
+      const { rowNum } = result.data
+      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
+    } else {
+      Logger.log('获取新权限的排名失败')
+    }
+  })
   // 查询新权限所在分页
   searchForm.value = deafultSearchForm
   searchFormRef.value.resetFields()
