@@ -3,7 +3,8 @@ import { ElMessage } from 'element-plus'
 import { useSystemStore } from '@/stores/system'
 import { useOptionStore } from '@/stores/option'
 import { useResetStore } from '@/stores/reset'
-// import router from '@/router'
+import { usePathStore } from '@/stores/path'
+import { useRouterStore } from '@/router'
 import Token from '@/utils/token'
 import Logger from '@/utils/logger'
 import RequestLogger from './request_logger'
@@ -13,6 +14,8 @@ export function createAxiosInstance() {
   const System = useSystemStore()
   const Option = useOptionStore()
   const Reset = useResetStore()
+  const Path = usePathStore()
+  const router = useRouterStore().getRouter()
   // axios 配置详见：https://www.axios-http.cn/docs/req_config
   const instance = axios.create({
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -29,7 +32,7 @@ export function createAxiosInstance() {
         if (Token.isExpired()) {
           Logger.log('登录已过期，重定向到登录页面')
           await Reset.resetStoreAndStorage()
-          router.push('/portal/login')
+          router.push(Path.data.LOGIN)
           return Promise.reject(new Error('登录已过期，请重新登录'))
         } else {
           config.headers.token = `${Token.getToken()}` // 在报文头中注入token
@@ -65,17 +68,17 @@ export function createAxiosInstance() {
 
       if (!result.success && notEmpty(result.data) && hasText(result.data.failCode)) {
         // 分支1: 后端返回有错误码时统一处理
+        // 401-未登录：清除缓存，重定向到登录页面
+        if (result.data.failCode === '401') {
+          Logger.log('401-登录已过期，跳转到登陆页面')
+          ElMessage.error('登录已过期，请重新登录')
+          System.setLogoutLock()
+          await Reset.resetStoreAndStorage()
+          await router.push(Path.data.LOGIN)
+          System.releaseLogoutLock()
+          return Promise.reject(new Error('登录已过期，请重新登录'))
+        }
         // TODO
-        //         // 401-未登录：清除缓存，重定向到登录页面
-        //         if (result.data.code === 401) {
-        //           Logger.log('401-登录已过期，跳转到登陆页面')
-        //           ElMessage.error('登录已过期，请重新登录')
-        //           System.setLogoutLock()
-        //           await Reset.resetStoreAndStorage()
-        //           await router.push('/portal/login')
-        //           System.releaseLogoutLock()
-        //           return Promise.reject(new Error('登录已过期，请重新登录'))
-        //         }
         //         // 其他只需要提示的错误：400-请求参数错误、403-用户权限不足、500-服务器内部错误
         //         if (result.data.code === 400 || result.data.code === 500) {
         //           if (result.message) {
@@ -87,17 +90,6 @@ export function createAxiosInstance() {
         //           }
         //         }
 
-        //       // 401-未登录：清除缓存，重定向到登录页面
-        //       if (res.data.code === 401) {
-        //         console.log('401-登录已过期，跳转到登陆页面')
-        //         ElMessage.error('登录已过期，请重新登录')
-        //         appStore.setLogoutLock()
-        //         await appStore.initialize()
-        //         console.groupEnd()
-        //         await Router.push(Routes.LOGIN)
-        //         appStore.releaseLogoutLock()
-        //         return Promise.reject(new Error('登录已过期，请重新登录'))
-        //       }
         //       // 其他只需要提示的错误：400-请求参数错误、403-用户权限不足、500-服务器内部错误
         //       if (res.data.code === 400 || res.data.code === 500) {
         //         if (res.message) {
