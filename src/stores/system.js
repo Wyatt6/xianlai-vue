@@ -50,20 +50,24 @@ export const useSystemStore = defineStore('system', () => {
                 await usePathStore().evalData(result.data.paths, result.data.checksum.sysPathsChecksum)
                 Logger.log('系统路径初始化完成')
               }
+              // 系统路由
+              if (notEmpty(result.data.routes) && hasText(result.data.checksum.sysRoutesChecksum)) {
+                await useRouterStore().evalData(result.data.routes, result.data.checksum.sysRoutesChecksum)
+                Logger.log('系统路由初始化完成')
+              }
               // 系统菜单
               if (notEmpty(result.data.menus) && hasText(result.data.checksum.sysMenusChecksum)) {
                 await useMenuStore().evalData(result.data.menus, result.data.checksum.sysMenusChecksum)
                 Logger.log('系统菜单初始化完成')
               }
+              // 注册router插件
+              if (app != null) {
+                app.use(useRouterStore().getRouter())
+              }
               // 系统接口
               if (notEmpty(result.data.apis) && hasText(result.data.checksum.sysApisChecksum)) {
                 await useApiStore().evalData(result.data.apis, result.data.checksum.sysApisChecksum)
                 Logger.log('系统接口初始化完成')
-              }
-              // 系统路由
-              if (notEmpty(result.data.routes) && hasText(result.data.checksum.sysRoutesChecksum)) {
-                await useRouterStore().evalData(result.data.routes, result.data.checksum.sysRoutesChecksum)
-                Logger.log('系统路由初始化完成')
               }
             }
           } else {
@@ -81,8 +85,6 @@ export const useSystemStore = defineStore('system', () => {
     }
     Logger.log('系统初始化完成')
     if (app != null) {
-      // 注册router插件
-      app.use(useRouterStore().getRouter())
       app.mount('#app')
     }
   }
