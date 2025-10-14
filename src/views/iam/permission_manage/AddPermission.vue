@@ -84,7 +84,6 @@ function onConfirm() {
           if (result && result.success) {
             Logger.log('新增权限成功')
             ElMessage.success('新增权限成功')
-            loading.value = false
             onClose()
             emits('afterAdd', result.data.permission.id) // 调用父组件afterAdd事件
           } else {
