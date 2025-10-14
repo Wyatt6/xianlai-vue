@@ -37,9 +37,9 @@
             border
           >
             <el-table-column label="序号" align="center" width="70" type="index" :index="getIndex" />
-            <el-table-column label="排序ID" align="center" prop="sortId" width="150" />
-            <el-table-column label="权限标识" prop="identifier" width="380" />
-            <el-table-column label="权限名称" prop="name" width="250" />
+            <el-table-column label="排序ID" align="center" prop="sortId" width="110" />
+            <el-table-column label="权限标识" prop="identifier" width="360" />
+            <el-table-column label="权限名称" prop="name" width="260" />
             <el-table-column label="权限说明" prop="description" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['permission:edit', 'permission:delete']">
               <template #default="scope">
