@@ -184,8 +184,8 @@ function onSearch() {
  * 重置
  */
 function reset() {
-  searched.value = false
   searchForm.value = deafultSearchForm
+  searched.value = false
   searchFormRef.value.resetFields()
   getList(1, formPageSize.value)
 }
@@ -195,8 +195,8 @@ function reset() {
  */
 const showAddPermission = ref(false)
 async function afterAdd(id) {
-  searched.value = false
   searchForm.value = deafultSearchForm
+  searched.value = false
   searchFormRef.value.resetFields()
   formPageNum.value = 1
   // 获取新权限的排名
