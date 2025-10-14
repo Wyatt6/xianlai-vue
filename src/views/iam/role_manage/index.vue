@@ -291,29 +291,24 @@ function afterEdit(role) {
  * @param row 当前行
  */
 function onDelete(row) {
-  //   const { id, identifier, name } = row
-  //   const message = '是否删除角色【' + identifier + (name ? ' / ' + name : '') + '】？'
-  //   ElMessageBox.confirm(message, '请确认', { type: 'warning' })
-  //     .then(() => {
-  //       Api.request.iam.role
-  //         .deleteRole(id)
-  //         .then(result => {
-  //           if (result && result.success) {
-  //             const succMesg = '成功删除角色【' + identifier + (name ? ' / ' + name : '') + '】'
-  //             ElMessage.success(succMesg)
-  //             getList(formPageNum.value, formPageSize.value)
-  //           } else {
-  //             console.log('删除角色失败')
-  //             ElMessage.error(result && result.message ? result.message : '删除角色失败')
-  //           }
-  //         })
-  //         .catch(error => {
-  //           // 异常已统一处理，此处忽略异常
-  //         })
-  //     })
-  //     .catch(() => {
-  //       // 点击“取消”不做动作
-  //     })
+  const { id, identifier, name } = row
+  const message = '删除后数据不可恢复！<br>请确认是否删除角色【' + identifier + (name ? ' / ' + name : '') + '】？'
+  ElMessageBox.confirm(message, '删除角色', { type: 'warning', dangerouslyUseHTMLString: true })
+    .then(() => {
+      Api.request.iam.role.deleteRole({ roleId: id }).then(result => {
+        if (result && result.success) {
+          const succMesg = '成功删除角色【' + identifier + (name ? ' / ' + name : '') + '】'
+          ElMessage.success(succMesg)
+          getList(formPageNum.value, formPageSize.value)
+        } else {
+          Logger.log('删除角色失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除角色失败')
+        }
+      })
+    })
+    .catch(() => {
+      // 点击“取消”不做动作
+    })
 }
 
 /**
