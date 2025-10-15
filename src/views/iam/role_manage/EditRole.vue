@@ -1,19 +1,25 @@
 <template>
   <el-dialog draggable :model-value="props.show" :title="title" @close="onClose">
     <el-form ref="formRef" :model="form" :rules="formRules" label-width="10rem" label-position="right">
+      <el-form-item label="排序ID" prop="sortId">
+        <el-input v-model="form.sortId" clearable />
+      </el-form-item>
       <el-form-item label="角色标识" prop="identifier">
         <el-input v-model="form.identifier" clearable />
       </el-form-item>
       <el-form-item label="角色名称">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="备注">
-        <el-input v-model="form.remark" type="textarea" />
+      <el-form-item label="生效">
+        <el-switch v-model="form.active" />
+      </el-form-item>
+      <el-form-item label="角色说明">
+        <el-input v-model="form.description" type="textarea" />
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="primary" @click="onConfirm" :loading="loading">确定</el-button>
-      <el-button @click="onClose">取消</el-button>
+      <el-button type="primary" @click="onConfirm()" :loading="loading">确定</el-button>
+      <el-button @click="onClose()">取消</el-button>
     </template>
   </el-dialog>
 </template>
@@ -22,6 +28,9 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
+import Logger from '@/utils/logger'
+
+const Api = useApiStore()
 
 const props = defineProps({
   show: {
@@ -40,18 +49,15 @@ const title = ref('')
 // -----
 const formRef = ref(null)
 const formRules = ref({
-  identifier: [
-    {
-      required: true,
-      trigger: 'blur', // 移开光标时
-      message: '请输入角色标识符'
-    }
-  ]
+  sortId: [{ required: true, trigger: 'blur', message: '请输入排序ID' }],
+  identifier: [{ required: true, trigger: 'blur', message: '请输入角色标识符' }]
 })
 const form = ref({
+  sortId: null,
   identifier: null,
   name: null,
-  remark: null
+  active: null,
+  description: null
 })
 // -----
 const loading = ref(false)
@@ -61,9 +67,11 @@ const loading = ref(false)
 function initForm() {
   title.value = '编辑角色【' + props.nowRow.identifier + (props.nowRow.name ? ' / ' + props.nowRow.name : '') + '】'
   // 用当前角色数据渲染表单初始数据
+  form.value.sortId = props.nowRow.sortId
   form.value.identifier = props.nowRow.identifier
   form.value.name = props.nowRow.name
-  form.value.remark = props.nowRow.remark
+  form.value.active = props.nowRow.active
+  form.value.description = props.nowRow.description
   loading.value = false
 }
 
@@ -82,14 +90,19 @@ watch(
  * 点击“确定”
  */
 function onConfirm() {
-  console.groupCollapsed('编辑角色')
+  Logger.log('编辑角色')
   formRef.value.validate(async valid => {
     if (valid) {
-      console.log('通过表单格式验证')
+      Logger.log('通过表单格式验证')
       loading.value = true
-      if (form.value.identifier === props.nowRow.identifier && form.value.name === props.nowRow.name && form.value.remark === props.nowRow.remark) {
-        console.log('角色无修改')
-        console.groupEnd()
+      if (
+        form.value.sortId === props.nowRow.sortId &&
+        form.value.identifier === props.nowRow.identifier &&
+        form.value.name === props.nowRow.name &&
+        form.value.active === props.nowRow.active &&
+        form.value.description === props.nowRow.description
+      ) {
+        Logger.log('角色无修改')
         ElMessage.info('角色无修改')
         loading.value = false
         return
@@ -98,29 +111,28 @@ function onConfirm() {
         id: props.nowRow.id,
         identifier: form.value.identifier,
         name: form.value.name,
-        remark: form.value.remark
+        active: form.value.active,
+        description: form.value.description,
+        sortId: form.value.sortId
       }
       await Api.request.iam.role
-        .editRole(input)
-        .then(res => {
-          if (res && res.success) {
-            console.log('修改角色成功')
+        .editRole(null, input)
+        .finally(() => {
+          loading.value = false
+        })
+        .then(result => {
+          if (result && result.success) {
+            Logger.log('修改角色成功')
             ElMessage.success('保存成功')
-            loading.value = false
             onClose()
-            emits('afterEdit', res.data.role) // 调用父组件afterEdit事件
+            emits('afterEdit', result.data.role) // 调用父组件afterEdit事件
           } else {
-            console.log('编辑角色失败')
-            ElMessage.error(res && res.message ? res.message : '编辑角色失败')
+            Logger.log('编辑角色失败')
+            ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑角色失败')
           }
         })
-        .catch(error => {
-          // 异常已统一处理，此处忽略异常
-        })
-      loading.value = false
     }
   })
-  console.groupEnd()
 }
 
 /**

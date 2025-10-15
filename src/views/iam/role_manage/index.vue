@@ -85,7 +85,7 @@
         </div>
       </el-card>
       <AddRole :show="showAddRole" @close="showAddRole = false" @afterAdd="afterAdd" />
-      <!-- <EditRole :show="showEditRole" :nowRow="nowRow" @close="showEditRole = false" @afterEdit="afterEdit" /> -->
+      <EditRole :show="showEditRole" :nowRow="nowRow" @close="showEditRole = false" @afterEdit="afterEdit" />
       <!-- <GrantPermission :show="showGrantPermission" :nowRow="nowRow" @close="showGrantPermission = false" /> -->
     </div>
   </div>
@@ -96,7 +96,7 @@ import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddRole from './AddRole.vue'
-// import EditRole from './EditRole.vue'
+import EditRole from './EditRole.vue'
 // import GrantPermission from './GrantPermission.vue'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
@@ -274,16 +274,17 @@ function onEdit(row) {
 }
 // 编辑角色后处理，回显数据
 function afterEdit(role) {
-  //   console.log('回显编辑后的角色信息')
-  //   for (let i = 0; i < formList.value.length; i++) {
-  //     if (role.id === formList.value[i].id) {
-  //       formList.value[i].identifier = role.identifier
-  //       formList.value[i].name = role.name
-  //       formList.value[i].remark = role.remark
-  //       break
-  //     }
-  //   }
-  //   currRowKey.value = role.id
+  for (let i = 0; i < formList.value.length; i++) {
+    if (role.id === formList.value[i].id) {
+      formList.value[i].sortId = role.sortId
+      formList.value[i].identifier = role.identifier
+      formList.value[i].name = role.name
+      formList.value[i].active = role.active
+      formList.value[i].description = role.description
+      break
+    }
+  }
+  currRowKey.value = role.id
 }
 
 /**
