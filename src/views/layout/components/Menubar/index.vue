@@ -132,7 +132,6 @@ const logoTitleSize = ref(`${Option.data.menubar.logoTitleSize}rem`)
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 1001;
   overflow: hidden;
   background-color: vars.$menubar-color;
   transition: width #{vars.$menubar-transition-duration};

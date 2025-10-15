@@ -36,7 +36,6 @@ import { useLayoutStore } from '@/stores/layout'
       position: fixed;
       top: 0;
       right: 0;
-      z-index: 1001;
       width: calc(100% - vars.$menubar-width);
       transition: width #{vars.$menubar-transition-duration};
     }

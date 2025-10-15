@@ -52,9 +52,11 @@ $--padding-left-right: 0.7rem;
 
 .content-wrap {
   position: fixed;
+  bottom: 0;
+  right: 0;
   width: calc(100% - vars.$menubar-width);
-  height: 100%;
-  padding: calc(vars.$navbar-height + vars.$tagbar-height + $--padding-top) $--padding-left-right 0 $--padding-left-right;
+  height: calc(100% - vars.$navbar-height - vars.$tagbar-height);
+  padding: $--padding-top $--padding-left-right 0 $--padding-left-right;
   overflow: hidden;
   box-sizing: border-box;
   transition: width #{vars.$menubar-transition-duration};

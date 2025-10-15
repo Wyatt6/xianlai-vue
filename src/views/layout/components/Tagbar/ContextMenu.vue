@@ -83,7 +83,6 @@ const onCloseOtherClick = async () => {
 .context-menu-container {
   position: fixed;
   background: #fff;
-  z-index: 3000;
   list-style-type: none;
   padding: 0.5rem 0;
   border-radius: 0.4rem;
