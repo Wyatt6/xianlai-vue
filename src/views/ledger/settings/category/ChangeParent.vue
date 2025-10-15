@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
 

@@ -118,7 +118,7 @@ import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Refresh, Search, Brush, Open, TurnOff } from '@element-plus/icons-vue'
 import BindRole from './BindRole.vue'
-import Perms from '@/plugins/directives/permissions'
+import Perms from '@/directives/permissions'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
 

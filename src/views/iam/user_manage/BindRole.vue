@@ -46,9 +46,9 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Perms from '@/plugins/directives/permissions'
+import Perms from '@/directives/permissions'
 import { useApiStore } from '@/apis'
 
 const props = defineProps({
