@@ -86,7 +86,7 @@
       </el-card>
       <AddRole :show="showAddRole" @close="showAddRole = false" @afterAdd="afterAdd" />
       <EditRole :show="showEditRole" :nowRow="nowRow" @close="showEditRole = false" @afterEdit="afterEdit" />
-      <!-- <GrantPermission :show="showGrantPermission" :nowRow="nowRow" @close="showGrantPermission = false" /> -->
+      <GrantPermission :show="showGrantPermission" :nowRow="nowRow" @close="showGrantPermission = false" />
     </div>
   </div>
 </template>
@@ -97,7 +97,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddRole from './AddRole.vue'
 import EditRole from './EditRole.vue'
-// import GrantPermission from './GrantPermission.vue'
+import GrantPermission from './GrantPermission.vue'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
