@@ -10,7 +10,7 @@
       <el-form-item label="权限名称">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="权限描述">
+      <el-form-item label="权限说明">
         <el-input v-model="form.description" type="textarea" />
       </el-form-item>
     </el-form>

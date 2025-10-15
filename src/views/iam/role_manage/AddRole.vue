@@ -10,7 +10,7 @@
       <el-form-item label="角色名称">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="立即启用">
+      <el-form-item label="立即生效">
         <el-switch v-model="form.active" />
       </el-form-item>
       <el-form-item label="角色说明">
