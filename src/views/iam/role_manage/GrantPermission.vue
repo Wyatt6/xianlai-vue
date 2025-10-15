@@ -98,84 +98,80 @@ function resetSelected() {
  */
 const saving = ref(false)
 async function onConfirm() {
-  //   Logger.groupCollapsed('保存授权的变更')
-  //   saving.value = true
-  //   const selectedRows = tableRef.value.getSelectionRows()
-  //   Logger.log('获取要授权的权限ID列表')
-  //   const grantList = []
-  //   for (let i = 0; i < selectedRows.length; i++) {
-  //     let notShow = true
-  //     for (let j = 0; j < permIdsOfRole.value.length; j++) {
-  //       if (selectedRows[i].id === permIdsOfRole.value[j]) {
-  //         notShow = false
-  //         break
-  //       }
-  //     }
-  //     if (notShow) {
-  //       grantList.push(selectedRows[i].id)
-  //     }
-  //   }
-  //   Logger.log('获取要解除授权的权限ID列表')
-  //   const cancelList = []
-  //   for (let i = 0; i < permIdsOfRole.value.length; i++) {
-  //     let notShow = true
-  //     for (let j = 0; j < selectedRows.length; j++) {
-  //       if (permIdsOfRole.value[i] === selectedRows[j].id) {
-  //         notShow = false
-  //         break
-  //       }
-  //     }
-  //     if (notShow) {
-  //       cancelList.push(permIdsOfRole.value[i])
-  //     }
-  //   }
-  //   if (grantList.length + cancelList.length > 0) {
-  //     await Api.request.iam.role
-  //       .updateGrants({
-  //         roleId: props.nowRow.id,
-  //         grant: grantList,
-  //         cancel: cancelList
-  //       })
-  //       .then(async result => {
-  //         if (result && result.success) {
-  //           const { failGrant, failCancel } = result.data
-  //           const failGrantCnt = failGrant ? failGrant.length : 0
-  //           const failCancelCnt = failCancel ? failCancel.length : 0
-  //           if (failGrantCnt + failCancelCnt > 0) {
-  //             const grantSum = grantList.length
-  //             const cancelSum = cancelList.length
-  //             if (failGrantCnt + failCancelCnt < grantSum + cancelSum) {
-  //               Logger.log('部分授权变更成功')
-  //               ElMessage.error(`授权${grantSum - failGrantCnt}/${grantSum} 解除授权${cancelSum - failCancelCnt}/${cancelSum}`)
-  //             } else {
-  //               Logger.log('授权变更失败')
-  //               ElMessage.error('授权变更失败')
-  //             }
-  //           } else {
-  //             Logger.log('授权变更成功')
-  //             ElMessage.success('授权变更成功')
-  //           }
-  //           Logger.log('更新角色所具有的授权')
-  //           loading.value = true
-  //           const { permissionIds } = await getPermissionIdsOfRole(props.nowRow.id)
-  //           permIdsOfRole.value = permissionIds
-  //           resetSelected()
-  //           change.value = false
-  //           loading.value = false
-  //         } else {
-  //           Logger.log('授权变更失败')
-  //           ElMessage.error(result && result.message ? result.message : '授权变更失败')
-  //         }
-  //       })
-  //       .catch(error => {
-  //         // 异常已统一处理，此处忽略异常
-  //       })
-  //   } else {
-  //     Logger.log('授权未有变化')
-  //     ElMessage.warning('授权未有变化')
-  //   }
-  //   saving.value = false
-  //   Logger.groupEnd()
+  Logger.log('保存授权的变更')
+  saving.value = true
+  const selectedRows = tableRef.value.getSelectionRows()
+  Logger.log('获取要授权的权限ID列表')
+  const grantList = []
+  for (let i = 0; i < selectedRows.length; i++) {
+    let notShow = true
+    for (let j = 0; j < permIdsOfRole.value.length; j++) {
+      if (selectedRows[i].id === permIdsOfRole.value[j]) {
+        notShow = false
+        break
+      }
+    }
+    if (notShow) {
+      grantList.push(selectedRows[i].id)
+    }
+  }
+  Logger.log('获取要解除授权的权限ID列表')
+  const cancelList = []
+  for (let i = 0; i < permIdsOfRole.value.length; i++) {
+    let notShow = true
+    for (let j = 0; j < selectedRows.length; j++) {
+      if (permIdsOfRole.value[i] === selectedRows[j].id) {
+        notShow = false
+        break
+      }
+    }
+    if (notShow) {
+      cancelList.push(permIdsOfRole.value[i])
+    }
+  }
+  if (grantList.length + cancelList.length > 0) {
+    await Api.request.iam.role
+      .updateGrants(null, {
+        roleId: props.nowRow.id,
+        grant: grantList,
+        cancel: cancelList
+      })
+      .then(async result => {
+        if (result && result.success) {
+          const { failGrant, failCancel } = result.data
+          const failGrantCnt = failGrant ? failGrant.length : 0
+          const failCancelCnt = failCancel ? failCancel.length : 0
+          if (failGrantCnt + failCancelCnt > 0) {
+            const grantSum = grantList.length
+            const cancelSum = cancelList.length
+            if (failGrantCnt + failCancelCnt < grantSum + cancelSum) {
+              Logger.log('部分授权变更成功')
+              ElMessage.error(`授权${grantSum - failGrantCnt}/${grantSum} 解除授权${cancelSum - failCancelCnt}/${cancelSum}`)
+            } else {
+              Logger.log('授权变更失败')
+              ElMessage.error('授权变更失败')
+            }
+          } else {
+            Logger.log('授权变更成功')
+            ElMessage.success('授权变更成功')
+          }
+          Logger.log('更新角色所具有的授权')
+          loading.value = true
+          const { permissionIds } = await getPermissionIdsOfRole(props.nowRow.id)
+          permIdsOfRole.value = permissionIds
+          resetSelected()
+          change.value = false
+          loading.value = false
+        } else {
+          Logger.log('授权变更失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '授权变更失败')
+        }
+      })
+  } else {
+    Logger.log('授权未有变化')
+    ElMessage.warning('授权未有变化')
+  }
+  saving.value = false
 }
 
 /**
