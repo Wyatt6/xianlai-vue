@@ -116,7 +116,7 @@ function onConfirm() {
         sortId: form.value.sortId
       }
       await Api.request.iam.role
-        .editRole(null, input)
+        .edit(null, input)
         .finally(() => {
           loading.value = false
         })

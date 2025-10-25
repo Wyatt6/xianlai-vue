@@ -81,7 +81,7 @@ function onConfirm() {
       Logger.log('通过表单格式验证')
       loading.value = true
       await Api.request.iam.role
-        .addRole(null, form.value)
+        .add(null, form.value)
         .finally(() => {
           loading.value = false
         })

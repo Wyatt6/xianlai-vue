@@ -131,7 +131,7 @@ async function onConfirm() {
   }
   if (grantList.length + cancelList.length > 0) {
     await Api.request.iam.role
-      .updateGrants(null, {
+      .grant(null, {
         roleId: props.nowRow.id,
         grant: grantList,
         cancel: cancelList

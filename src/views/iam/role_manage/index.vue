@@ -25,6 +25,9 @@
               <el-option label="未生效" value="false" />
             </el-select>
           </el-form-item>
+          <el-form-item label="角色说明" prop="description">
+            <el-input v-model="searchForm.description" clearable />
+          </el-form-item>
           <el-form-item label="包含权限" prop="permission">
             <el-input v-model="searchForm.permission" clearable />
           </el-form-item>
@@ -46,7 +49,7 @@
             border
           >
             <el-table-column label="序号" align="center" width="55" type="index" :index="getIndex" />
-            <el-table-column label="排序ID" align="center" prop="sortId" width="110" />
+            <el-table-column label="排序ID" align="center" prop="sortId" width="80" />
             <el-table-column label="角色标识" prop="identifier" width="250" />
             <el-table-column label="角色名称" prop="name" width="220" />
             <el-table-column label="状态" align="center" width="85">
@@ -114,6 +117,7 @@ const deafultSearchForm = {
   identifier: null,
   name: null,
   active: null,
+  description: null,
   permission: null
 }
 const searchForm = ref(Storage.get(SEARCHED_KEY) ? Storage.get(SEARCH_FORM_KEY) : deafultSearchForm)
@@ -167,29 +171,30 @@ async function getList(num, size) {
       identifier: searchForm.value.identifier,
       name: searchForm.value.name,
       active: searchForm.value.active,
+      description: searchForm.value.description,
       permission: searchForm.value.permission
     }
     Logger.log('条件查询角色列表分页数据')
     Api.request.iam.role
-      .getRolesByPage({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
-      .finally(() => {
-        loading.value = false
-      })
+      .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
         if (result && result.success) {
           Logger.log('成功获取角色列表分页数据，渲染表格')
-          const { pageNum, pageSize, totalPages, totalElements, roles } = result.data
+          const { pageNum, pageSize, totalPages, totalElements, content } = result.data
           formerPageSize.value = formPageSize.value
           formPageNum.value = pageNum + 1 // 注意：自然页码，下标从1开始
           formPageSize.value = pageSize
           formTotalPages.value = totalPages
           formTotalElements.value = totalElements
-          formList.value = roles
+          formList.value = content
           success = true
         } else {
           Logger.log('获取角色列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取角色列表失败')
         }
+      })
+      .finally(() => {
+        loading.value = false
       })
   }
   return success
@@ -204,6 +209,7 @@ function onSearch() {
   if (notEmpty(searchForm.value.identifier)) searched.value = true
   if (notEmpty(searchForm.value.name)) searched.value = true
   if (notEmpty(searchForm.value.active)) searched.value = true
+  if (notEmpty(searchForm.value.description)) searched.value = true
   if (notEmpty(searchForm.value.permission)) searched.value = true
   getList(1, formPageSize.value)
 }
@@ -296,7 +302,7 @@ function onDelete(row) {
   const message = '删除后数据不可恢复！<br>请确认是否删除角色【' + identifier + (name ? ' / ' + name : '') + '】？'
   ElMessageBox.confirm(message, '删除角色', { type: 'warning', dangerouslyUseHTMLString: true })
     .then(() => {
-      Api.request.iam.role.deleteRole({ roleId: id }).then(result => {
+      Api.request.iam.role.delete({ roleId: id }).then(result => {
         if (result && result.success) {
           const succMesg = '成功删除角色【' + identifier + (name ? ' / ' + name : '') + '】'
           ElMessage.success(succMesg)
