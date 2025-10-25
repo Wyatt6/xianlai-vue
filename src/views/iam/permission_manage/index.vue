@@ -19,6 +19,9 @@
           <el-form-item label="权限名称" prop="name">
             <el-input v-model="searchForm.name" clearable />
           </el-form-item>
+          <el-form-item label="权限说明" prop="name">
+            <el-input v-model="searchForm.description" clearable />
+          </el-form-item>
           <el-form-item>
             <el-button :icon="Search" @click="onSearch()">搜索</el-button>
             <el-button :icon="Brush" @click="reset()">重置</el-button>
@@ -91,7 +94,8 @@ const searched = ref(Storage.get(SEARCHED_KEY) || false)
 const searchFormRef = ref()
 const deafultSearchForm = {
   identifier: null,
-  name: null
+  name: null,
+  description: null
 }
 const searchForm = ref(Storage.get(SEARCHED_KEY) ? Storage.get(SEARCH_FORM_KEY) : deafultSearchForm)
 watch(
@@ -141,29 +145,30 @@ async function getList(num, size) {
     loading.value = true
     const condition = {
       identifier: searchForm.value.identifier,
-      name: searchForm.value.name
+      name: searchForm.value.name,
+      description: searchForm.value.description
     }
     Logger.log('条件查询权限列表分页数据')
     await Api.request.iam.permission
-      .getPermissionsByPage({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
-      .finally(() => {
-        loading.value = false
-      })
+      .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
         if (result && result.success) {
           Logger.log('成功获取权限列表分页数据，渲染表格')
-          const { pageNum, pageSize, totalPages, totalElements, permissions } = result.data
+          const { pageNum, pageSize, totalPages, totalElements, content } = result.data
           formerPageSize.value = formPageSize.value
           formPageNum.value = pageNum + 1 // 注意：自然页码，下标从1开始
           formPageSize.value = pageSize
           formTotalPages.value = totalPages
           formTotalElements.value = totalElements
-          formList.value = permissions
+          formList.value = content
           success = true
         } else {
           Logger.log('获取权限列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取权限列表失败')
         }
+      })
+      .finally(() => {
+        loading.value = false
       })
   }
   return success
@@ -177,6 +182,7 @@ function onSearch() {
   searched.value = false
   if (notEmpty(searchForm.value.identifier)) searched.value = true
   if (notEmpty(searchForm.value.name)) searched.value = true
+  if (notEmpty(searchForm.value.description)) searched.description = true
   getList(1, formPageSize.value)
 }
 
@@ -259,7 +265,7 @@ function onDelete(row) {
   const message = '删除后数据不可恢复！<br>请确认是否删除权限【' + identifier + (name ? ' / ' + name : '') + '】？'
   ElMessageBox.confirm(message, '删除权限', { type: 'warning', dangerouslyUseHTMLString: true })
     .then(() => {
-      Api.request.iam.permission.deletePermission({ permissionId: id }).then(result => {
+      Api.request.iam.permission.delete({ permissionId: id }).then(result => {
         if (result && result.success) {
           const succMesg = '成功删除权限【' + identifier + (name ? ' / ' + name : '') + '】'
           ElMessage.success(succMesg)

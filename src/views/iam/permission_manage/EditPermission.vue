@@ -106,7 +106,7 @@ const onConfirm = () => {
         sortId: form.value.sortId
       }
       await Api.request.iam.permission
-        .editPermission(null, input)
+        .edit(null, input)
         .finally(() => {
           loading.value = false
         })
