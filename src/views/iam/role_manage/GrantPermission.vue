@@ -243,12 +243,12 @@ watch(
       change.value = false
       loading.value = true
       await Api.request.iam.permission
-        .getAllPermissions()
+        .getPageConditionally({ pageNum: -1, pageSize: 0 }, null)
         .then(async result => {
           if (result && result.success) {
             Logger.log('成功获取权限列表')
-            const { permissions } = result.data
-            formList.value = permissions
+            const { content } = result.data
+            formList.value = content
             const { permissionIds } = await getPermissionIdsOfRole(props.nowRow.id)
             permIdsOfRole.value = permissionIds
             resetSelected()
