@@ -16,6 +16,9 @@
       <el-form-item label="角色说明">
         <el-input v-model="form.description" type="textarea" />
       </el-form-item>
+      <el-form-item label="用户绑定检查">
+        <el-switch v-model="form.bindCheck" />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button type="primary" @click="onConfirm()" :loading="loading">确定</el-button>
@@ -52,7 +55,8 @@ const form = ref({
   identifier: null,
   name: null,
   active: false,
-  description: null
+  description: null,
+  bindCheck: false
 })
 // ----- 监听打开对话框动作 -----
 watch(
@@ -65,6 +69,7 @@ watch(
       form.value.name = null
       form.value.active = false
       form.value.description = null
+      form.value.bindCheck = false
       loading.value = false
     }
   },

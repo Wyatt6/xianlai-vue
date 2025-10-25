@@ -60,6 +60,13 @@
               </template>
             </el-table-column>
             <el-table-column label="角色说明" prop="description" />
+            <el-table-column label="用户绑定检查" align="center" width="110">
+              <template #default="scope">
+                <el-tag :type="scope.row.bindCheck ? 'success' : 'danger'">
+                  {{ scope.row.bindCheck ? '是' : '否' }}
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="140" fixed="right" v-perm="['role:query', 'role:edit', 'role:delete']">
               <template #default="scope">
                 <el-button-group size="small">

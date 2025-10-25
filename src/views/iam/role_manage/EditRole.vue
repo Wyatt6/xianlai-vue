@@ -16,6 +16,9 @@
       <el-form-item label="角色说明">
         <el-input v-model="form.description" type="textarea" />
       </el-form-item>
+      <el-form-item label="用户绑定检查">
+        <el-switch v-model="form.bindCheck" />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button type="primary" @click="onConfirm()" :loading="loading">确定</el-button>
@@ -57,7 +60,8 @@ const form = ref({
   identifier: null,
   name: null,
   active: null,
-  description: null
+  description: null,
+  bindCheck: null
 })
 // -----
 const loading = ref(false)
@@ -72,6 +76,7 @@ function initForm() {
   form.value.name = props.nowRow.name
   form.value.active = props.nowRow.active
   form.value.description = props.nowRow.description
+  form.value.bindCheck = props.nowRow.bindCheck
   loading.value = false
 }
 
@@ -100,7 +105,8 @@ function onConfirm() {
         form.value.identifier === props.nowRow.identifier &&
         form.value.name === props.nowRow.name &&
         form.value.active === props.nowRow.active &&
-        form.value.description === props.nowRow.description
+        form.value.description === props.nowRow.description &&
+        form.value.bindCheck === props.nowRow.bindCheck
       ) {
         Logger.log('角色无修改')
         ElMessage.info('角色无修改')
@@ -109,11 +115,12 @@ function onConfirm() {
       }
       const input = {
         id: props.nowRow.id,
+        sortId: form.value.sortId,
         identifier: form.value.identifier,
         name: form.value.name,
         active: form.value.active,
         description: form.value.description,
-        sortId: form.value.sortId
+        bindCheck: form.value.bindCheck
       }
       await Api.request.iam.role
         .edit(null, input)
