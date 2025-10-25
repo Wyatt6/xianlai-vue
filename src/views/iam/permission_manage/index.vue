@@ -19,7 +19,7 @@
           <el-form-item label="权限名称" prop="name">
             <el-input v-model="searchForm.name" clearable />
           </el-form-item>
-          <el-form-item label="权限说明" prop="name">
+          <el-form-item label="权限说明" prop="description">
             <el-input v-model="searchForm.description" clearable />
           </el-form-item>
           <el-form-item>
