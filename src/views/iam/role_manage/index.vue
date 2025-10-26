@@ -73,7 +73,7 @@
                   <el-tooltip effect="dark" content="查看授权" placement="top">
                     <el-button v-perm="['role:query']" :icon="Search" plain type="primary" @click="onGrant(scope.row)" />
                   </el-tooltip>
-                  <el-button v-perm="['role:delete']" :icon="Edit" plain @click="onEdit(scope.row)" />
+                  <el-button v-perm="['role:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
                   <el-button v-perm="['role:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
                 </el-button-group>
               </template>
