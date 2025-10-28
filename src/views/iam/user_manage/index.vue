@@ -3,7 +3,6 @@
     <div class="card-wrap">
       <el-card class="card" shadow="never">
         <div class="btn-wrap">
-          <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']">创建</el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
           <div class="open-register">
             <span style="margin-right: 0.5rem">开启门户页面用户注册功能</span>
@@ -80,9 +79,6 @@
                     <el-button v-perm="['user:query']" :icon="Search" plain type="primary" @click="onBind(scope.row)" />
                   </el-tooltip>
                   <el-button v-perm="['user:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
-                  <el-tooltip effect="dark" content="永久注销用户" placement="top">
-                    <el-button v-perm="['user:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
-                  </el-tooltip>
                 </el-button-group>
               </template>
             </el-table-column>
@@ -111,7 +107,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import { Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import EditUser from './EditUser.vue'
 import BindRole from './BindRole.vue'
 import Storage from '@/utils/storage'
@@ -234,14 +230,6 @@ function reset() {
 }
 
 /**
- * 计算序号
- * @param index 下标从0开始
- */
-function getIndex(index) {
-  return (formPageNum.value - 1) * formPageSize.value + index + 1
-}
-
-/**
  * 分页器改变页码大小
  * 为了在改变分页大小后，依然显示当前浏览的数据，需要对新页码进行计算
  */
@@ -284,13 +272,6 @@ function afterEdit(userInfo) {
     }
   }
   currRowKey.value = userInfo.id
-}
-
-/**
- * 永久注销用户
- */
-function onDelete(row) {
-  ElMessage.info('功能未开放')
 }
 
 /**
