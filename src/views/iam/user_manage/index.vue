@@ -21,12 +21,6 @@
           <el-form-item label="用户名" prop="username">
             <el-input v-model="searchForm.username" clearable />
           </el-form-item>
-          <el-form-item label="用户状态" prop="active">
-            <el-select v-model="searchForm.active" clearable>
-              <el-option label="正常" value="true" />
-              <el-option label="冻结" value="false" />
-            </el-select>
-          </el-form-item>
           <el-form-item label="注册时间" prop="registerTimeRange">
             <el-date-picker
               v-model="searchForm.registerTimeRange"
@@ -34,6 +28,18 @@
               start-placeholder="开始时间（含）"
               end-placeholder="结束时间（含）"
             />
+          </el-form-item>
+          <el-form-item label="用户状态" prop="active">
+            <el-select v-model="searchForm.active" clearable>
+              <el-option label="正常" value="true" />
+              <el-option label="冻结" value="false" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="注销状态" prop="isDelete">
+            <el-select v-model="searchForm.isDelete" clearable>
+              <el-option label="未注销" value="false" />
+              <el-option label="已注销" value="true" />
+            </el-select>
           </el-form-item>
           <el-form-item label="包含角色" prop="role">
             <el-input v-model="searchForm.role" clearable />
@@ -60,9 +66,10 @@
           >
             <el-table-column label="用户ID" prop="id" width="160" />
             <el-table-column label="用户名" prop="username" />
-            <el-table-column label="状态" align="center" width="70">
+            <el-table-column label="状态" align="center" width="85">
               <template #default="scope">
-                <el-tag :type="scope.row.active ? 'success' : 'danger'">
+                <el-tag v-if="scope.row.isDelete" type="info">已注销</el-tag>
+                <el-tag v-else :type="scope.row.active ? 'success' : 'danger'">
                   {{ scope.row.active ? '正常' : '冻结' }}
                 </el-tag>
               </template>
@@ -79,6 +86,9 @@
                     <el-button v-perm="['user:query']" :icon="Search" plain type="primary" @click="onBind(scope.row)" />
                   </el-tooltip>
                   <el-button v-perm="['user:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
+                  <el-tooltip effect="dark" content="注销用户" placement="top">
+                    <el-button v-perm="['user:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
+                  </el-tooltip>
                 </el-button-group>
               </template>
             </el-table-column>
@@ -124,6 +134,7 @@ const searchFormRef = ref()
 const deafultSearchForm = {
   username: null,
   active: null,
+  isDelete: null,
   registerTimeRange: null,
   role: null,
   permission: null
@@ -177,6 +188,7 @@ async function getList(num, size) {
     const condition = {
       username: searchForm.value.username,
       active: searchForm.value.active,
+      isDelete: searchForm.value.isDelete,
       stRegisterTime: searchForm.value.registerTimeRange != null ? searchForm.value.registerTimeRange[0] : null,
       edRegisterTime: searchForm.value.registerTimeRange != null ? searchForm.value.registerTimeRange[1] : null,
       role: searchForm.value.role,
@@ -272,6 +284,45 @@ function afterEdit(userInfo) {
     }
   }
   currRowKey.value = userInfo.id
+}
+
+/**
+ * 注销用户
+ * @param row 当前行
+ */
+function onDelete(row) {
+  const message = '注销后用户数据不会删除，但该用户和用户名无法重新使用。请确认是否继续注销用户？'
+  ElMessageBox.confirm(message, '注销用户', { type: 'warning', dangerouslyUseHTMLString: true })
+    .then(() => {
+      const message =
+        '注销后用户数据不会删除，但该用户和用户名无法重新使用。请确认是否继续注销用户？坚持注销请在下面输入用户名确认： <b>' + row.username + '</b>'
+      ElMessageBox.prompt(message, '再次确认注销用户', {
+        type: 'warning',
+        dangerouslyUseHTMLString: true,
+        inputErrorMessage: '请输入所要注销的用户正确的用户名',
+        inputValidator: text => {
+          return text === row.username
+        }
+      })
+        .then(() => {
+          Api.request.iam.user.editUserInfo(null, { id: row.id, isDelete: true }).then(result => {
+            if (result && result.success) {
+              const succMesg = '成功注销用户【' + row.username + '】'
+              ElMessage.success(succMesg)
+              getList(formPageNum.value, formPageSize.value)
+            } else {
+              Logger.log('注销用户失败')
+              ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '注销用户失败')
+            }
+          })
+        })
+        .catch(() => {
+          // 点击“取消”不做动作
+        })
+    })
+    .catch(() => {
+      // 点击“取消”不做动作
+    })
 }
 
 /**
