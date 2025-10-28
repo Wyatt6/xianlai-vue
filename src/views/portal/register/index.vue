@@ -53,6 +53,7 @@ import { useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores/option'
 import Validator from '@/utils/validator'
 import Logger from '@/utils/logger'
+import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
 import { usePathStore } from '@/stores/path'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -128,6 +129,7 @@ function onRegister() {
         .then(result => {
           if (result && result.success) {
             Logger.log('注册成功，跳转到登录页面')
+            Storage.set(Storage.keys.REMEMBER_USERNAME, result.data.user.username)
             ElMessageBox.alert(`欢迎使用「${Option.data.system.name}」系统，请登陆`, '注册成功', {
               callback: action => {
                 router.push(Path.data.LOGIN)
