@@ -31,8 +31,12 @@
     </el-table>
     <template #footer>
       <div v-perm="['user:bind']">
-        <el-button v-if="!change" type="danger" plain :disabled="props.nowRow.isDelete" @click="change = true">变更绑定</el-button>
-        <el-button v-if="change" type="primary" :disabled="props.nowRow.isDelete" @click="onConfirm()" :loading="saving">保存变更</el-button>
+        <el-button v-if="!change" type="danger" plain :disabled="notEmpty(props.nowRow) && props.nowRow.isDelete" @click="change = true">
+          变更绑定
+        </el-button>
+        <el-button v-if="change" type="primary" :disabled="notEmpty(props.nowRow) && props.nowRow.isDelete" @click="onConfirm()" :loading="saving">
+          保存变更
+        </el-button>
         <el-button v-if="change" @click="onCancel()">取消变更</el-button>
       </div>
     </template>
@@ -44,6 +48,7 @@ import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
 import Logger from '@/utils/logger'
+import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
 
