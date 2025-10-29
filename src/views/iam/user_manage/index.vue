@@ -37,7 +37,7 @@
           </el-form-item>
           <el-form-item label="注销状态" prop="isDelete">
             <el-select v-model="searchForm.isDelete" clearable>
-              <el-option label="未注销" value="false" />
+              <el-option label="正常" value="false" />
               <el-option label="已注销" value="true" />
             </el-select>
           </el-form-item>
@@ -85,9 +85,9 @@
                   <el-tooltip effect="dark" content="查看用户绑定的角色" placement="top">
                     <el-button v-perm="['user:query']" :icon="Search" plain type="primary" @click="onBind(scope.row)" />
                   </el-tooltip>
-                  <el-button v-perm="['user:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
+                  <el-button v-perm="['user:edit']" :icon="Edit" plain :disabled="scope.row.isDelete" @click="onEdit(scope.row)" />
                   <el-tooltip effect="dark" content="注销用户" placement="top">
-                    <el-button v-perm="['user:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
+                    <el-button v-perm="['user:delete']" :icon="Delete" type="danger" :disabled="scope.row.isDelete" @click="onDelete(scope.row)" />
                   </el-tooltip>
                 </el-button-group>
               </template>
