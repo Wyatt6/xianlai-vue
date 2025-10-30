@@ -3,6 +3,7 @@
     <div class="card-wrap">
       <el-card class="card" shadow="never">
         <div class="btn-wrap">
+          <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']" @click="showAddUser = true">创建用户</el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
           <div class="open-register">
             <span style="margin-right: 0.5rem">开启门户页面用户注册功能</span>
@@ -108,6 +109,7 @@
           />
         </div>
       </el-card>
+      <AddUser :show="showAddUser" @close="showAddUser = false" @afterAdd="afterAdd" />
       <EditUser :show="showEditUser" :nowRow="nowRow" @close="showEditUser = false" @afterEdit="afterEdit" />
       <BindRole :show="showBindRole" :nowRow="nowRow" @close="showBindRole = false" />
     </div>
@@ -117,7 +119,8 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import AddUser from './AddUser.vue'
 import EditUser from './EditUser.vue'
 import BindRole from './BindRole.vue'
 import Storage from '@/utils/storage'
@@ -264,6 +267,33 @@ const nowRow = ref()
 function onBind(row) {
   showBindRole.value = true
   nowRow.value = row
+}
+
+/**
+ * 创建用户
+ */
+const showAddUser = ref(false)
+async function afterAdd(id) {
+  searchForm.value = deafultSearchForm
+  searched.value = false
+  searchFormRef.value.resetFields()
+  formPageNum.value = 1
+  // 获取新用户的排名
+  await Api.request.iam.user.getRowNumStartFrom1({ userId: id }).then(result => {
+    if (result && result.success) {
+      Logger.log('成功获取新用户的排名')
+      const { rowNum } = result.data
+      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
+    } else {
+      Logger.log('获取新用户的排名失败')
+    }
+  })
+  // 查询新用户所在分页
+  searchForm.value = deafultSearchForm
+  searchFormRef.value.resetFields()
+  await getList(formPageNum.value, formPageSize.value)
+  // 选中最新增加的用户记录
+  currRowKey.value = id
 }
 
 /**
