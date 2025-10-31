@@ -46,10 +46,10 @@
             border
           >
             <el-table-column label="序号" align="center" min-width="55" type="index" :index="getIndex" />
-            <el-table-column label="接口说明" prop="description" min-width="250" />
-            <el-table-column label="调用路径" prop="callPath" min-width="330" />
+            <el-table-column label="接口说明" prop="description" min-width="240" />
+            <el-table-column label="调用路径" prop="callPath" min-width="320" />
             <el-table-column label="请求方法" align="center" prop="requestMethod" min-width="85" />
-            <el-table-column label="请求URL" prop="url" min-width="400" />
+            <el-table-column label="请求URL" prop="url" min-width="380" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
               <template #default="scope">
                 <el-button-group size="small">
