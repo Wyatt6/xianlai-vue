@@ -40,7 +40,7 @@
             <el-table-column label="排序ID" align="center" prop="sortId" min-width="140" />
             <el-table-column label="路径常量" prop="name" min-width="320" />
             <el-table-column label="路径URL" prop="path" min-width="400" />
-            <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
+            <el-table-column label="操作" align="center" width="110" fixed="right" v-perm="['api:edit', 'api:delete']">
               <template #default="scope">
                 <el-button-group size="small">
                   <el-button v-perm="['api:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
@@ -171,27 +171,15 @@ getList(formPageNum.value, formPageSize.value)
  * 新增路径
  */
 const showAddPath = ref(false)
-async function afterAdd(id) {
+async function afterAdd(newObj, rowNum) {
   searchForm.value = deafultSearchForm
   searched.value = false
   searchFormRef.value.resetFields()
-  formPageNum.value = 1
-  // 获取新路径的排名
-  await Api.request.common.path.getRowNumStartFrom1({ pathId: id }).then(result => {
-    if (result && result.success) {
-      Logger.log('成功获取新路径的排名')
-      const { rowNum } = result.data
-      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-    } else {
-      Logger.log('获取新路径的排名失败')
-    }
-  })
   // 查询新路径所在分页
-  searchForm.value = deafultSearchForm
-  searchFormRef.value.resetFields()
+  formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
   await getList(formPageNum.value, formPageSize.value)
   // 选中最新增加的路径记录
-  currRowKey.value = id
+  currRowKey.value = newObj.id
 }
 
 /**

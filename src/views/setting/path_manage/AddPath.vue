@@ -81,7 +81,7 @@ function onConfirm() {
             Logger.log('新增路径成功')
             ElMessage.success('新增路径成功')
             onClose()
-            emits('afterAdd', result.data.path.id) // 调用父组件afterAdd事件
+            emits('afterAdd', result.data.path, result.data.rowNum) // 调用父组件afterAdd事件
           } else {
             Logger.log('新增路径失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '新增路径失败')
