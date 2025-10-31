@@ -48,19 +48,19 @@
             v-loading="loading"
             border
           >
-            <el-table-column label="序号" align="center" width="55" type="index" :index="getIndex" />
-            <el-table-column label="排序ID" align="center" prop="sortId" width="80" />
-            <el-table-column label="角色标识" prop="identifier" width="250" />
-            <el-table-column label="角色名称" prop="name" width="220" />
-            <el-table-column label="状态" align="center" width="85">
+            <el-table-column label="序号" align="center" min-width="55" type="index" :index="getIndex" />
+            <el-table-column label="排序ID" align="center" prop="sortId" min-width="80" />
+            <el-table-column label="角色标识" prop="identifier" min-width="200" />
+            <el-table-column label="角色名称" prop="name" min-width="200" />
+            <el-table-column label="状态" align="center" min-width="85">
               <template #default="scope">
                 <el-tag :type="scope.row.active ? 'success' : 'danger'">
                   {{ scope.row.active ? '生效' : '未生效' }}
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="角色说明" prop="description" />
-            <el-table-column label="用户绑定检查" align="center" width="110">
+            <el-table-column label="角色说明" prop="description" min-width="320" />
+            <el-table-column label="用户绑定检查" align="center" min-width="110">
               <template #default="scope">
                 <el-tag :type="scope.row.bindCheck ? 'success' : 'danger'">
                   {{ scope.row.bindCheck ? '是' : '否' }}

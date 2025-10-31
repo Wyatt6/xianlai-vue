@@ -39,11 +39,11 @@
             v-loading="loading"
             border
           >
-            <el-table-column label="序号" align="center" width="70" type="index" :index="getIndex" />
-            <el-table-column label="排序ID" align="center" prop="sortId" width="80" />
-            <el-table-column label="权限标识" prop="identifier" width="360" />
-            <el-table-column label="权限名称" prop="name" width="260" />
-            <el-table-column label="权限说明" prop="description" />
+            <el-table-column label="序号" align="center" min-width="60" type="index" :index="getIndex" />
+            <el-table-column label="排序ID" align="center" prop="sortId" min-width="80" />
+            <el-table-column label="权限标识" prop="identifier" min-width="320" />
+            <el-table-column label="权限名称" prop="name" min-width="250" />
+            <el-table-column label="权限说明" prop="description" min-width="370" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['permission:edit', 'permission:delete']">
               <template #default="scope">
                 <el-button-group size="small">
