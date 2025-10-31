@@ -71,7 +71,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddPath from './AddPath.vue'
 import { useApiStore } from '@/apis'
@@ -218,6 +218,31 @@ function reset() {
  */
 function getIndex(index) {
   return (formPageNum.value - 1) * formPageSize.value + index + 1
+}
+
+/**
+ * 删除路径
+ * @param row 当前行
+ */
+function onDelete(row) {
+  const { id, name } = row
+  const message = '删除后数据不可恢复！<br>是否删除路径【' + name + '】？'
+  ElMessageBox.confirm(message, '删除路径', { type: 'warning', dangerouslyUseHTMLString: true })
+    .then(() => {
+      Api.request.common.path.delete({ pathId: id }).then(result => {
+        if (result && result.success) {
+          const succMesg = '成功删除路径【' + name + '】'
+          ElMessage.success(succMesg)
+          getList(formPageNum.value, formPageSize.value)
+        } else {
+          Logger.log('删除路径失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除路径失败')
+        }
+      })
+    })
+    .catch(() => {
+      // 点击“取消”不做动作
+    })
 }
 
 /**
