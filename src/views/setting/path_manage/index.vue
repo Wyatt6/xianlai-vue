@@ -65,6 +65,7 @@
         </div>
       </el-card>
     </div>
+    <AddPath :show="showAddPath" @close="showAddPath = false" @afterAdd="afterAdd" />
   </div>
 </template>
 
@@ -72,6 +73,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import AddPath from './AddPath.vue'
 import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
@@ -164,6 +166,33 @@ async function getList(num, size) {
   return success
 }
 getList(formPageNum.value, formPageSize.value)
+
+/**
+ * 新增路径
+ */
+const showAddPath = ref(false)
+async function afterAdd(id) {
+  searchForm.value = deafultSearchForm
+  searched.value = false
+  searchFormRef.value.resetFields()
+  formPageNum.value = 1
+  // 获取新路径的排名
+  await Api.request.common.path.getRowNumStartFrom1({ pathId: id }).then(result => {
+    if (result && result.success) {
+      Logger.log('成功获取新路径的排名')
+      const { rowNum } = result.data
+      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
+    } else {
+      Logger.log('获取新路径的排名失败')
+    }
+  })
+  // 查询新路径所在分页
+  searchForm.value = deafultSearchForm
+  searchFormRef.value.resetFields()
+  await getList(formPageNum.value, formPageSize.value)
+  // 选中最新增加的路径记录
+  currRowKey.value = id
+}
 
 /**
  * 刷新表格
