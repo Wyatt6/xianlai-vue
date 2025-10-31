@@ -37,7 +37,7 @@
             border
           >
             <el-table-column label="序号" align="center" min-width="80" type="index" :index="getIndex" />
-            <el-table-column label="排序ID" align="center" prop="sortId" min-width="120" />
+            <el-table-column label="排序ID" align="center" prop="sortId" min-width="140" />
             <el-table-column label="路径常量" prop="name" min-width="320" />
             <el-table-column label="路径URL" prop="path" min-width="400" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
