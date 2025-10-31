@@ -2,6 +2,37 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['api:add']" @click="showAddApi = true">新增</el-button>
+        <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-form
+          class="search-box-inline"
+          :inline="true"
+          size="small"
+          label-position="right"
+          label-width="6rem"
+          ref="searchFormRef"
+          :model="searchForm"
+        >
+          <el-form-item label="接口说明" prop="description">
+            <el-input v-model="searchForm.description" clearable />
+          </el-form-item>
+          <el-form-item label="调用路径" prop="callPath">
+            <el-input v-model="searchForm.callPath" clearable />
+          </el-form-item>
+          <el-form-item label="请求方法" prop="requestMethod">
+            <el-select v-model="searchForm.requestMethod" clearable>
+              <el-option label="GET" value="GET" />
+              <el-option label="POST" value="POST" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="请求URL" prop="url">
+            <el-input v-model="searchForm.url" clearable />
+          </el-form-item>
+          <el-form-item>
+            <el-button :icon="Search" @click="onSearch()">搜索</el-button>
+            <el-button :icon="Brush" @click="reset()">重置</el-button>
+          </el-form-item></el-form
+        >
         <div class="table-wrap">
           <el-table
             height="100%"
@@ -14,11 +45,19 @@
             v-loading="loading"
             border
           >
-            <el-table-column label="序号" align="center" width="55" type="index" :index="getIndex" />
-            <el-table-column label="接口说明" prop="description" width="250" />
-            <el-table-column label="调用路径" prop="callPath" width="330" />
-            <el-table-column label="请求方法" align="center" prop="requestMethod" width="85" />
-            <el-table-column label="请求URL" prop="url" />
+            <el-table-column label="序号" align="center" min-width="55" type="index" :index="getIndex" />
+            <el-table-column label="接口说明" prop="description" min-width="250" />
+            <el-table-column label="调用路径" prop="callPath" min-width="330" />
+            <el-table-column label="请求方法" align="center" prop="requestMethod" min-width="85" />
+            <el-table-column label="请求URL" prop="url" min-width="400" />
+            <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
+              <template #default="scope">
+                <el-button-group size="small">
+                  <el-button v-perm="['api:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
+                  <el-button v-perm="['api:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
+                </el-button-group>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="pagination-wrap">
@@ -40,13 +79,35 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 
 const Api = useApiStore()
+
+// ---------- 搜索表单数据定义 ----------
+const SEARCHED_KEY = 'setting.api_manage.searched'
+const SEARCH_FORM_KEY = 'setting.api_manage.searchForm'
+const searched = ref(Storage.get(SEARCHED_KEY) || false)
+const searchFormRef = ref()
+const deafultSearchForm = {
+  description: null,
+  callPath: null,
+  requestMethod: null,
+  url: null
+}
+const searchForm = ref(Storage.get(SEARCHED_KEY) ? Storage.get(SEARCH_FORM_KEY) : deafultSearchForm)
+watch(
+  () => searched.value,
+  (value, oldValue) => {
+    Storage.set(SEARCHED_KEY, value)
+    Storage.set(SEARCH_FORM_KEY, searchForm.value)
+  },
+  { immediate: true }
+)
 
 // ---------- 表格数据定义 ----------
 const PAGE_NUM_KEY = 'setting.api_manage.pageNum'
@@ -84,19 +145,19 @@ async function getList(num, size) {
   let success = false
   if (!loading.value) {
     loading.value = true
-    // const condition = {
-    //   identifier: searchForm.value.identifier,
-    //   name: searchForm.value.name,
-    //   description: searchForm.value.description
-    // }
+    const condition = {
+      description: searchForm.value.description,
+      callPath: searchForm.value.callPath,
+      requestMethod: searchForm.value.requestMethod,
+      url: searchForm.value.url
+    }
     Logger.log('条件查询接口列表分页数据')
     await Api.request.common.api
-      .getPageConditionally({ pageNum: num - 1, pageSize: size }, null) // 注意：服务器页码，下标从0开始，所以-1
+      .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
         if (result && result.success) {
           Logger.log('成功获取接口列表分页数据，渲染表格')
           const { pageNum, pageSize, totalPages, totalElements, content } = result.data
-          console.log(result.data)
           formerPageSize.value = formPageSize.value
           formPageNum.value = pageNum + 1 // 注意：自然页码，下标从1开始
           formPageSize.value = pageSize
@@ -116,6 +177,38 @@ async function getList(num, size) {
   return success
 }
 getList(formPageNum.value, formPageSize.value)
+
+/**
+ * 刷新表格
+ */
+async function refresh() {
+  const result = await getList(formPageNum.value, formPageSize.value)
+  if (result) {
+    ElMessage.success('表格刷新完成')
+  }
+}
+
+/**
+ * 搜索
+ */
+function onSearch() {
+  searched.value = false
+  if (notEmpty(searchForm.value.description)) searched.value = true
+  if (notEmpty(searchForm.value.callPath)) searched.value = true
+  if (notEmpty(searchForm.value.requestMethod)) searched.value = true
+  if (notEmpty(searchForm.value.url)) searched.value = true
+  getList(1, formPageSize.value)
+}
+
+/**
+ * 重置
+ */
+function reset() {
+  searchForm.value = deafultSearchForm
+  searched.value = false
+  searchFormRef.value.resetFields()
+  getList(1, formPageSize.value)
+}
 
 /**
  * 计算序号
@@ -154,13 +247,13 @@ function tableRow() {
  * 动态渲染表格高度
  */
 const searchBoxHeight = ref('0rem')
-// onMounted(() => {
-//   const searchBoxDOM = document.getElementsByClassName('search-box-inline')[0]
-//   const resizeObserver = new ResizeObserver(entries => {
-//     searchBoxHeight.value = '' + entries[0].contentRect.height / 10 + 'rem'
-//   })
-//   resizeObserver.observe(searchBoxDOM)
-// })
+onMounted(() => {
+  const searchBoxDOM = document.getElementsByClassName('search-box-inline')[0]
+  const resizeObserver = new ResizeObserver(entries => {
+    searchBoxHeight.value = '' + entries[0].contentRect.height / 10 + 'rem'
+  })
+  resizeObserver.observe(searchBoxDOM)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -186,6 +279,19 @@ const searchBoxHeight = ref('0rem')
         min-height: calc(100% - 2 * var(--el-card-padding)) !important;
       }
 
+      .search-box-inline {
+        margin-top: 2rem;
+
+        // 在版本2.5.0之后，el-select的默认宽度更改为100%，当使用内联形式时，宽度将显示异常。
+        // 为了保持显示正常, 您需要手动配置el-select的宽度，例如：
+        .el-form-item {
+          .el-input,
+          .el-select {
+            width: 20rem;
+          }
+        }
+      }
+
       .table-wrap {
         width: 100%;
         // 全屏高度: 100vh
@@ -196,7 +302,7 @@ const searchBoxHeight = ref('0rem')
         // 减去调整值: 6.7rem（含搜索框margin-top 2rem）
         // 减去条件搜索框高度: 计算得到
         --search-box-height: v-bind(searchBoxHeight);
-        height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 4.4rem - 4.7rem - var(--search-box-height));
+        height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 2.4rem - 4.4rem - 6.7rem - var(--search-box-height));
       }
 
       .pagination-wrap {
