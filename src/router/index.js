@@ -55,6 +55,13 @@ export const useRouterStore = defineStore('router', () => {
   }
 
   /**
+   * 清除旧的路由实例
+   */
+  async function clearRouter() {
+    router.value = null
+  }
+
+  /**
    * 检查用户是否有权限访问该页面路由
    */
   function canAccessRoute(routePermission) {
@@ -133,6 +140,7 @@ export const useRouterStore = defineStore('router', () => {
     routes,
     checksum,
     evalData,
+    clearRouter,
     getRouter
   }
 })
