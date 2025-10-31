@@ -4,7 +4,7 @@
       <div>
         <span class="title">登录</span>
       </div>
-      <div>
+      <div v-if="Option.data.portal.allowRegister">
         <span class="sub-title">没有账号？</span>
         <span :class="loading ? 'sub-title-link__disabled' : 'sub-title-link'" @click="toRegister()">点此注册</span>
       </div>

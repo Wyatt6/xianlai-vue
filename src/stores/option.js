@@ -28,6 +28,7 @@ export const useOptionStore = defineStore('option', () => {
       coverSubTitle: '封面副标题',
       coverSubTitleSize: 2,
       coverSubTitleColor: '#ffffff',
+      allowRegister: true,
       footerCopyright: '',
       footerBeianIcp: '',
       footerBeianGongan: ''
