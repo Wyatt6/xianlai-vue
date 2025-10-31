@@ -4,6 +4,7 @@
       <el-card class="card" shadow="never">
         <el-button size="small" type="primary" :icon="Plus" v-perm="['path:add']" @click="showAddPath = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-button size="small" :icon="Refresh" @click="reloadCache()">重载路径缓存</el-button>
         <el-form
           class="search-box-inline"
           :inline="true"
@@ -190,6 +191,20 @@ async function refresh() {
   if (result) {
     ElMessage.success('表格刷新完成')
   }
+}
+
+/**
+ * 重载路径缓存
+ */
+function reloadCache() {
+  Api.request.common.path.reloadCache().then(result => {
+    if (result && result.success) {
+      ElMessage.success('重载路径缓存完成')
+    } else {
+      Logger.log('重载路径缓存失败')
+      ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载路径缓存失败')
+    }
+  })
 }
 
 /**
