@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['api:add']" @click="showAdd = true">新增</el-button>
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['menu:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载菜单缓存</el-button>
         <div class="table-wrap">
@@ -29,7 +29,7 @@
               </template>
             </el-table-column>
             <el-table-column label="菜单标题" prop="title" min-width="200" />
-            <el-table-column label="路径名称" prop="pathName" min-width="250" />
+            <el-table-column label="访问路径名称" prop="pathName" min-width="250" />
             <el-table-column label="鉴权" align="center" prop="needPermission" min-width="60">
               <template #default="scope">
                 <div class="icon-wrap">
@@ -37,7 +37,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="权限标识" prop="permission" min-width="250" />
+            <el-table-column label="鉴权所需权限标识" prop="permission" min-width="250" />
             <el-table-column label="状态" align="center" prop="active" min-width="85">
               <template #default="scope">
                 <el-tag :type="scope.row.active ? 'success' : 'danger'">
@@ -64,7 +64,7 @@
 
 <script setup>
 import LocalIcon from '@/components/LocalIcon/index.vue'
-import { ref, watch, onMounted } from 'vue'
+import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 // import AddMenu from './AddMenu.vue'
@@ -175,24 +175,28 @@ function afterEdit(api) {
  * @param row 当前行
  */
 function onDelete(row) {
-  // const { id, callPath } = row
-  // const message = '删除后数据不可恢复！<br>是否删除菜单【' + callPath + '】？'
-  // ElMessageBox.confirm(message, '删除菜单', { type: 'warning', dangerouslyUseHTMLString: true })
-  //   .then(() => {
-  //     Api.request.common.api.delete({ apiId: id }).then(result => {
-  //       if (result && result.success) {
-  //         const succMesg = '成功删除菜单【' + callPath + '】'
-  //         ElMessage.success(succMesg)
-  //         getForest(formPageNum.value, formPageSize.value)
-  //       } else {
-  //         Logger.log('删除菜单失败')
-  //         ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除菜单失败')
-  //       }
-  //     })
-  //   })
-  //   .catch(() => {
-  //     // 点击“取消”不做动作
-  //   })
+  const { id, title, children } = row
+  if (notEmpty(children)) {
+    ElMessageBox.alert('当前菜单仍然包含子菜单，无法删除。', '删除菜单', { type: 'warning', dangerouslyUseHTMLString: true })
+  } else {
+    const message = '删除后数据不可恢复！<br>是否删除菜单【' + title + '】？'
+    ElMessageBox.confirm(message, '删除菜单', { type: 'warning', dangerouslyUseHTMLString: true })
+      .then(() => {
+        Api.request.common.menu.delete({ menuId: id }).then(result => {
+          if (result && result.success) {
+            const succMesg = '成功删除菜单【' + title + '】'
+            ElMessage.success(succMesg)
+            getForest()
+          } else {
+            Logger.log('删除菜单失败')
+            ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除菜单失败')
+          }
+        })
+      })
+      .catch(() => {
+        // 点击“取消”不做动作
+      })
+  }
 }
 
 /**
