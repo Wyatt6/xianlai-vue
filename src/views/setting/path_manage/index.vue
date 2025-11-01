@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['path:add']" @click="showAddPath = true">新增</el-button>
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['path:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载路径缓存</el-button>
         <el-form
@@ -14,7 +14,7 @@
           ref="searchFormRef"
           :model="searchForm"
         >
-          <el-form-item label="路径常量" prop="name">
+          <el-form-item label="路径名称" prop="name">
             <el-input v-model="searchForm.name" clearable />
           </el-form-item>
           <el-form-item label="路径URL" prop="path">
@@ -39,7 +39,7 @@
           >
             <el-table-column label="序号" align="center" min-width="80" type="index" :index="getIndex" />
             <el-table-column label="排序ID" align="center" prop="sortId" min-width="140" />
-            <el-table-column label="路径常量" prop="name" min-width="320" />
+            <el-table-column label="路径名称" prop="name" min-width="320" />
             <el-table-column label="路径URL" prop="path" min-width="400" />
             <el-table-column label="操作" align="center" width="110" fixed="right" v-perm="['api:edit', 'api:delete']">
               <template #default="scope">
@@ -66,7 +66,8 @@
         </div>
       </el-card>
     </div>
-    <AddPath :show="showAddPath" @close="showAddPath = false" @afterAdd="afterAdd" />
+    <AddPath :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+    <EditPath :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
   </div>
 </template>
 
@@ -75,6 +76,7 @@ import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddPath from './AddPath.vue'
+import EditPath from './EditPath.vue'
 import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
@@ -171,7 +173,7 @@ getList(formPageNum.value, formPageSize.value)
 /**
  * 新增路径
  */
-const showAddPath = ref(false)
+const showAdd = ref(false)
 async function afterAdd(newObj, rowNum) {
   searchForm.value = deafultSearchForm
   searched.value = false
@@ -225,6 +227,28 @@ function reset() {
   searched.value = false
   searchFormRef.value.resetFields()
   getList(1, formPageSize.value)
+}
+
+/**
+ * 修改路径
+ */
+const showEdit = ref(false)
+const nowRow = ref({})
+function onEdit(row) {
+  showEdit.value = true
+  nowRow.value = row
+}
+// 编辑路径后处理，回显数据
+function afterEdit(path) {
+  for (let i = 0; i < formList.value.length; i++) {
+    if (path.id === formList.value[i].id) {
+      formList.value[i].sortId = path.sortId
+      formList.value[i].name = path.name
+      formList.value[i].path = path.path
+      break
+    }
+  }
+  currRowKey.value = path.id
 }
 
 /**
