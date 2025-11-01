@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['api:add']" @click="showAddApi = true">新增</el-button>
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['api:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-form
           class="search-box-inline"
@@ -45,11 +45,11 @@
             v-loading="loading"
             border
           >
-            <el-table-column label="序号" align="center" min-width="55" type="index" :index="getIndex" />
-            <el-table-column label="接口说明" prop="description" min-width="240" />
+            <el-table-column label="序号" align="center" min-width="70" type="index" :index="getIndex" />
+            <el-table-column label="接口说明" prop="description" min-width="250" />
             <el-table-column label="调用路径" prop="callPath" min-width="320" />
             <el-table-column label="请求方法" align="center" prop="requestMethod" min-width="85" />
-            <el-table-column label="请求URL" prop="url" min-width="380" />
+            <el-table-column label="请求URL" prop="url" min-width="360" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
               <template #default="scope">
                 <el-button-group size="small">
@@ -75,6 +75,7 @@
         </div>
       </el-card>
     </div>
+    <AddApi :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
   </div>
 </template>
 
@@ -82,6 +83,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import AddApi from './AddApi.vue'
 import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
@@ -177,6 +179,21 @@ async function getList(num, size) {
   return success
 }
 getList(formPageNum.value, formPageSize.value)
+
+/**
+ * 新增
+ */
+const showAdd = ref(false)
+async function afterAdd(newObj, rowNum) {
+  searchForm.value = deafultSearchForm
+  searched.value = false
+  searchFormRef.value.resetFields()
+  // 查询新纪录所在分页
+  formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
+  await getList(formPageNum.value, formPageSize.value)
+  // 选中最新增加的记录
+  currRowKey.value = newObj.id
+}
 
 /**
  * 刷新表格
