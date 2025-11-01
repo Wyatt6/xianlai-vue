@@ -4,7 +4,7 @@
       <el-form-item label="排序ID" prop="sortId">
         <el-input v-model="form.sortId" clearable />
       </el-form-item>
-      <el-form-item label="路径常量" prop="name">
+      <el-form-item label="路径名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="路径URL" prop="path">
@@ -39,7 +39,7 @@ const loading = ref(false)
 const formRef = ref()
 const formRules = ref({
   sortId: [{ required: true, trigger: 'blur', message: '请输入排序ID' }],
-  name: [{ required: true, trigger: 'blur', message: '请输入路径常量' }],
+  name: [{ required: true, trigger: 'blur', message: '请输入路径名称' }],
   path: [{ required: true, trigger: 'blur', message: '请输入路径URL' }]
 })
 const form = ref({
