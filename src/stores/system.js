@@ -58,8 +58,8 @@ export const useSystemStore = defineStore('system', () => {
                 Logger.log('系统路由初始化完成')
               }
               // 系统菜单
-              if (notEmpty(result.data.menus) && hasText(result.data.checksum.sysMenusChecksum)) {
-                await useMenuStore().evalData(result.data.menus, result.data.checksum.sysMenusChecksum)
+              if (notEmpty(result.data.menus) && hasText(result.data.checksum.menusChecksum)) {
+                await useMenuStore().evalData(result.data.menus, result.data.checksum.menusChecksum)
                 Logger.log('系统菜单初始化完成')
               }
               // 注册router插件
