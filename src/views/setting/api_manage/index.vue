@@ -17,7 +17,7 @@
           <el-form-item label="接口说明" prop="description">
             <el-input v-model="searchForm.description" clearable />
           </el-form-item>
-          <el-form-item label="调用接口" prop="callPath">
+          <el-form-item label="调用路径" prop="callPath">
             <el-input v-model="searchForm.callPath" clearable />
           </el-form-item>
           <el-form-item label="请求方法" prop="requestMethod">
@@ -48,7 +48,7 @@
           >
             <el-table-column label="序号" align="center" min-width="70" type="index" :index="getIndex" />
             <el-table-column label="接口说明" prop="description" min-width="250" />
-            <el-table-column label="调用接口" prop="callPath" min-width="320" />
+            <el-table-column label="调用路径" prop="callPath" min-width="320" />
             <el-table-column label="请求方法" align="center" prop="requestMethod" min-width="85" />
             <el-table-column label="请求URL" prop="url" min-width="360" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
@@ -77,6 +77,7 @@
       </el-card>
     </div>
     <AddApi :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+    <EditApi :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
   </div>
 </template>
 
@@ -85,6 +86,7 @@ import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddApi from './AddApi.vue'
+import EditApi from './EditApi.vue'
 import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
@@ -241,6 +243,29 @@ function reset() {
   searched.value = false
   searchFormRef.value.resetFields()
   getList(1, formPageSize.value)
+}
+
+/**
+ * 修改接口
+ */
+const showEdit = ref(false)
+const nowRow = ref({})
+function onEdit(row) {
+  showEdit.value = true
+  nowRow.value = row
+}
+// 编辑接口后处理，回显数据
+function afterEdit(api) {
+  for (let i = 0; i < formList.value.length; i++) {
+    if (api.id === formList.value[i].id) {
+      formList.value[i].callPath = api.callPath
+      formList.value[i].requestMethod = api.requestMethod
+      formList.value[i].url = api.url
+      formList.value[i].description = api.description
+      break
+    }
+  }
+  currRowKey.value = api.id
 }
 
 /**
