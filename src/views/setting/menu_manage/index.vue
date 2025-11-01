@@ -137,14 +137,14 @@ async function refresh() {
  * 重载菜单缓存
  */
 function reloadCache() {
-  // Api.request.common.api.reloadCache().then(result => {
-  //   if (result && result.success) {
-  //     ElMessage.success('重载菜单缓存完成')
-  //   } else {
-  //     Logger.log('重载菜单缓存失败')
-  //     ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载菜单缓存失败')
-  //   }
-  // })
+  Api.request.common.menu.reloadCache().then(result => {
+    if (result && result.success) {
+      ElMessage.success('重载菜单缓存完成')
+    } else {
+      Logger.log('重载菜单缓存失败')
+      ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载菜单缓存失败')
+    }
+  })
 }
 
 /**
