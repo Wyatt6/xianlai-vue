@@ -2,8 +2,8 @@
   <el-sub-menu v-if="showMenu && menu.children && menu.children.length > 0" :index="menu.path">
     <template #title>
       <div v-if="menu.icon" class="icon-wrap">
-        <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
-          <component :is="menu.icon.substring(8, menu.icon.length)" />
+        <el-icon v-if="menu.icon.includes('el-')" size="2rem">
+          <component :is="menu.icon.substring(3, menu.icon.length)" />
         </el-icon>
         <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
       </div>
@@ -13,8 +13,8 @@
   </el-sub-menu>
   <el-menu-item v-else-if="showMenu" :index="menu.path">
     <div v-if="menu.icon" class="icon-wrap">
-      <el-icon v-if="menu.icon.includes('el-icon')" size="2rem">
-        <component :is="menu.icon.substring(8, menu.icon.length)" />
+      <el-icon v-if="menu.icon.includes('el-')" size="2rem">
+        <component :is="menu.icon.substring(3, menu.icon.length)" />
       </el-icon>
       <LocalIcon v-else class="custom-icon" :name="menu.icon" size="2rem" />
     </div>
