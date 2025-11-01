@@ -82,7 +82,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
 import AddApi from './AddApi.vue'
 import { useApiStore } from '@/apis'
@@ -241,6 +241,31 @@ function reset() {
   searched.value = false
   searchFormRef.value.resetFields()
   getList(1, formPageSize.value)
+}
+
+/**
+ * 删除接口
+ * @param row 当前行
+ */
+function onDelete(row) {
+  const { id, callPath } = row
+  const message = '删除后数据不可恢复！<br>是否删除接口【' + callPath + '】？'
+  ElMessageBox.confirm(message, '删除接口', { type: 'warning', dangerouslyUseHTMLString: true })
+    .then(() => {
+      Api.request.common.api.delete({ apiId: id }).then(result => {
+        if (result && result.success) {
+          const succMesg = '成功删除接口【' + callPath + '】'
+          ElMessage.success(succMesg)
+          getList(formPageNum.value, formPageSize.value)
+        } else {
+          Logger.log('删除接口失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除接口失败')
+        }
+      })
+    })
+    .catch(() => {
+      // 点击“取消”不做动作
+    })
 }
 
 /**
