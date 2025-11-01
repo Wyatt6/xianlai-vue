@@ -4,6 +4,7 @@
       <el-card class="card" shadow="never">
         <el-button size="small" type="primary" :icon="Plus" v-perm="['api:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-button size="small" :icon="Refresh" @click="reloadCache()">重载接口缓存</el-button>
         <el-form
           class="search-box-inline"
           :inline="true"
@@ -16,7 +17,7 @@
           <el-form-item label="接口说明" prop="description">
             <el-input v-model="searchForm.description" clearable />
           </el-form-item>
-          <el-form-item label="调用路径" prop="callPath">
+          <el-form-item label="调用接口" prop="callPath">
             <el-input v-model="searchForm.callPath" clearable />
           </el-form-item>
           <el-form-item label="请求方法" prop="requestMethod">
@@ -47,7 +48,7 @@
           >
             <el-table-column label="序号" align="center" min-width="70" type="index" :index="getIndex" />
             <el-table-column label="接口说明" prop="description" min-width="250" />
-            <el-table-column label="调用路径" prop="callPath" min-width="320" />
+            <el-table-column label="调用接口" prop="callPath" min-width="320" />
             <el-table-column label="请求方法" align="center" prop="requestMethod" min-width="85" />
             <el-table-column label="请求URL" prop="url" min-width="360" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['api:edit', 'api:delete']">
@@ -204,6 +205,20 @@ async function refresh() {
   if (result) {
     ElMessage.success('表格刷新完成')
   }
+}
+
+/**
+ * 重载接口缓存
+ */
+function reloadCache() {
+  Api.request.common.api.reloadCache().then(result => {
+    if (result && result.success) {
+      ElMessage.success('重载接口缓存完成')
+    } else {
+      Logger.log('重载接口缓存失败')
+      ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载接口缓存失败')
+    }
+  })
 }
 
 /**
