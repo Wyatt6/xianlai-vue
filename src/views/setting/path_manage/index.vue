@@ -85,8 +85,8 @@ import { notEmpty } from '@/utils/common'
 const Api = useApiStore()
 
 // ---------- 搜索表单数据定义 ----------
-const SEARCHED_KEY = 'setting.api_manage.searched'
-const SEARCH_FORM_KEY = 'setting.api_manage.searchForm'
+const SEARCHED_KEY = 'setting.path_manage.searched'
+const SEARCH_FORM_KEY = 'setting.path_manage.searchForm'
 const searched = ref(Storage.get(SEARCHED_KEY) || false)
 const searchFormRef = ref()
 const deafultSearchForm = {
@@ -104,8 +104,8 @@ watch(
 )
 
 // ---------- 表格数据定义 ----------
-const PAGE_NUM_KEY = 'setting.api_manage.pageNum'
-const PAGE_SIZE_KEY = 'setting.api_manage.pageSize'
+const PAGE_NUM_KEY = 'setting.path_manage.pageNum'
+const PAGE_SIZE_KEY = 'setting.path_manage.pageSize'
 const pageSizeList = ref([20, 50, 100, 500])
 const formerPageSize = ref(0)
 const formPageNum = ref(Storage.get(PAGE_NUM_KEY) || 1) // 初始页码（注意：自然页码，下标从1开始）
