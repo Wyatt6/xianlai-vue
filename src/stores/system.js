@@ -48,8 +48,8 @@ export const useSystemStore = defineStore('system', () => {
                 Logger.log('系统参数初始化完成')
               }
               // 系统路径
-              if (notEmpty(result.data.paths) && hasText(result.data.checksum.sysPathsChecksum)) {
-                await usePathStore().evalData(result.data.paths, result.data.checksum.sysPathsChecksum)
+              if (notEmpty(result.data.paths) && hasText(result.data.checksum.pathsChecksum)) {
+                await usePathStore().evalData(result.data.paths, result.data.checksum.pathsChecksum)
                 Logger.log('系统路径初始化完成')
               }
               // 系统路由
