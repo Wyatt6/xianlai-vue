@@ -78,28 +78,16 @@ export function createAxiosInstance() {
           System.releaseLogoutLock()
           return Promise.reject(new Error('登录已过期，请重新登录'))
         }
-        // TODO
-        //         // 其他只需要提示的错误：400-请求参数错误、403-用户权限不足、500-服务器内部错误
-        //         if (result.data.code === 400 || result.data.code === 500) {
-        //           if (result.message) {
-        //             ElMessage.error(result.message)
-        //             return Promise.reject(new Error(result.message))
-        //           } else {
-        //             ElMessage.error('' + result.data.code + '错误')
-        //             return Promise.reject(new Error(result.data.code))
-        //           }
-        //         }
-
-        //       // 其他只需要提示的错误：400-请求参数错误、403-用户权限不足、500-服务器内部错误
-        //       if (res.data.code === 400 || res.data.code === 500) {
-        //         if (res.message) {
-        //           ElMessage.error(res.message)
-        //           return Promise.reject(new Error(res.message))
-        //         } else {
-        //           ElMessage.error('' + res.data.code + '错误')
-        //           return Promise.reject(new Error(res.data.code))
-        //         }
-        //       }
+        // 其他只需要提示的错误：400-请求参数错误、403-用户权限不足、500-服务器内部错误
+        if (result.data.failCode === 400 || result.data.failCode === 500) {
+          if (result.failMessage) {
+            ElMessage.error(result.failMessage)
+            return Promise.reject(new Error(result.failMessage))
+          } else {
+            ElMessage.error('' + result.data.failCode + '错误')
+            return Promise.reject(new Error(result.data.failCode))
+          }
+        }
 
         // 对于以上集中错误处理以外未列出的情况，返回给调用方处理
         return result
