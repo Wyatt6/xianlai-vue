@@ -67,8 +67,8 @@ export const useSystemStore = defineStore('system', () => {
                 app.use(useRouterStore().getRouter())
               }
               // 系统接口
-              if (notEmpty(result.data.apis) && hasText(result.data.checksum.sysApisChecksum)) {
-                await useApiStore().evalData(result.data.apis, result.data.checksum.sysApisChecksum)
+              if (notEmpty(result.data.apis) && hasText(result.data.checksum.apisChecksum)) {
+                await useApiStore().evalData(result.data.apis, result.data.checksum.apisChecksum)
                 Logger.log('系统接口初始化完成')
               }
             }
