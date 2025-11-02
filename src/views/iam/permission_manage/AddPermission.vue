@@ -85,7 +85,7 @@ function onConfirm() {
             Logger.log('新增权限成功')
             ElMessage.success('新增权限成功')
             onClose()
-            emits('afterAdd', result.data.permission.id) // 调用父组件afterAdd事件
+            emits('afterAdd', result.data.permission, result.data.rowNum) // 调用父组件afterAdd事件
           } else {
             Logger.log('新增权限失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '新增权限失败')

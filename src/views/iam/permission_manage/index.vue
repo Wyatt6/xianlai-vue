@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['permission:add']" @click="showAddPermission = true">新增</el-button>
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['permission:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-form
           class="search-box-inline"
@@ -69,8 +69,8 @@
         </div>
       </el-card>
     </div>
-    <AddPermission :show="showAddPermission" @close="showAddPermission = false" @afterAdd="afterAdd" />
-    <EditPermission :show="showEditPermission" :nowRow="nowRow" @close="showEditPermission = false" @afterEdit="afterEdit" />
+    <AddPermission :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+    <EditPermission :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
   </div>
 </template>
 
@@ -199,28 +199,16 @@ function reset() {
 /**
  * 新增权限
  */
-const showAddPermission = ref(false)
-async function afterAdd(id) {
+const showAdd = ref(false)
+async function afterAdd(permission, rowNum) {
   searchForm.value = deafultSearchForm
   searched.value = false
   searchFormRef.value.resetFields()
-  formPageNum.value = 1
-  // 获取新权限的排名
-  await Api.request.iam.permission.getRowNumStartFrom1({ permissionId: id }).then(result => {
-    if (result && result.success) {
-      Logger.log('成功获取新权限的排名')
-      const { rowNum } = result.data
-      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-    } else {
-      Logger.log('获取新权限的排名失败')
-    }
-  })
   // 查询新权限所在分页
-  searchForm.value = deafultSearchForm
-  searchFormRef.value.resetFields()
+  formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
   await getList(formPageNum.value, formPageSize.value)
   // 选中最新增加的权限记录
-  currRowKey.value = id
+  currRowKey.value = permission.id
 }
 
 /**
@@ -236,10 +224,10 @@ async function refresh() {
 /**
  * 修改权限
  */
-const showEditPermission = ref(false)
+const showEdit = ref(false)
 const nowRow = ref({})
 function onEdit(row) {
-  showEditPermission.value = true
+  showEdit.value = true
   nowRow.value = row
 }
 // 编辑权限后处理，回显数据
