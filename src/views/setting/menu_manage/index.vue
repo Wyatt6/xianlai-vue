@@ -60,7 +60,15 @@
       </el-card>
     </div>
     <AddMenu :show="showAdd" :menus="formList" :paths="pathList" :perms="permList" @close="showAdd = false" @afterAdd="afterAdd" />
-    <!-- <EditMenu :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" /> -->
+    <EditMenu
+      :show="showEdit"
+      :menus="formList"
+      :paths="pathList"
+      :perms="permList"
+      :nowRow="nowRow"
+      @close="showEdit = false"
+      @afterEdit="afterEdit"
+    />
   </div>
 </template>
 
@@ -70,7 +78,7 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 import AddMenu from './AddMenu.vue'
-// import EditMenu from './EditMenu.vue'
+import EditMenu from './EditMenu.vue'
 import { useApiStore } from '@/apis'
 import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
@@ -178,17 +186,9 @@ function onEdit(row) {
   nowRow.value = row
 }
 // 编辑菜单后处理，回显数据
-function afterEdit(api) {
-  // for (let i = 0; i < formList.value.length; i++) {
-  //   if (api.id === formList.value[i].id) {
-  //     formList.value[i].callPath = api.callPath
-  //     formList.value[i].requestMethod = api.requestMethod
-  //     formList.value[i].url = api.url
-  //     formList.value[i].description = api.description
-  //     break
-  //   }
-  // }
-  // currRowKey.value = api.id
+async function afterEdit(menu) {
+  await getForest()
+  currRowKey.value = menu.id
 }
 
 /**
