@@ -16,8 +16,10 @@
             :current-row-key="currRowKey"
             v-loading="loading"
             border
+            default-expand-all
           >
-            <el-table-column label="排序ID" prop="sortId" min-width="185" />
+            <el-table-column label="菜单ID" prop="id" min-width="280" />
+            <el-table-column label="排序ID" prop="sortId" min-width="140" />
             <el-table-column label="图标" align="center" prop="icon" min-width="60">
               <template #default="scope">
                 <div v-if="scope.row.icon" class="icon-wrap">
@@ -29,15 +31,6 @@
               </template>
             </el-table-column>
             <el-table-column label="菜单标题" prop="title" min-width="200" />
-            <el-table-column label="访问路径名称" prop="pathName" min-width="250" />
-            <el-table-column label="鉴权" align="center" prop="needPermission" min-width="60">
-              <template #default="scope">
-                <div class="icon-wrap">
-                  <LocalIcon v-if="scope.row.needPermission" class="custom-icon" name="ri-check-line" size="1.8rem" />
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="鉴权所需权限标识" prop="permission" min-width="250" />
             <el-table-column label="状态" align="center" prop="active" min-width="85">
               <template #default="scope">
                 <el-tag :type="scope.row.active ? 'success' : 'danger'">
@@ -45,6 +38,15 @@
                 </el-tag>
               </template>
             </el-table-column>
+            <el-table-column label="访问路径名称" prop="pathName" min-width="245" />
+            <el-table-column label="非公开" align="center" prop="needPermission" min-width="70">
+              <template #default="scope">
+                <div class="icon-wrap">
+                  <LocalIcon v-if="scope.row.needPermission" class="custom-icon" name="ri-check-line" size="1.8rem" />
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="所需权限标识" prop="permission" min-width="245" />
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['menu:edit', 'menu:delete']">
               <template #default="scope">
                 <el-button-group size="small">
@@ -57,7 +59,7 @@
         </div>
       </el-card>
     </div>
-    <!-- <AddMenu :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" /> -->
+    <AddMenu :show="showAdd" :menus="formList" :paths="pathList" :perms="permList" @close="showAdd = false" @afterAdd="afterAdd" />
     <!-- <EditMenu :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" /> -->
   </div>
 </template>
@@ -67,10 +69,9 @@ import LocalIcon from '@/components/LocalIcon/index.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
-// import AddMenu from './AddMenu.vue'
+import AddMenu from './AddMenu.vue'
 // import EditMenu from './EditMenu.vue'
 import { useApiStore } from '@/apis'
-import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
@@ -80,6 +81,32 @@ const Api = useApiStore()
 const formList = ref([]) // 初始分页列表
 const currRowKey = ref()
 const loading = ref(false)
+
+const pathList = ref([])
+function initPathList() {
+  Api.request.common.path.getPageConditionally({ pageNum: -1, pageSize: 0 }, null).then(result => {
+    if (result && result.success) {
+      pathList.value = result.data.content
+    } else {
+      Logger.log('获取路径列表失败')
+      ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取路径列表失败')
+    }
+  })
+}
+initPathList()
+
+const permList = ref([])
+function initPermList() {
+  Api.request.iam.permission.getPageConditionally({ pageNum: -1, pageSize: 0 }, null).then(result => {
+    if (result && result.success) {
+      permList.value = result.data.content
+    } else {
+      Logger.log('获取权限列表失败')
+      ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取权限列表失败')
+    }
+  })
+}
+initPermList()
 
 /**
  * 获取菜单森林
@@ -112,21 +139,17 @@ getForest()
  * 新增
  */
 const showAdd = ref(false)
-async function afterAdd(newObj, rowNum) {
-  // searchForm.value = deafultSearchForm
-  // searched.value = false
-  // searchFormRef.value.resetFields()
-  // // 查询新纪录所在分页
-  // formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-  // await getForest(formPageNum.value, formPageSize.value)
-  // // 选中最新增加的记录
-  // currRowKey.value = newObj.id
+async function afterAdd(newObj) {
+  await getForest()
+  currRowKey.value = newObj.id
 }
 
 /**
  * 刷新
  */
 async function refresh() {
+  initPathList()
+  initPermList()
   const result = await getForest()
   if (result) {
     ElMessage.success('表格刷新完成')
