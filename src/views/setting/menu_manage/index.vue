@@ -2,8 +2,8 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['menu:add']" @click="showAdd = true">新增</el-button>
-        <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['menu:add']" @click="showAdd = true" :loading="loading">新增</el-button>
+        <el-button size="small" type="success" :icon="Refresh" @click="refresh()" :loading="loading">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载菜单缓存</el-button>
         <div class="table-wrap">
           <el-table
@@ -93,7 +93,6 @@ function initPathList() {
     }
   })
 }
-initPathList()
 
 const permList = ref([])
 function initPermList() {
@@ -106,7 +105,6 @@ function initPermList() {
     }
   })
 }
-initPermList()
 
 /**
  * 获取菜单森林
@@ -115,6 +113,8 @@ async function getForest() {
   let success = false
   if (!loading.value) {
     loading.value = true
+    initPathList()
+    initPermList()
     await Api.request.common.menu
       .getForest()
       .then(result => {
@@ -148,8 +148,6 @@ async function afterAdd(newObj) {
  * 刷新
  */
 async function refresh() {
-  initPathList()
-  initPermList()
   const result = await getForest()
   if (result) {
     ElMessage.success('表格刷新完成')
