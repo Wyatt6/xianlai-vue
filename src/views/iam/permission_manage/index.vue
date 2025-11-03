@@ -148,7 +148,6 @@ async function getList(num, size) {
       name: searchForm.value.name,
       description: searchForm.value.description
     }
-    Logger.log('条件查询权限列表分页数据')
     await Api.request.iam.permission
       .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
