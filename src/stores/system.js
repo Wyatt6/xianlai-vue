@@ -43,8 +43,8 @@ export const useSystemStore = defineStore('system', () => {
               // 清除旧的路由实例
               await useRouterStore().clearRouter()
               // 系统参数
-              if (notEmpty(result.data.options) && hasText(result.data.checksum.sysOptionsChecksum)) {
-                await useOptionStore().evalData(result.data.options, result.data.checksum.sysOptionsChecksum)
+              if (notEmpty(result.data.options) && hasText(result.data.checksum.optionsChecksum)) {
+                await useOptionStore().evalData(result.data.options, result.data.checksum.optionsChecksum)
                 Logger.log('系统参数初始化完成')
               }
               // 系统路径
