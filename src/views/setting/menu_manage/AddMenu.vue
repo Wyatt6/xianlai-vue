@@ -1,9 +1,6 @@
 <template>
   <el-dialog draggable :model-value="props.show" title="新增菜单" @close="onClose()">
     <el-form ref="formRef" :rules="formRules" :model="form" label-width="11rem" label-position="right">
-      <el-form-item label="排序ID" prop="sortId">
-        <el-input v-model="form.sortId" clearable />
-      </el-form-item>
       <el-form-item label="上级菜单" prop="parentId">
         <el-tree-select v-model="form.parentId" :data="menuList" node-key="id" :props="{ label: 'title' }" check-strictly default-expand-all>
           <template #label="{ label, value }">
@@ -15,6 +12,9 @@
             <el-text style="margin-left: 1rem">{{ data.title }}</el-text>
           </template>
         </el-tree-select>
+      </el-form-item>
+      <el-form-item label="排序ID" prop="sortId">
+        <el-input v-model="form.sortId" clearable />
       </el-form-item>
       <el-form-item label="图标" prop="icon">
         <el-select v-model="form.icon" clearable filterable>
