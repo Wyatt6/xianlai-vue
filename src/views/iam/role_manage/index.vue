@@ -235,27 +235,15 @@ function reset() {
  * 新增角色
  */
 const showAddRole = ref(false)
-async function afterAdd(id) {
+async function afterAdd(role, rowNum) {
   searchForm.value = deafultSearchForm
   searched.value = false
   searchFormRef.value.resetFields()
-  formPageNum.value = 1
-  // 获取新角色的排名
-  await Api.request.iam.role.getRowNumStartFrom1({ roleId: id }).then(result => {
-    if (result && result.success) {
-      Logger.log('成功获取新角色的排名')
-      const { rowNum } = result.data
-      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-    } else {
-      Logger.log('获取新角色的排名失败')
-    }
-  })
   // 查询新角色所在分页
-  searchForm.value = deafultSearchForm
-  searchFormRef.value.resetFields()
+  formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
   await getList(formPageNum.value, formPageSize.value)
   // 选中最新增加的角色记录
-  currRowKey.value = id
+  currRowKey.value = role.id
 }
 
 /**
