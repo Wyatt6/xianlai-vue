@@ -19,7 +19,7 @@
             default-expand-all
           >
             <el-table-column label="菜单ID" prop="id" min-width="280" />
-            <el-table-column label="排序ID" prop="sortId" min-width="140" />
+            <el-table-column label="排序ID" align="center" prop="sortId" min-width="140" />
             <el-table-column label="图标" align="center" prop="icon" min-width="60">
               <template #default="scope">
                 <div v-if="scope.row.icon" class="icon-wrap">
