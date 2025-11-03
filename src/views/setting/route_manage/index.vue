@@ -60,7 +60,7 @@
       </el-card>
     </div>
     <AddRoute :show="showAdd" :routes="formList" :paths="pathList" :perms="permList" @close="showAdd = false" @afterAdd="afterAdd" />
-    <!-- <EditRoute
+    <EditRoute
       :show="showEdit"
       :routes="formList"
       :paths="pathList"
@@ -68,7 +68,7 @@
       :nowRow="nowRow"
       @close="showEdit = false"
       @afterEdit="afterEdit"
-    /> -->
+    />
   </div>
 </template>
 
@@ -78,7 +78,7 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 import AddRoute from './AddRoute.vue'
-// import EditRoute from './EditRoute.vue'
+import EditRoute from './EditRoute.vue'
 import { useApiStore } from '@/apis'
 import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
