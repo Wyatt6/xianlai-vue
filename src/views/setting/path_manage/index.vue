@@ -143,7 +143,6 @@ async function getList(num, size) {
       name: searchForm.value.name,
       path: searchForm.value.path
     }
-    Logger.log('条件查询路径列表分页数据')
     await Api.request.common.path
       .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
