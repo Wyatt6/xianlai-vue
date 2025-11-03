@@ -22,7 +22,7 @@
             <el-table-column label="路由ID" prop="id" min-width="200" />
             <el-table-column label="排序ID" align="center" prop="sortId" min-width="100" />
             <el-table-column label="路由路径(path属性)" prop="pathName" min-width="260" />
-            <el-table-column label="路径重定向(redirect属性)" prop="pathName" min-width="260" />
+            <el-table-column label="路径重定向(redirect属性)" prop="redirectPathName" min-width="260" />
             <el-table-column label="组件相对路径(component属性)" prop="componentPath" min-width="300" />
             <el-table-column label="需登陆" align="center" prop="needLogin" min-width="70">
               <template #default="scope">
