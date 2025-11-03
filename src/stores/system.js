@@ -53,8 +53,8 @@ export const useSystemStore = defineStore('system', () => {
                 Logger.log('系统路径初始化完成')
               }
               // 系统路由
-              if (notEmpty(result.data.routes) && hasText(result.data.checksum.sysRoutesChecksum)) {
-                await useRouterStore().evalData(result.data.routes, result.data.checksum.sysRoutesChecksum)
+              if (notEmpty(result.data.routes) && hasText(result.data.checksum.routesChecksum)) {
+                await useRouterStore().evalData(result.data.routes, result.data.checksum.routesChecksum)
                 Logger.log('系统路由初始化完成')
               }
               // 系统菜单
