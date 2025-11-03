@@ -50,8 +50,8 @@
             <el-table-column label="操作" align="center" width="100" fixed="right" v-perm="['menu:edit', 'menu:delete']">
               <template #default="scope">
                 <el-button-group size="small">
-                  <el-button v-perm="['api:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
-                  <el-button v-perm="['api:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
+                  <el-button v-perm="['menu:edit']" :icon="Edit" plain @click="onEdit(scope.row)" />
+                  <el-button v-perm="['menu:delete']" :icon="Delete" type="danger" @click="onDelete(scope.row)" />
                 </el-button-group>
               </template>
             </el-table-column>
