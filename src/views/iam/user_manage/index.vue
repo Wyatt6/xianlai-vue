@@ -3,7 +3,7 @@
     <div class="card-wrap">
       <el-card class="card" shadow="never">
         <div class="btn-wrap">
-          <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']" @click="showAddUser = true">创建用户</el-button>
+          <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']" @click="showAdd = true">创建用户</el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
           <div class="open-register">
             <span style="margin-right: 0.5rem">开启门户页面用户注册功能</span>
@@ -109,8 +109,8 @@
           />
         </div>
       </el-card>
-      <AddUser :show="showAddUser" @close="showAddUser = false" @afterAdd="afterAdd" />
-      <EditUser :show="showEditUser" :nowRow="nowRow" @close="showEditUser = false" @afterEdit="afterEdit" />
+      <AddUser :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+      <EditUser :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
       <BindRole :show="showBindRole" :nowRow="nowRow" @close="showBindRole = false" />
     </div>
   </div>
@@ -272,36 +272,24 @@ function onBind(row) {
 /**
  * 创建用户
  */
-const showAddUser = ref(false)
-async function afterAdd(id) {
+const showAdd = ref(false)
+async function afterAdd(user, rowNum) {
   searchForm.value = deafultSearchForm
   searched.value = false
   searchFormRef.value.resetFields()
-  formPageNum.value = 1
-  // 获取新用户的排名
-  await Api.request.iam.user.getRowNumStartFrom1({ userId: id }).then(result => {
-    if (result && result.success) {
-      Logger.log('成功获取新用户的排名')
-      const { rowNum } = result.data
-      formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-    } else {
-      Logger.log('获取新用户的排名失败')
-    }
-  })
   // 查询新用户所在分页
-  searchForm.value = deafultSearchForm
-  searchFormRef.value.resetFields()
+  formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
   await getList(formPageNum.value, formPageSize.value)
   // 选中最新增加的用户记录
-  currRowKey.value = id
+  currRowKey.value = user.id
 }
 
 /**
  * 修改用户
  */
-const showEditUser = ref(false)
+const showEdit = ref(false)
 function onEdit(row) {
-  showEditUser.value = true
+  showEdit.value = true
   nowRow.value = row
 }
 // 编辑用户后处理，回显数据

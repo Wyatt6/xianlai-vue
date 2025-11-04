@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['role:add']" @click="showAddRole = true">新增</el-button>
+        <el-button size="small" type="primary" :icon="Plus" v-perm="['role:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-form
           class="search-box-inline"
@@ -94,8 +94,8 @@
           />
         </div>
       </el-card>
-      <AddRole :show="showAddRole" @close="showAddRole = false" @afterAdd="afterAdd" />
-      <EditRole :show="showEditRole" :nowRow="nowRow" @close="showEditRole = false" @afterEdit="afterEdit" />
+      <AddRole :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+      <EditRole :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
       <GrantPermission :show="showGrantPermission" :nowRow="nowRow" @close="showGrantPermission = false" />
     </div>
   </div>
@@ -234,7 +234,7 @@ function reset() {
 /**
  * 新增角色
  */
-const showAddRole = ref(false)
+const showAdd = ref(false)
 async function afterAdd(role, rowNum) {
   searchForm.value = deafultSearchForm
   searched.value = false
@@ -268,9 +268,9 @@ function onGrant(row) {
 /**
  * 编辑角色
  */
-const showEditRole = ref(false)
+const showEdit = ref(false)
 function onEdit(row) {
-  showEditRole.value = true
+  showEdit.value = true
   nowRow.value = row
 }
 // 编辑角色后处理，回显数据
