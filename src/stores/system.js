@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 import { notEmpty, hasText } from '@/utils/common'
+import Token from '@/utils/token'
 import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 import { useRouterStore } from '@/router'
@@ -40,6 +41,11 @@ export const useSystemStore = defineStore('system', () => {
           if (result.success) {
             if (notEmpty(result.data) && notEmpty(result.data.checksum)) {
               initData.value = result.data
+              // 登陆过期时初始化缓存数据
+              if (Token.hasToken() && Token.isExpired()) {
+                Logger.log('登陆已过期')
+                Token.setExpiredTime(0)
+              }
               // 清除旧的路由实例
               await useRouterStore().clearRouter()
               // 系统参数
