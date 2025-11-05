@@ -5,7 +5,7 @@
         <el-button size="small" type="primary" :icon="Plus" v-perm="['option:add']" @click="showAdd = true">新增</el-button>
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载参数缓存</el-button>
-        <div class="tab-wrap">
+        <div class="tab-wrap" v-loading="loading">
           <el-tabs class="tabs" tab-position="left" type="border-card">
             <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :label="tab.label">
               <el-scrollbar height="100%">
@@ -71,7 +71,7 @@
 import LocalIcon from '@/components/LocalIcon/index.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 import { useApiStore } from '@/apis'
 // import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
