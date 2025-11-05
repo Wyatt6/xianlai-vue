@@ -34,6 +34,7 @@ import { useLayoutStore } from '@/stores/layout'
 
     .fixed-header {
       position: fixed;
+      z-index: 2; // 比Content的z-index大，避免遮挡标签栏右键菜单的显示
       top: 0;
       right: 0;
       width: calc(100% - vars.$menubar-width);

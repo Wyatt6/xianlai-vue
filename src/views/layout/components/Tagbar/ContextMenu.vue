@@ -14,7 +14,6 @@
  * index：当前标签页在列表中的下标，Number，必填
  * path: 当前标签页的路由路径，String，必填
  */
-import { defineProps } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
 import { usePathStore } from '@/stores/path'
