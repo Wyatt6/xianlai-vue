@@ -71,6 +71,11 @@ export const useSystemStore = defineStore('system', () => {
                 await useApiStore().evalData(result.data.apis, result.data.checksum.apisChecksum)
                 Logger.log('系统接口初始化完成')
               }
+              // 挂载页面到Vue应用
+              Logger.log('系统初始化完成')
+              if (app != null) {
+                app.mount('#app')
+              }
             }
           } else {
             initFail()
@@ -84,10 +89,6 @@ export const useSystemStore = defineStore('system', () => {
         .finally(() => {
           initing.value = false
         })
-    }
-    Logger.log('系统初始化完成')
-    if (app != null) {
-      app.mount('#app')
     }
   }
 
