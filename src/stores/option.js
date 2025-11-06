@@ -77,18 +77,15 @@ export const useOptionStore = defineStore('option', () => {
             if (valueObj.type === 'BOOLEAN') {
               const boolExp = new RegExp('^true$', 'i')
               now[keys[i]] = boolExp.test(valueObj.value)
-            }
-            if (valueObj.type === 'NUMBER') {
+            } else if (valueObj.type === 'NUMBER') {
               now[keys[i]] = Number(valueObj.value)
-            }
-            if (valueObj.type === 'STRING') {
+            } else if (valueObj.type === 'ARRAY') {
+              now[keys[i]] = JSON.parse(valueObj.value)
+            } else if (valueObj.type === 'OBJECT') {
+              now[keys[i]] = JSON.parse(valueObj.value)
+            } else {
+              // 最后当作STRING类型兜底
               now[keys[i]] = valueObj.value
-            }
-            if (valueObj.type === 'ARRAY') {
-              now[keys[i]] = JSON.parse(valueObj.value)
-            }
-            if (valueObj.type === 'OBJECT') {
-              now[keys[i]] = JSON.parse(valueObj.value)
             }
           } else {
             if (now[keys[i]] == null) now[keys[i]] = {}
