@@ -52,7 +52,6 @@ $--padding-left-right: 0.7rem;
 
 .content-wrap {
   position: fixed;
-  z-index: 1; // 比header的z-index小，避免遮挡标签栏右键菜单的显示
   bottom: 0;
   right: 0;
   width: calc(100% - vars.$menubar-width);
