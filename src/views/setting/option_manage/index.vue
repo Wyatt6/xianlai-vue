@@ -15,7 +15,7 @@
                     <span>{{ item.name }}</span>
                     <el-button-group style="margin-left: 2.5rem" size="small">
                       <el-button v-perm="['option:edit']" :icon="Edit" plain @click="onEdit()" />
-                      <el-button v-perm="['option:delete']" :icon="Delete" type="danger" @click="onDelete()" />
+                      <el-button v-perm="['option:delete']" :icon="Delete" type="danger" @click="onDelete(item)" />
                     </el-button-group>
                   </div>
                   <div class="option-sub-title" v-if="notEmpty(item.description)">
@@ -64,6 +64,7 @@
         </div>
       </el-card>
     </div>
+    <AddOption :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
   </div>
 </template>
 
@@ -72,20 +73,18 @@ import LocalIcon from '@/components/LocalIcon/index.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
+import AddOption from './AddOption.vue'
 import { useApiStore } from '@/apis'
+import { useOptionStore } from '@/stores/option'
 // import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
+const Option = useOptionStore()
 
-const tabCtrl = ref([
-  { label: '门户页面版式', category: 'portal' },
-  { label: '用户注册登陆', category: 'user' },
-  { label: '其他控制', category: 'other' }
-])
+const tabCtrl = ref(Option.data.option.categoryList)
 const formList = ref({}) // 初始分页列表
-// const currRowKey = ref()
 const loading = ref(false)
 
 /**
@@ -115,20 +114,13 @@ async function getList() {
 }
 getList()
 
-// /**
-//  * 新增参数
-//  */
-// const showAdd = ref(false)
-// async function afterAdd(newObj, rowNum) {
-//   searchForm.value = deafultSearchForm
-//   searched.value = false
-//   searchFormRef.value.resetFields()
-//   // 查询新参数所在分页
-//   formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-//   await getList(formPageNum.value, formPageSize.value)
-//   // 选中最新增加的参数记录
-//   currRowKey.value = newObj.id
-// }
+/**
+ * 新增参数
+ */
+const showAdd = ref(false)
+async function afterAdd() {
+  await getList()
+}
 
 /**
  * 刷新
@@ -176,30 +168,29 @@ function reloadCache() {
 //   currRowKey.value = path.id
 // }
 
-// /**
-//  * 删除参数
-//  * @param row 当前行
-//  */
-// function onDelete(row) {
-//   const { id, name } = row
-//   const message = '删除后数据不可恢复！<br>是否删除参数【' + name + '】？'
-//   ElMessageBox.confirm(message, '删除参数', { type: 'warning', dangerouslyUseHTMLString: true })
-//     .then(() => {
-//       Api.request.common.path.delete({ pathId: id }).then(result => {
-//         if (result && result.success) {
-//           const succMesg = '成功删除参数【' + name + '】'
-//           ElMessage.success(succMesg)
-//           getList(formPageNum.value, formPageSize.value)
-//         } else {
-//           Logger.log('删除参数失败')
-//           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除参数失败')
-//         }
-//       })
-//     })
-//     .catch(() => {
-//       // 点击“取消”不做动作
-//     })
-// }
+/**
+ * 删除参数
+ */
+function onDelete(item) {
+  const { id, name } = item
+  const message = '删除后数据不可恢复！可能影响系统正常运行！<br>是否删除参数【' + name + '】？'
+  ElMessageBox.confirm(message, '删除参数', { type: 'warning', dangerouslyUseHTMLString: true })
+    .then(() => {
+      Api.request.common.option.delete({ optionId: id }).then(result => {
+        if (result && result.success) {
+          const succMesg = '成功删除参数【' + name + '】'
+          ElMessage.success(succMesg)
+          getList()
+        } else {
+          Logger.log('删除参数失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除参数失败')
+        }
+      })
+    })
+    .catch(() => {
+      // 点击“取消”不做动作
+    })
+}
 </script>
 
 <style lang="scss" scoped>
