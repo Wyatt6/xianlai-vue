@@ -109,7 +109,6 @@ function onConfirm() {
             Logger.log('修改用户信息成功')
             ElMessage.success('保存成功')
             onClose()
-            console.log(result)
             emits('afterEdit', result.data.userInfo) // 调用父组件afterEdit事件
           } else {
             Logger.log('修改用户信息失败')
