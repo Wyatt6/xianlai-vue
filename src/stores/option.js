@@ -87,6 +87,9 @@ export const useOptionStore = defineStore('option', () => {
             if (valueObj.type === 'ARRAY') {
               now[keys[i]] = JSON.parse(valueObj.value)
             }
+            if (valueObj.type === 'OBJECT') {
+              now[keys[i]] = JSON.parse(valueObj.value)
+            }
           } else {
             if (now[keys[i]] == null) now[keys[i]] = {}
             now = now[keys[i]]
