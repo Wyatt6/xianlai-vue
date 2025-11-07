@@ -6,15 +6,15 @@
         <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载参数缓存</el-button>
         <div class="tab-wrap" v-loading="loading">
-          <el-tabs class="tabs" tab-position="left" type="border-card">
-            <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :label="tab.label">
+          <el-tabs class="tabs" tab-position="left" type="border-card" v-model="tabsActiveName" @tab-click="onTabClick">
+            <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :label="tab.label" :name="tab.category">
               <el-scrollbar height="100%">
                 <div v-for="(item, index) in formList[tab.category]">
                   <el-divider v-if="index > 0" />
                   <div class="option-title">
                     <span>{{ item.name }}</span>
                     <el-button-group style="margin-left: 2.5rem" size="small">
-                      <el-button v-perm="['option:edit']" :icon="Edit" plain @click="onEdit()" />
+                      <el-button v-perm="['option:edit']" :icon="Edit" plain @click="onEdit(item)" />
                       <el-button v-perm="['option:delete']" :icon="Delete" type="danger" @click="onDelete(item)" />
                     </el-button-group>
                   </div>
@@ -65,6 +65,7 @@
       </el-card>
     </div>
     <AddOption :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+    <EditOption :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
   </div>
 </template>
 
@@ -74,16 +75,19 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 import AddOption from './AddOption.vue'
+import EditOption from './EditOption.vue'
 import { useApiStore } from '@/apis'
 import { useOptionStore } from '@/stores/option'
-// import Storage from '@/utils/storage'
+import Storage from '@/utils/storage'
 import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
 const Option = useOptionStore()
 
+const ACTIVE_TAB = 'setting.option.activeTab'
 const tabCtrl = ref(Option.data.option.categoryList)
+const tabsActiveName = ref(Storage.get(ACTIVE_TAB) ? Storage.get(ACTIVE_TAB) : tabCtrl.value[0].category)
 const formList = ref({}) // 初始分页列表
 const loading = ref(false)
 
@@ -146,27 +150,19 @@ function reloadCache() {
   })
 }
 
-// /**
-//  * 修改参数
-//  */
-// const showEdit = ref(false)
-// const nowRow = ref({})
-// function onEdit(row) {
-//   showEdit.value = true
-//   nowRow.value = row
-// }
-// // 编辑参数后处理，回显数据
-// function afterEdit(path) {
-//   for (let i = 0; i < formList.value.length; i++) {
-//     if (path.id === formList.value[i].id) {
-//       formList.value[i].sortId = path.sortId
-//       formList.value[i].name = path.name
-//       formList.value[i].path = path.path
-//       break
-//     }
-//   }
-//   currRowKey.value = path.id
-// }
+/**
+ * 修改
+ */
+const showEdit = ref(false)
+const nowRow = ref({})
+function onEdit(row) {
+  showEdit.value = true
+  nowRow.value = row
+}
+// 编辑参数后处理，回显数据
+async function afterEdit() {
+  await getList()
+}
 
 /**
  * 删除参数
@@ -190,6 +186,14 @@ function onDelete(item) {
     .catch(() => {
       // 点击“取消”不做动作
     })
+}
+
+/**
+ * 标签点击时缓存
+ */
+function onTabClick(item) {
+  tabsActiveName.value = item.paneName
+  Storage.set(ACTIVE_TAB, item.paneName)
 }
 </script>
 

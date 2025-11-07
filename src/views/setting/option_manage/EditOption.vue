@@ -1,5 +1,5 @@
 <template>
-  <el-dialog top="5vh" draggable :model-value="props.show" title="新增参数" @close="onClose()">
+  <el-dialog top="5vh" draggable :model-value="props.show" :title="title" @close="onClose()">
     <el-form ref="formRef" :rules="formRules" :model="form" label-width="10rem" label-position="right">
       <el-form-item label="排序ID" prop="sortId">
         <el-input v-model="form.sortId" clearable />
@@ -53,9 +53,9 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 import { useOptionStore } from '@/stores/option'
-import Logger from '@/utils/logger'
 
 const Api = useApiStore()
 const Option = useOptionStore()
@@ -65,12 +65,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
     required: true
+  },
+  nowRow: {
+    type: Object,
+    required: true
   }
 })
-const emits = defineEmits(['close', 'afterAdd'])
+const emits = defineEmits(['close', 'afterEdit'])
 
-const loading = ref(false)
-const formRef = ref()
+// ----- 初始化 -----
+const title = ref('')
+const formRef = ref(null)
 const formRules = ref({
   sortId: [{ required: true, trigger: 'blur', message: '请输入排序ID' }],
   category: [{ required: true, trigger: 'blur', message: '请选择参数分类' }],
@@ -91,52 +96,87 @@ const form = ref({
   frontLoad: false,
   jsType: null
 })
+// -----
+const loading = ref(false)
+// 表单参数初始化函数
+const initForm = () => {
+  title.value = '修改参数【' + props.nowRow.name + '】'
+  // 用当前参数数据渲染表单初始数据
+  form.value.sortId = props.nowRow.sortId
+  form.value.category = props.nowRow.category
+  form.value.optionKey = props.nowRow.optionKey
+  form.value.optionValue = props.nowRow.optionValue
+  form.value.defaultValue = props.nowRow.defaultValue
+  form.value.name = props.nowRow.name
+  form.value.description = props.nowRow.description
+  form.value.backLoad = props.nowRow.backLoad
+  form.value.frontLoad = props.nowRow.frontLoad
+  form.value.jsType = props.nowRow.jsType
+  loading.value = false
+}
 
 // ----- 监听打开对话框动作 -----
 watch(
   () => props.show,
   (value, oldValue) => {
     if (value === true) {
-      // 初始化
-      form.value.sortId = 1
-      form.value.category = null
-      form.value.optionKey = null
-      form.value.optionValue = null
-      form.value.defaultValue = null
-      form.value.name = null
-      form.value.description = null
-      form.value.backLoad = false
-      form.value.frontLoad = false
-      form.value.jsType = null
-      loading.value = false
+      initForm()
     }
   },
   { immediate: true }
 )
 
-/**
- * 点击“确定”
- */
-function onConfirm() {
-  Logger.log('新增参数')
+// ----- 点击“确定” -----
+const onConfirm = () => {
+  Logger.log('编辑参数')
   formRef.value.validate(async valid => {
     if (valid) {
       Logger.log('通过表单格式验证')
       loading.value = true
+      if (
+        form.value.sortId == props.nowRow.sortId &&
+        form.value.category == props.nowRow.category &&
+        form.value.optionKey == props.nowRow.optionKey &&
+        form.value.optionValue == props.nowRow.optionValue &&
+        form.value.defaultValue == props.nowRow.defaultValue &&
+        form.value.name == props.nowRow.name &&
+        form.value.description == props.nowRow.description &&
+        form.value.backLoad == props.nowRow.backLoad &&
+        form.value.frontLoad == props.nowRow.frontLoad &&
+        form.value.jsType == props.nowRow.jsType
+      ) {
+        Logger.log('参数无修改')
+        ElMessage.info('参数无修改')
+        loading.value = false
+        return
+      }
+      const input = {
+        id: props.nowRow.id,
+        sortId: form.value.sortId,
+        category: form.value.category,
+        optionKey: form.value.optionKey,
+        optionValue: form.value.optionValue,
+        defaultValue: form.value.defaultValue,
+        name: form.value.name,
+        description: form.value.description,
+        backLoad: form.value.backLoad,
+        frontLoad: form.value.frontLoad,
+        jsType: form.value.jsType
+      }
       await Api.request.common.option
-        .add(null, form.value)
+        .edit(null, input)
         .finally(() => {
           loading.value = false
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('新增参数成功')
-            ElMessage.success('新增参数成功')
+            Logger.log('编辑参数成功')
+            ElMessage.success('保存成功')
             onClose()
-            emits('afterAdd', result.data.option) // 调用父组件afterAdd事件
+            emits('afterEdit') // 调用父组件afterEdit事件
           } else {
-            Logger.log('新增参数失败')
-            ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '新增参数失败')
+            Logger.log('编辑参数失败')
+            ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑参数失败')
           }
         })
     }
