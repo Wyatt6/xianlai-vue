@@ -21,42 +21,44 @@
                   <div class="option-sub-title" v-if="notEmpty(item.description)">
                     <span>{{ item.description }}</span>
                   </div>
-                  <div class="option-row">
-                    <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                    <span class="row-item-title">Key:</span>
-                    <el-text class="row-item-value" type="primary">{{ item.optionKey }}</el-text>
-                  </div>
-                  <div class="option-row">
-                    <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                    <span class="row-item-title">当前参数值:</span>
-                    <el-text class="row-item-value" type="primary">{{ item.optionValue }}</el-text>
-                  </div>
-                  <div class="option-row">
-                    <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                    <span class="row-item-title">默认参数值:</span>
-                    <el-text class="row-item-value" type="info">{{ item.defaultValue }}</el-text>
-                  </div>
-                  <div class="option-row">
-                    <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                    <span class="row-item-title">前端加载:</span>
-                    <LocalIcon name="ri-checkbox-circle-fill" size="2rem" color="#67C23A" v-if="item.frontLoad" />
-                    <LocalIcon name="ri-close-circle-fill" size="2rem" color="#F56C6C" v-else />
-                    <span class="row-item-title" style="margin-left: 2.5rem" v-if="item.frontLoad">JS类型:</span>
-                    <el-text class="row-item-value" type="info" v-if="item.frontLoad">{{ item.jsType }}</el-text>
-                  </div>
-                  <div class="option-row">
-                    <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                    <span class="row-item-title">后台加载:</span>
-                    <LocalIcon name="ri-checkbox-circle-fill" size="2rem" color="#67C23A" v-if="item.backLoad" />
-                    <LocalIcon name="ri-close-circle-fill" size="2rem" color="#F56C6C" v-else />
-                  </div>
-                  <div class="option-row">
-                    <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                    <span class="row-item-sub-title">参数ID:</span>
-                    <span class="row-item-sub-title">{{ item.id }}</span>
-                    <span class="row-item-sub-title" style="margin-left: 1.5rem">排序ID:</span>
-                    <span class="row-item-sub-title">{{ item.sortId }}</span>
-                  </div>
+                  <el-card shadow="never" style="margin-top: 1rem">
+                    <div class="option-row">
+                      <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
+                      <span class="row-item-title">Key:</span>
+                      <el-text class="row-item-value" type="primary">{{ item.optionKey }}</el-text>
+                    </div>
+                    <div class="option-row">
+                      <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
+                      <span class="row-item-title">当前参数值:</span>
+                      <el-text class="row-item-value" type="primary">{{ item.optionValue }}</el-text>
+                    </div>
+                    <div class="option-row">
+                      <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
+                      <span class="row-item-title">默认参数值:</span>
+                      <el-text class="row-item-value" type="info">{{ item.defaultValue }}</el-text>
+                    </div>
+                    <div class="option-row">
+                      <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
+                      <span class="row-item-title">前端加载:</span>
+                      <LocalIcon name="ri-checkbox-circle-fill" size="2rem" color="#67C23A" v-if="item.frontLoad" />
+                      <LocalIcon name="ri-close-circle-fill" size="2rem" color="#F56C6C" v-else />
+                      <span class="row-item-title" style="margin-left: 2.5rem" v-if="item.frontLoad">JS类型:</span>
+                      <el-text class="row-item-value" type="info" v-if="item.frontLoad">{{ item.jsType }}</el-text>
+                    </div>
+                    <div class="option-row">
+                      <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
+                      <span class="row-item-title">后台加载:</span>
+                      <LocalIcon name="ri-checkbox-circle-fill" size="2rem" color="#67C23A" v-if="item.backLoad" />
+                      <LocalIcon name="ri-close-circle-fill" size="2rem" color="#F56C6C" v-else />
+                    </div>
+                    <div class="option-row">
+                      <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
+                      <span class="row-item-sub-title">参数ID:</span>
+                      <span class="row-item-sub-title">{{ item.id }}</span>
+                      <span class="row-item-sub-title" style="margin-left: 1.5rem">排序ID:</span>
+                      <span class="row-item-sub-title">{{ item.sortId }}</span>
+                    </div>
+                  </el-card>
                 </div>
               </el-scrollbar>
             </el-tab-pane>

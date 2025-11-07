@@ -5,10 +5,6 @@
         <div class="btn-wrap">
           <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']" @click="showAdd = true">创建用户</el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
-          <div class="open-register">
-            <span style="margin-right: 0.5rem">开启门户页面用户注册功能</span>
-            <el-switch />
-          </div>
         </div>
         <el-form
           class="search-box-inline"
@@ -393,13 +389,6 @@ onMounted(() => {
         width: 100%;
         display: flex;
         align-items: center;
-
-        .open-register {
-          display: flex;
-          align-items: center;
-          margin-left: 5rem;
-          font-size: 1.6rem;
-        }
       }
 
       .search-box-inline {
