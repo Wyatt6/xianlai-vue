@@ -6,8 +6,6 @@ export default {
     ROLES: 'roles',
     PERMISSIONS: 'permissions',
     PROFILE: 'profile',
-    DEPARTMENT: 'department',
-    POSITION: 'position',
     REMEMBER_USERNAME: 'remember_username',
     MENUBAR_EXPAND: 'sidebar_expand',
     TAG_LIST: 'tag_list'
