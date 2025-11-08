@@ -31,7 +31,6 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
-import Logger from '@/utils/logger'
 
 const Api = useApiStore()
 
@@ -95,10 +94,10 @@ watch(
  * 点击“确定”
  */
 function onConfirm() {
-  Logger.log('编辑角色')
+  console.log('编辑角色')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       if (
         form.value.sortId === props.nowRow.sortId &&
@@ -108,7 +107,7 @@ function onConfirm() {
         form.value.description === props.nowRow.description &&
         form.value.bindCheck === props.nowRow.bindCheck
       ) {
-        Logger.log('角色无修改')
+        console.log('角色无修改')
         ElMessage.info('角色无修改')
         loading.value = false
         return
@@ -129,12 +128,12 @@ function onConfirm() {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('修改角色成功')
+            console.log('修改角色成功')
             ElMessage.success('保存成功')
             onClose()
             emits('afterEdit', result.data.role) // 调用父组件afterEdit事件
           } else {
-            Logger.log('编辑角色失败')
+            console.log('编辑角色失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑角色失败')
           }
         })
