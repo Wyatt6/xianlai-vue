@@ -32,7 +32,8 @@ export const useRouterStore = defineStore('router', () => {
       needPermission: nowRoute.needPermission,
       permission: nowRoute.permission,
       showTag: nowRoute.showTag,
-      tagTitle: nowRoute.tagTitle
+      tagTitle: nowRoute.tagTitle,
+      keepAlive: nowRoute.keepAlive
     }
     if (notEmpty(nowRoute.children)) {
       nowRoute.children.forEach(item => {
