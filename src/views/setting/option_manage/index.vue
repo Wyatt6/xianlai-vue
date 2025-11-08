@@ -7,9 +7,9 @@
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载参数缓存</el-button>
         <div class="tab-wrap" v-loading="loading">
           <el-tabs class="tabs" tab-position="left" type="border-card" v-model="tabsActiveName" @tab-click="onTabClick">
-            <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :label="tab.label" :name="tab.category">
+            <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :key="tab.category" :label="tab.label" :name="tab.category">
               <el-scrollbar height="100%">
-                <div v-for="(item, index) in formList[tab.category]">
+                <div v-for="(item, index) in formList[tab.category]" :key="index">
                   <el-divider v-if="index > 0" />
                   <div class="option-title">
                     <span>{{ item.name }}</span>
@@ -81,7 +81,6 @@ import EditOption from './EditOption.vue'
 import { useApiStore } from '@/apis'
 import { useOptionStore } from '@/stores/option'
 import Storage from '@/utils/storage'
-import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
@@ -104,11 +103,11 @@ async function getList() {
       .getClassifiedList()
       .then(result => {
         if (result && result.success) {
-          Logger.log('成功获取参数列表分页数据，渲染表格')
+          console.log('成功获取参数列表分页数据，渲染表格')
           formList.value = result.data.options
           success = true
         } else {
-          Logger.log('获取参数列表失败')
+          console.log('获取参数列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取参数列表失败')
         }
       })
@@ -146,7 +145,7 @@ function reloadCache() {
     if (result && result.success) {
       ElMessage.success('重载参数缓存完成')
     } else {
-      Logger.log('重载参数缓存失败')
+      console.log('重载参数缓存失败')
       ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载参数缓存失败')
     }
   })
@@ -180,7 +179,7 @@ function onDelete(item) {
           ElMessage.success(succMesg)
           getList()
         } else {
-          Logger.log('删除参数失败')
+          console.log('删除参数失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除参数失败')
         }
       })
