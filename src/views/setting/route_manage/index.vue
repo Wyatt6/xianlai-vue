@@ -87,7 +87,6 @@ import { Plus, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 import AddRoute from './AddRoute.vue'
 import EditRoute from './EditRoute.vue'
 import { useApiStore } from '@/apis'
-import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
@@ -103,7 +102,7 @@ function initPathList() {
     if (result && result.success) {
       pathList.value = result.data.content
     } else {
-      Logger.log('获取路径列表失败')
+      console.log('获取路径列表失败')
       ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取路径列表失败')
     }
   })
@@ -115,7 +114,7 @@ function initPermList() {
     if (result && result.success) {
       permList.value = result.data.content
     } else {
-      Logger.log('获取权限列表失败')
+      console.log('获取权限列表失败')
       ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取权限列表失败')
     }
   })
@@ -134,11 +133,11 @@ async function getForest() {
       .getForest()
       .then(result => {
         if (result && result.success) {
-          Logger.log('成功获取路由列表分页数据，渲染表格')
+          console.log('成功获取路由列表分页数据，渲染表格')
           formList.value = result.data.routes
           success = true
         } else {
-          Logger.log('获取路由列表失败')
+          console.log('获取路由列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取路由列表失败')
         }
       })
@@ -177,7 +176,7 @@ function reloadCache() {
     if (result && result.success) {
       ElMessage.success('重载路由缓存完成')
     } else {
-      Logger.log('重载路由缓存失败')
+      console.log('重载路由缓存失败')
       ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载路由缓存失败')
     }
   })
@@ -216,7 +215,7 @@ function onDelete(row) {
             ElMessage.success(succMesg)
             getForest()
           } else {
-            Logger.log('删除路由失败')
+            console.log('删除路由失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除路由失败')
           }
         })
