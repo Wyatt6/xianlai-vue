@@ -38,10 +38,13 @@
       <el-form-item label="组件相对路径(component)" prop="componentPath">
         <el-input v-model="form.componentPath" type="textarea" />
       </el-form-item>
-      <el-form-item label="需登陆" prop="needLogin">
+      <el-form-item label="缓存组件" prop="keepAlive">
+        <el-switch v-model="form.keepAlive" />
+      </el-form-item>
+      <el-form-item label="需要登陆" prop="needLogin">
         <el-switch v-model="form.needLogin" />
       </el-form-item>
-      <el-form-item label="需权限" prop="needPermission">
+      <el-form-item label="需要权限" prop="needPermission">
         <el-switch v-model="form.needPermission" />
       </el-form-item>
       <el-form-item label="所需权限标识" prop="permission" v-if="form.needPermission">
@@ -114,6 +117,7 @@ const form = ref({
   pathName: null,
   redirectPathName: null,
   componentPath: null,
+  keepAlive: true,
   needLogin: true,
   needPermission: true,
   permission: null,
@@ -134,6 +138,7 @@ watch(
       form.value.pathName = null
       form.value.redirectPathName = null
       form.value.componentPath = null
+      form.value.keepAlive = true
       form.value.needLogin = true
       form.value.needPermission = true
       form.value.permission = null

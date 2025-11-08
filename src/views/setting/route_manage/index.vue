@@ -18,20 +18,27 @@
             border
             default-expand-all
           >
-            <el-table-column label="路由名称(name属性)" prop="name" min-width="300" />
+            <el-table-column label="路由名称(name属性)" prop="name" min-width="300" fixed="left" />
             <el-table-column label="路由ID" prop="id" min-width="200" />
             <el-table-column label="排序ID" align="center" prop="sortId" min-width="100" />
             <el-table-column label="路由路径(path属性)" prop="pathName" min-width="260" />
             <el-table-column label="路径重定向(redirect属性)" prop="redirectPathName" min-width="260" />
             <el-table-column label="组件相对路径(component属性)" prop="componentPath" min-width="300" />
-            <el-table-column label="需登陆" align="center" prop="needLogin" min-width="70">
+            <el-table-column label="缓存组件" align="center" prop="keepAlive" min-width="85">
+              <template #default="scope">
+                <div class="icon-wrap">
+                  <LocalIcon v-if="scope.row.keepAlive" class="custom-icon" name="ri-check-line" size="1.8rem" />
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="需要登陆" align="center" prop="needLogin" min-width="85">
               <template #default="scope">
                 <div class="icon-wrap">
                   <LocalIcon v-if="scope.row.needLogin" class="custom-icon" name="ri-check-line" size="1.8rem" />
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="需权限" align="center" prop="needPermission" min-width="70">
+            <el-table-column label="需要权限" align="center" prop="needPermission" min-width="85">
               <template #default="scope">
                 <div class="icon-wrap">
                   <LocalIcon v-if="scope.row.needPermission" class="custom-icon" name="ri-check-line" size="1.8rem" />
@@ -39,7 +46,7 @@
               </template>
             </el-table-column>
             <el-table-column label="所需权限标识" prop="permission" min-width="245" />
-            <el-table-column label="显标签" align="center" prop="showTag" min-width="70">
+            <el-table-column label="显示标签" align="center" prop="showTag" min-width="85">
               <template #default="scope">
                 <div class="icon-wrap">
                   <LocalIcon v-if="scope.row.showTag" class="custom-icon" name="ri-check-line" size="1.8rem" />

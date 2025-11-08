@@ -38,10 +38,13 @@
       <el-form-item label="组件相对路径(component)" prop="componentPath">
         <el-input v-model="form.componentPath" type="textarea" />
       </el-form-item>
-      <el-form-item label="需登陆" prop="needLogin">
+      <el-form-item label="缓存组件" prop="keepAlive">
+        <el-switch v-model="form.keepAlive" />
+      </el-form-item>
+      <el-form-item label="需要登陆" prop="needLogin">
         <el-switch v-model="form.needLogin" />
       </el-form-item>
-      <el-form-item label="需权限" prop="needPermission">
+      <el-form-item label="需要权限" prop="needPermission">
         <el-switch v-model="form.needPermission" />
       </el-form-item>
       <el-form-item label="所需权限标识" prop="permission" v-if="form.needPermission">
@@ -119,6 +122,7 @@ const form = ref({
   pathName: null,
   redirectPathName: null,
   componentPath: null,
+  keepAlive: true,
   needLogin: true,
   needPermission: true,
   permission: null,
@@ -139,6 +143,7 @@ const initForm = () => {
   form.value.pathName = props.nowRow.pathName
   form.value.redirectPathName = props.nowRow.redirectPathName
   form.value.componentPath = props.nowRow.componentPath
+  form.value.keepAlive = props.nowRow.keepAlive
   form.value.needLogin = props.nowRow.needLogin
   form.value.needPermission = props.nowRow.needPermission
   form.value.permission = props.nowRow.permission
@@ -171,6 +176,7 @@ const onConfirm = () => {
         form.value.pathName == props.nowRow.pathName &&
         form.value.redirectPathName == props.nowRow.redirectPathName &&
         form.value.componentPath == props.nowRow.componentPath &&
+        form.value.keepAlive == props.nowRow.keepAlive &&
         form.value.needLogin == props.nowRow.needLogin &&
         form.value.needPermission == props.nowRow.needPermission &&
         form.value.permission == props.nowRow.permission &&
@@ -190,6 +196,7 @@ const onConfirm = () => {
         pathName: form.value.pathName,
         redirectPathName: form.value.redirectPathName,
         componentPath: form.value.componentPath,
+        keepAlive: form.value.keepAlive,
         needLogin: form.value.needLogin,
         needPermission: form.value.needPermission,
         permission: form.value.permission,
