@@ -20,7 +20,6 @@ import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
 import { useOptionStore } from '@/stores/option'
-import Logger from '@/utils/logger'
 import Validator from '@/utils/validator'
 
 const Api = useApiStore()
@@ -83,13 +82,13 @@ watch(
  * 点击“确定”
  */
 function onConfirm() {
-  Logger.log('修改用户信息')
+  console.log('修改用户信息')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       if (form.value.username === props.nowRow.username && form.value.active === props.nowRow.active) {
-        Logger.log('用户信息无修改')
+        console.log('用户信息无修改')
         ElMessage.info('用户信息无修改')
         loading.value = false
         return
@@ -106,12 +105,12 @@ function onConfirm() {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('修改用户信息成功')
+            console.log('修改用户信息成功')
             ElMessage.success('保存成功')
             onClose()
             emits('afterEdit', result.data.userInfo) // 调用父组件afterEdit事件
           } else {
-            Logger.log('修改用户信息失败')
+            console.log('修改用户信息失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '修改用户信息失败')
           }
         })
