@@ -53,7 +53,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 import { useOptionStore } from '@/stores/option'
 
@@ -128,10 +127,10 @@ watch(
 
 // ----- 点击“确定” -----
 const onConfirm = () => {
-  Logger.log('编辑参数')
+  console.log('编辑参数')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       if (
         form.value.sortId == props.nowRow.sortId &&
@@ -145,7 +144,7 @@ const onConfirm = () => {
         form.value.frontLoad == props.nowRow.frontLoad &&
         form.value.jsType == props.nowRow.jsType
       ) {
-        Logger.log('参数无修改')
+        console.log('参数无修改')
         ElMessage.info('参数无修改')
         loading.value = false
         return
@@ -170,12 +169,12 @@ const onConfirm = () => {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('编辑参数成功')
+            console.log('编辑参数成功')
             ElMessage.success('保存成功')
             onClose()
             emits('afterEdit') // 调用父组件afterEdit事件
           } else {
-            Logger.log('编辑参数失败')
+            console.log('编辑参数失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑参数失败')
           }
         })
