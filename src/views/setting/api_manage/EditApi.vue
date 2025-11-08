@@ -27,7 +27,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 
 const Api = useApiStore()
@@ -85,10 +84,10 @@ watch(
 
 // ----- 点击“确定” -----
 const onConfirm = () => {
-  Logger.log('编辑接口')
+  console.log('编辑接口')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       if (
         form.value.callPath === props.nowRow.callPath &&
@@ -96,7 +95,7 @@ const onConfirm = () => {
         form.value.url === props.nowRow.url &&
         form.value.description === props.nowRow.description
       ) {
-        Logger.log('接口无修改')
+        console.log('接口无修改')
         ElMessage.info('接口无修改')
         loading.value = false
         return
@@ -115,12 +114,12 @@ const onConfirm = () => {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('编辑接口成功')
+            console.log('编辑接口成功')
             ElMessage.success('保存成功')
             onClose()
             emits('afterEdit', result.data.api) // 调用父组件afterEdit事件
           } else {
-            Logger.log('编辑接口失败')
+            console.log('编辑接口失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑接口失败')
           }
         })
