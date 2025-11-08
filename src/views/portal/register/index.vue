@@ -52,7 +52,6 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores/option'
 import Validator from '@/utils/validator'
-import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
 import { usePathStore } from '@/stores/path'
@@ -111,7 +110,7 @@ const formRules = ref({
 })
 
 function onRegister() {
-  Logger.log('注册新用户')
+  console.log('注册新用户')
   formRef.value.validate(valid => {
     if (valid) {
       loading.value = true
@@ -128,7 +127,7 @@ function onRegister() {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('注册成功，跳转到登录页面')
+            console.log('注册成功，跳转到登录页面')
             Storage.set(Storage.keys.REMEMBER_USERNAME, result.data.user.username)
             ElMessageBox.alert(`欢迎使用「${Option.data.system.name}」系统，请登陆`, '注册成功', {
               callback: action => {
@@ -136,7 +135,7 @@ function onRegister() {
               }
             })
           } else {
-            Logger.log('注册失败')
+            console.log('注册失败')
             ElMessage.error(result && result.data && result.data.failMessage ? result.data.failMessage : '注册失败')
             // 自动刷新验证码
             captchaRef.value.initCaptcha(true)
@@ -145,7 +144,7 @@ function onRegister() {
         })
     } else {
       ElMessage.error('输入格式错误')
-      Logger.log('注册表单数据格式错误')
+      console.log('注册表单数据格式错误')
     }
   })
 }
