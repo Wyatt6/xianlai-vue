@@ -24,7 +24,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 
 const Api = useApiStore()
@@ -82,10 +81,10 @@ watch(
 
 // ----- 点击“确定” -----
 const onConfirm = () => {
-  Logger.log('编辑权限')
+  console.log('编辑权限')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       if (
         form.value.sortId === props.nowRow.sortId &&
@@ -93,7 +92,7 @@ const onConfirm = () => {
         form.value.name === props.nowRow.name &&
         form.value.description === props.nowRow.description
       ) {
-        Logger.log('权限无修改')
+        console.log('权限无修改')
         ElMessage.info('权限无修改')
         loading.value = false
         return
@@ -112,12 +111,12 @@ const onConfirm = () => {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('修改权限成功')
+            console.log('修改权限成功')
             ElMessage.success('保存成功')
             onClose()
             emits('afterEdit', result.data.permission) // 调用父组件afterEdit事件
           } else {
-            Logger.log('编辑权限失败')
+            console.log('编辑权限失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑权限失败')
           }
         })
