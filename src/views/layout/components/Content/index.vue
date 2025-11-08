@@ -4,7 +4,7 @@
       <!-- 问题：即使使用了KeepAlive也没有缓存组件，每次路由切换到组件时都会执行onMounted() -->
       <!-- 分析：检查路由配置发现组件里面还嵌套了一个只有RouterView的Placeholder.vue，而KeepAlive只能在最里层的RouterView下才会生效 -->
       <!-- 解决：重新配置路由表，不再使用Placeholder.vue -->
-      <KeepAlive v-if="route.meta.keepAlive">
+      <KeepAlive v-if="route.meta.keepAlive" :max="10">
         <component :is="Component" />
       </KeepAlive>
       <component :is="Component" v-else />
