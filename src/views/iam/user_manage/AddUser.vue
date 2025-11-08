@@ -23,7 +23,6 @@ import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useOptionStore } from '@/stores/option'
 import { useApiStore } from '@/apis'
-import Logger from '@/utils/logger'
 import Validator from '@/utils/validator'
 
 const Option = useOptionStore()
@@ -80,10 +79,10 @@ watch(
  * 点击“确定”
  */
 function onConfirm() {
-  Logger.log('创建用户')
+  console.log('创建用户')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       await Api.request.iam.user
         .createUser(null, form.value)
@@ -92,12 +91,12 @@ function onConfirm() {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('创建用户成功')
+            console.log('创建用户成功')
             ElMessage.success('创建用户成功')
             onClose()
             emits('afterAdd', result.data.user.id) // 调用父组件afterAdd事件
           } else {
-            Logger.log('创建用户失败')
+            console.log('创建用户失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '创建用户失败')
           }
         })
