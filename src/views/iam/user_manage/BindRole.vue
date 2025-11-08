@@ -47,7 +47,6 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
-import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
@@ -80,10 +79,10 @@ const loading = ref(false)
 async function getRoleIdsOfUser(id) {
   return Api.request.iam.role.getRoleIdsOfUser({ userId: id }).then(result => {
     if (result && result.success) {
-      Logger.log('成功获取该用户的角色列表')
+      console.log('成功获取该用户的角色列表')
       return result.data
     } else {
-      Logger.log('获取该用户的角色列表失败')
+      console.log('获取该用户的角色列表失败')
       ElMessage.error(result && result.failMessage ? result.failMessage : '获取该用户的角色列表失败')
     }
   })
@@ -116,10 +115,10 @@ function resultetSelected() {
  */
 const saving = ref(false)
 async function onConfirm() {
-  Logger.log('保存角色绑定的变更')
+  console.log('保存角色绑定的变更')
   saving.value = true
   const selectedRows = tableRef.value.getSelectionRows()
-  Logger.log('获取要绑定的角色ID列表')
+  console.log('获取要绑定的角色ID列表')
   const bindList = []
   for (let i = 0; i < selectedRows.length; i++) {
     let notShow = true
@@ -133,7 +132,7 @@ async function onConfirm() {
       bindList.push(selectedRows[i].id)
     }
   }
-  Logger.log('获取要解除绑定的角色ID列表')
+  console.log('获取要解除绑定的角色ID列表')
   const cancelList = []
   for (let i = 0; i < roleIdsOfUser.value.length; i++) {
     let notShow = true
@@ -163,17 +162,17 @@ async function onConfirm() {
             const bindSum = bindList.length
             const cancelSum = cancelList.length
             if (failBindCnt + failCancelCnt < bindSum + cancelSum) {
-              Logger.log('部分绑定变更成功')
+              console.log('部分绑定变更成功')
               ElMessage.error(`绑定${bindSum - failBindCnt}/${bindSum} 解除绑定${cancelSum - failCancelCnt}/${cancelSum}`)
             } else {
-              Logger.log('绑定变更失败')
+              console.log('绑定变更失败')
               ElMessage.error('绑定变更失败')
             }
           } else {
-            Logger.log('绑定变更成功')
+            console.log('绑定变更成功')
             ElMessage.success('绑定变更成功')
           }
-          Logger.log('更新用户所绑定的角色')
+          console.log('更新用户所绑定的角色')
           loading.value = true
           const { roleIds } = await getRoleIdsOfUser(props.nowRow.id)
           roleIdsOfUser.value = roleIds
@@ -181,12 +180,12 @@ async function onConfirm() {
           change.value = false
           loading.value = false
         } else {
-          Logger.log('绑定变更失败')
+          console.log('绑定变更失败')
           ElMessage.error(result && result.failMessage ? result.failMessage : '绑定变更失败')
         }
       })
   } else {
-    Logger.log('绑定未有变化')
+    console.log('绑定未有变化')
     ElMessage.warning('绑定未有变化')
   }
   saving.value = false
@@ -264,14 +263,14 @@ watch(
         .getPageConditionally({ pageNum: -1, pageSize: 0 }, null)
         .then(async result => {
           if (result && result.success) {
-            Logger.log('成功获取角色列表')
+            console.log('成功获取角色列表')
             const { content } = result.data
             formList.value = content
             const { roleIds } = await getRoleIdsOfUser(props.nowRow.id)
             roleIdsOfUser.value = roleIds
             resultetSelected()
           } else {
-            Logger.log('获取角色列表失败')
+            console.log('获取角色列表失败')
             ElMessage.error(result && result.failMessage ? result.failMmessage : '获取角色列表失败')
           }
         })
