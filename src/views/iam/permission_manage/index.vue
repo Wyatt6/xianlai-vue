@@ -81,7 +81,6 @@ import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-
 import AddPermission from './AddPermission.vue'
 import EditPermission from './EditPermission.vue'
 import Storage from '@/utils/storage'
-import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 import { notEmpty } from '@/utils/common'
 
@@ -152,7 +151,7 @@ async function getList(num, size) {
       .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
         if (result && result.success) {
-          Logger.log('成功获取权限列表分页数据，渲染表格')
+          console.log('成功获取权限列表分页数据，渲染表格')
           const { pageNum, pageSize, totalPages, totalElements, content } = result.data
           formerPageSize.value = formPageSize.value
           formPageNum.value = pageNum + 1 // 注意：自然页码，下标从1开始
@@ -162,7 +161,7 @@ async function getList(num, size) {
           formList.value = content
           success = true
         } else {
-          Logger.log('获取权限列表失败')
+          console.log('获取权限列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取权限列表失败')
         }
       })
@@ -181,7 +180,7 @@ function onSearch() {
   searched.value = false
   if (notEmpty(searchForm.value.identifier)) searched.value = true
   if (notEmpty(searchForm.value.name)) searched.value = true
-  if (notEmpty(searchForm.value.description)) searched.description = true
+  if (notEmpty(searchForm.value.description)) searched.value.description = true
   getList(1, formPageSize.value)
 }
 
@@ -258,7 +257,7 @@ function onDelete(row) {
           ElMessage.success(succMesg)
           getList(formPageNum.value, formPageSize.value)
         } else {
-          Logger.log('删除权限失败')
+          console.log('删除权限失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除权限失败')
         }
       })
