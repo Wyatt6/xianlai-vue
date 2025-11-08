@@ -1,11 +1,14 @@
 <template>
   <div class="content-wrap" :class="[Layout.menubarExpand ? '' : 'menubar-hidden-content-wrap']">
-    <router-view v-slot="{ Component, route }">
-      <!-- TODO 使用KeepAlive也无法缓存组件状态，每次路由切换同样需要加载，还会钩子函数执行混乱 -->
-      <keep-alive>
-        <component :is="Component" :key="route.path" />
-      </keep-alive>
-    </router-view>
+    <RouterView v-slot="{ Component }">
+      <!-- 问题：即使使用了KeepAlive也没有缓存组件，每次路由切换到组件时都会执行onMounted() -->
+      <!-- 分析：检查路由配置发现组件里面还嵌套了一个只有RouterView的Placeholder.vue，而KeepAlive只能在最里层的RouterView下才会生效 -->
+      <!-- 解决：重新配置路由表，不再使用Placeholder.vue -->
+      <KeepAlive v-if="route.meta.keepAlive">
+        <component :is="Component" />
+      </KeepAlive>
+      <component :is="Component" v-else />
+    </RouterView>
   </div>
 </template>
 
