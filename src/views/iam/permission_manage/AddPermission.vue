@@ -25,7 +25,6 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
-import Logger from '@/utils/logger'
 
 const Api = useApiStore()
 
@@ -70,10 +69,10 @@ watch(
  * 点击“确定”
  */
 function onConfirm() {
-  Logger.log('新增权限')
+  console.log('新增权限')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       await Api.request.iam.permission
         .add(null, form.value)
@@ -82,12 +81,12 @@ function onConfirm() {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('新增权限成功')
+            console.log('新增权限成功')
             ElMessage.success('新增权限成功')
             onClose()
             emits('afterAdd', result.data.permission, result.data.rowNum) // 调用父组件afterAdd事件
           } else {
-            Logger.log('新增权限失败')
+            console.log('新增权限失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '新增权限失败')
           }
         })
