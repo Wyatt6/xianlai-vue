@@ -79,7 +79,6 @@ import AddPath from './AddPath.vue'
 import EditPath from './EditPath.vue'
 import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
-import Logger from '@/utils/logger'
 import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
@@ -147,7 +146,7 @@ async function getList(num, size) {
       .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
         if (result && result.success) {
-          Logger.log('成功获取路径列表分页数据，渲染表格')
+          console.log('成功获取路径列表分页数据，渲染表格')
           const { pageNum, pageSize, totalPages, totalElements, content } = result.data
           formerPageSize.value = formPageSize.value
           formPageNum.value = pageNum + 1 // 注意：自然页码，下标从1开始
@@ -157,7 +156,7 @@ async function getList(num, size) {
           formList.value = content
           success = true
         } else {
-          Logger.log('获取路径列表失败')
+          console.log('获取路径列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取路径列表失败')
         }
       })
@@ -202,7 +201,7 @@ function reloadCache() {
     if (result && result.success) {
       ElMessage.success('重载路径缓存完成')
     } else {
-      Logger.log('重载路径缓存失败')
+      console.log('重载路径缓存失败')
       ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '重载路径缓存失败')
     }
   })
@@ -273,7 +272,7 @@ function onDelete(row) {
           ElMessage.success(succMesg)
           getList(formPageNum.value, formPageSize.value)
         } else {
-          Logger.log('删除路径失败')
+          console.log('删除路径失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除路径失败')
         }
       })
