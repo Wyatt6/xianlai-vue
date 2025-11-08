@@ -6,7 +6,6 @@ import { useOptionStore } from '@/stores/option'
 import { usePathStore } from '@/stores/path'
 import { useResetStore } from '@/stores/reset'
 import { notEmpty, hasText } from '@/utils/common'
-import Logger from '@/utils/logger'
 import Token from '@/utils/token'
 import Storage from '@/utils/storage'
 
@@ -88,22 +87,22 @@ export const useRouterStore = defineStore('router', () => {
        * @param {*} next 是否要去？
        */
       router.value.beforeEach(async (to, from, next) => {
-        Logger.log('路由前置守卫程序 ' + from.path + ' ---> ' + to.path, '')
+        console.log('路由前置守卫程序 ' + from.path + ' ---> ' + to.path, '')
         const Path = usePathStore()
         if (to.meta.needLogin) {
           // 分支1: 访问非白名单路径，须先登录，否则重定向到登录页面
-          Logger.log('访问非白名单页面')
+          console.log('访问非白名单页面')
           if (Token.hasToken() && !Token.isExpired()) {
-            Logger.log('用户已登录，token未过期')
+            console.log('用户已登录，token未过期')
             if (to.meta.needPermission && !canAccessRoute(to.meta.permission)) {
-              Logger.log('用户无权限访问此非白名单页面，跳转到401页面')
+              console.log('用户无权限访问此非白名单页面，跳转到401页面')
               next(Path.data.NOT_AUTHORIZED_EMBEDDED)
               return
             }
-            Logger.log('用户允许访问该非白名单页面')
+            console.log('用户允许访问该非白名单页面')
             next()
           } else {
-            Logger.log('用户token不存在或已过期，重定向到登录页面')
+            console.log('用户token不存在或已过期，重定向到登录页面')
             if (!Token.hasToken()) {
               ElMessage.error('用户未登录')
             } else {
@@ -114,17 +113,17 @@ export const useRouterStore = defineStore('router', () => {
           }
         } else {
           // 分支2: 访问白名单路径（不需要登录即可访问）
-          Logger.log('访问白名单页面')
+          console.log('访问白名单页面')
           if (
             (to.path === Path.data.PORTAL || to.path === Path.data.LOGIN || to.path === Path.data.REGISTER || to.path === Path.data.RESET_PASSWORD) &&
             Token.hasToken() &&
             !Token.isExpired()
           ) {
-            Logger.log('用户已登录，不允许访问门户页面，重定向到主页')
+            console.log('用户已登录，不允许访问门户页面，重定向到主页')
             next(Path.data.INDEX)
           } else {
             if (to.path === Path.data.REGISTER && !useOptionStore().data.portal.allowRegister) {
-              Logger.log('注册功能未开放')
+              console.log('注册功能未开放')
               next(Path.data.NOT_FOUND)
             } else {
               // 其他非门户的白名单页面不论登录与否均可访问
