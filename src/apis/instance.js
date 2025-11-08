@@ -6,7 +6,6 @@ import { useResetStore } from '@/stores/reset'
 import { usePathStore } from '@/stores/path'
 import { useRouterStore } from '@/router'
 import Token from '@/utils/token'
-import Logger from '@/utils/logger'
 import RequestLogger from './request_logger'
 import { notEmpty, hasText } from '@/utils/common'
 
@@ -30,7 +29,7 @@ export function createAxiosInstance() {
     async function (config) {
       if (Token.hasToken()) {
         if (Token.isExpired()) {
-          Logger.log('登录已过期，重定向到登录页面')
+          console.log('登录已过期，重定向到登录页面')
           await Reset.resetStoreAndStorage()
           router.push(Path.data.LOGIN)
           return Promise.reject(new Error('登录已过期，请重新登录'))
@@ -62,7 +61,7 @@ export function createAxiosInstance() {
       RequestLogger.receive.info(config, result)
 
       if (notEmpty(result.data) && notEmpty(result.data.checksum) && System.isChecksumChange(result.data.checksum)) {
-        Logger.log('初始化数据checksum发生变化，重新获取初始化数据')
+        console.log('初始化数据checksum发生变化，重新获取初始化数据')
         await System.initialize()
       }
 
@@ -70,7 +69,7 @@ export function createAxiosInstance() {
         // 分支1: 后端返回有错误码时统一处理
         // 401-未登录：清除缓存，重定向到登录页面
         if (result.data.failCode === '401') {
-          Logger.log('401-登录已过期，跳转到登陆页面')
+          console.log('401-登录已过期，跳转到登陆页面')
           ElMessage.error('登录已过期，请重新登录')
           System.setLogoutLock()
           await Reset.resetStoreAndStorage()
@@ -93,7 +92,7 @@ export function createAxiosInstance() {
         return result
       } else {
         // 分支2: 后端返回没有错误码时，不论业务成功与否（success=true/false）都返回给调用方处理
-        Logger.log('向调用方返回响应结果')
+        console.log('向调用方返回响应结果')
         return result
       }
     },
@@ -118,7 +117,7 @@ export function createAxiosInstance() {
         if (error.code === 'ECONNABORTED') {
           message = '服务器连接超时'
         }
-        Logger.send.error(error, message)
+        RequestLogger.send.error(error, message)
       }
       ElMessage.error(message)
       // 这里一定要向调用方reject，调用方可以不写catch子句或catch子句为空去忽略，因为上面已经统一处理过了
