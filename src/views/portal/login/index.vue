@@ -47,7 +47,6 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Storage from '@/utils/storage'
 import Validator from '@/utils/validator'
-import Logger from '@/utils/logger'
 import { useOptionStore } from '@/stores/option'
 import { useApiStore } from '@/apis'
 import { usePathStore } from '@/stores/path'
@@ -92,7 +91,7 @@ const formRules = ref({
 })
 
 function onLogin() {
-  Logger.log('用户登录')
+  console.log('用户登录')
   formRef.value.validate(valid => {
     if (valid) {
       loading.value = true
@@ -109,9 +108,9 @@ function onLogin() {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('登录成功')
+            console.log('登录成功')
             const { token, tokenExpireTime, user, roles, permissions, profile } = result.data
-            Logger.log('缓存登录数据')
+            console.log('缓存登录数据')
             Storage.set(Storage.keys.TOKEN, token) // 用来下次自动登录
             Storage.set(Storage.keys.TOKEN_EXPIRE_TIME, tokenExpireTime)
             Storage.set(Storage.keys.USER, user)
@@ -119,15 +118,15 @@ function onLogin() {
             Storage.set(Storage.keys.PERMISSIONS, permissions)
             Storage.set(Storage.keys.PROFILE, profile)
             if (rememberMe.value) {
-              Logger.log('记住用户名')
+              console.log('记住用户名')
               Storage.set(Storage.keys.REMEMBER_USERNAME, input.username)
             } else {
               Storage.delete(Storage.keys.REMEMBER_USERNAME)
             }
-            Logger.log('跳转到主页面')
+            console.log('跳转到主页面')
             router.push(Path.data.INDEX)
           } else {
-            Logger.log('登录失败')
+            console.log('登录失败')
             ElMessage.error(result && result.data && result.data.failMessage ? result.data.failMessage : '登录失败')
             // 自动刷新验证码
             captchaRef.value.initCaptcha(true)
@@ -136,7 +135,7 @@ function onLogin() {
         })
     } else {
       ElMessage.error('输入格式错误')
-      Logger.log('登录表单数据格式错误')
+      console.log('登录表单数据格式错误')
     }
   })
 }
