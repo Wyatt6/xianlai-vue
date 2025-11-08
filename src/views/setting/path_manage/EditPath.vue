@@ -21,7 +21,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import Logger from '@/utils/logger'
 import { useApiStore } from '@/apis'
 
 const Api = useApiStore()
@@ -77,13 +76,13 @@ watch(
 
 // ----- 点击“确定” -----
 const onConfirm = () => {
-  Logger.log('编辑路径')
+  console.log('编辑路径')
   formRef.value.validate(async valid => {
     if (valid) {
-      Logger.log('通过表单格式验证')
+      console.log('通过表单格式验证')
       loading.value = true
       if (form.value.sortId === props.nowRow.sortId && form.value.name === props.nowRow.name && form.value.path === props.nowRow.path) {
-        Logger.log('路径无修改')
+        console.log('路径无修改')
         ElMessage.info('路径无修改')
         loading.value = false
         return
@@ -101,12 +100,12 @@ const onConfirm = () => {
         })
         .then(result => {
           if (result && result.success) {
-            Logger.log('编辑路径成功')
+            console.log('编辑路径成功')
             ElMessage.success('保存成功')
             onClose()
             emits('afterEdit', result.data.path) // 调用父组件afterEdit事件
           } else {
-            Logger.log('编辑路径失败')
+            console.log('编辑路径失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '编辑路径失败')
           }
         })
