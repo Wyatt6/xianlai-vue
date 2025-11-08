@@ -22,6 +22,7 @@ export default [
     name: 'custom config',
     rules: {
       'no-unused-vars': 'off', // 变量已定义但未使用
+      'vue/no-unused-vars': 'off', // 变量已定义但未使用
       'vue/multi-word-component-names': 'off' // 组件文件名要由多个单词组成
     }
   }
