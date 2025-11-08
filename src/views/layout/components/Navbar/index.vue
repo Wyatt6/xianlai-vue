@@ -29,7 +29,6 @@ import { useApiStore } from '@/apis'
 import { useSystemStore } from '@/stores/system'
 import { usePathStore } from '@/stores/path'
 import { useResetStore } from '@/stores/reset'
-import Logger from '@/utils/logger'
 import Storage from '@/utils/storage'
 import { hasText, notEmpty } from '@/utils/common'
 
@@ -53,15 +52,15 @@ if (notEmpty(Storage.get(Storage.keys.PROFILE))) {
  * 退出登录
  */
 async function logout() {
-  Logger.log('退出登录')
+  console.log('退出登录')
   System.setLogoutLock()
   await Api.request.iam.user.logout().then(async result => {
     if (result && result.success) {
-      Logger.log('退出登录成功，返回到登录页面')
+      console.log('退出登录成功，返回到登录页面')
       await Reset.resetStoreAndStorage()
       await router.push(Path.data.LOGIN)
     } else {
-      Logger.log('退出登录失败')
+      console.log('退出登录失败')
     }
   })
   System.releaseLogoutLock()
