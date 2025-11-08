@@ -30,7 +30,6 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useApiStore } from '@/apis'
-import Logger from '@/utils/logger'
 
 const Api = useApiStore()
 
@@ -62,10 +61,10 @@ const loading = ref(false)
 async function getPermissionIdsOfRole(id) {
   return Api.request.iam.permission.getPermissionIdsOfRole({ roleId: id }).then(result => {
     if (result && result.success) {
-      Logger.log('成功获取该角色的权限列表')
+      console.log('成功获取该角色的权限列表')
       return result.data
     } else {
-      Logger.log('获取该角色的权限列表失败')
+      console.log('获取该角色的权限列表失败')
       ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取该角色的权限列表失败')
     }
   })
@@ -98,10 +97,10 @@ function resetSelected() {
  */
 const saving = ref(false)
 async function onConfirm() {
-  Logger.log('保存授权的变更')
+  console.log('保存授权的变更')
   saving.value = true
   const selectedRows = tableRef.value.getSelectionRows()
-  Logger.log('获取要授权的权限ID列表')
+  console.log('获取要授权的权限ID列表')
   const grantList = []
   for (let i = 0; i < selectedRows.length; i++) {
     let notShow = true
@@ -115,7 +114,7 @@ async function onConfirm() {
       grantList.push(selectedRows[i].id)
     }
   }
-  Logger.log('获取要解除授权的权限ID列表')
+  console.log('获取要解除授权的权限ID列表')
   const cancelList = []
   for (let i = 0; i < permIdsOfRole.value.length; i++) {
     let notShow = true
@@ -145,17 +144,17 @@ async function onConfirm() {
             const grantSum = grantList.length
             const cancelSum = cancelList.length
             if (failGrantCnt + failCancelCnt < grantSum + cancelSum) {
-              Logger.log('部分授权变更成功')
+              console.log('部分授权变更成功')
               ElMessage.error(`授权${grantSum - failGrantCnt}/${grantSum} 解除授权${cancelSum - failCancelCnt}/${cancelSum}`)
             } else {
-              Logger.log('授权变更失败')
+              console.log('授权变更失败')
               ElMessage.error('授权变更失败')
             }
           } else {
-            Logger.log('授权变更成功')
+            console.log('授权变更成功')
             ElMessage.success('授权变更成功')
           }
-          Logger.log('更新角色所具有的授权')
+          console.log('更新角色所具有的授权')
           loading.value = true
           const { permissionIds } = await getPermissionIdsOfRole(props.nowRow.id)
           permIdsOfRole.value = permissionIds
@@ -163,12 +162,12 @@ async function onConfirm() {
           change.value = false
           loading.value = false
         } else {
-          Logger.log('授权变更失败')
+          console.log('授权变更失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '授权变更失败')
         }
       })
   } else {
-    Logger.log('授权未有变化')
+    console.log('授权未有变化')
     ElMessage.warning('授权未有变化')
   }
   saving.value = false
@@ -246,14 +245,14 @@ watch(
         .getPageConditionally({ pageNum: -1, pageSize: 0 }, null)
         .then(async result => {
           if (result && result.success) {
-            Logger.log('成功获取权限列表')
+            console.log('成功获取权限列表')
             const { content } = result.data
             formList.value = content
             const { permissionIds } = await getPermissionIdsOfRole(props.nowRow.id)
             permIdsOfRole.value = permissionIds
             resetSelected()
           } else {
-            Logger.log('获取权限列表失败')
+            console.log('获取权限列表失败')
             ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取权限列表失败')
           }
         })
