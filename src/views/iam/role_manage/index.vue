@@ -109,7 +109,7 @@ import AddRole from './AddRole.vue'
 import EditRole from './EditRole.vue'
 import GrantPermission from './GrantPermission.vue'
 import Storage from '@/utils/storage'
-import Logger from '@/utils/logger'
+
 import { notEmpty } from '@/utils/common'
 import { useApiStore } from '@/apis'
 
@@ -181,12 +181,12 @@ async function getList(num, size) {
       description: searchForm.value.description,
       permission: searchForm.value.permission
     }
-    Logger.log('条件查询角色列表分页数据')
+    console.log('条件查询角色列表分页数据')
     Api.request.iam.role
       .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
       .then(result => {
         if (result && result.success) {
-          Logger.log('成功获取角色列表分页数据，渲染表格')
+          console.log('成功获取角色列表分页数据，渲染表格')
           const { pageNum, pageSize, totalPages, totalElements, content } = result.data
           formerPageSize.value = formPageSize.value
           formPageNum.value = pageNum + 1 // 注意：自然页码，下标从1开始
@@ -196,7 +196,7 @@ async function getList(num, size) {
           formList.value = content
           success = true
         } else {
-          Logger.log('获取角色列表失败')
+          console.log('获取角色列表失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '获取角色列表失败')
         }
       })
@@ -303,7 +303,7 @@ function onDelete(row) {
           ElMessage.success(succMesg)
           getList(formPageNum.value, formPageSize.value)
         } else {
-          Logger.log('删除角色失败')
+          console.log('删除角色失败')
           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除角色失败')
         }
       })
