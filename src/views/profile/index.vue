@@ -12,7 +12,7 @@
                   </div>
                   <div class="btn-wrap">
                     <el-button class="btn" @click="changeAvatar()">更换头像</el-button>
-                    <el-button class="btn" plain type="danger" @click="changeAvatar()">修改密码</el-button>
+                    <el-button class="btn" plain type="danger" @click="showChangePwd = true">修改密码</el-button>
                   </div>
                   <el-divider />
                   <div class="info-detail">
@@ -59,14 +59,14 @@
       </el-card>
     </div>
     <!-- <ChangeAvatar :show="showChangeAvatar" @close="showChangeAvatar = false" /> -->
-    <!-- <ChangePwd :show="showChangePwd" @close="showChangePwd = false" /> -->
+    <ChangePwd :show="showChangePwd" @close="showChangePwd = false" />
   </div>
 </template>
 
 <script setup>
 import FailPicture from '@/assets/images/fail_picture.png'
 // import ChangeAvatar from './ChangeAvatar'
-// import ChangePwd from './ChangePwd'
+import ChangePwd from './ChangePwd.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Storage from '@/utils/storage'
@@ -86,6 +86,7 @@ const form = ref({
   phone: null,
   email: null
 })
+const showChangePwd = ref(false)
 
 // // ---------- 头像 ----------
 // // 更换头像对话框
@@ -93,9 +94,6 @@ const form = ref({
 // const changeAvatar = () => {
 //   showChangeAvatar.value = true
 // }
-
-// // ---------- 修改密码弹窗 ----------
-// const showChangePwd = ref(false)
 
 function init() {
   if (notEmpty(profile.value)) {
