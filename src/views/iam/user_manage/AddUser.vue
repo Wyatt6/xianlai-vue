@@ -2,10 +2,10 @@
   <el-dialog draggable :model-value="props.show" title="创建用户" @close="onClose()">
     <el-form ref="formRef" :rules="formRules" :model="form" label-width="10rem" label-position="right">
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" clearable />
+        <el-input v-model="form.username" :maxlength="uMaxLen" clearable />
       </el-form-item>
       <el-form-item label="初始密码" prop="password">
-        <el-input v-model="form.password" clearable />
+        <el-input v-model="form.password" :maxlength="pMaxLen" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="active">
         <el-switch v-model="form.active" active-text="正常" inactive-text="冻结" />
