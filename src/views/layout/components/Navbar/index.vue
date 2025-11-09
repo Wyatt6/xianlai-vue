@@ -9,6 +9,10 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item @click="router.push(Path.data.PROFILE)">
+              <LocalIcon class="dropdown-item-icon" name="ri-user-line" size="1.5rem" />
+              <span>个人中心</span>
+            </el-dropdown-item>
             <el-dropdown-item divided @click="logout()">
               <LocalIcon class="dropdown-item-icon" name="ri-logout-box-r-line" size="1.5rem" color="#f56c6c" />
               <span style="color: #f56c6c">退出登录</span>
