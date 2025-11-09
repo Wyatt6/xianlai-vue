@@ -5,50 +5,77 @@
         <div class="btn-wrap">
           <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']" @click="showAdd = true">创建用户</el-button>
           <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
+          <el-button size="small" :icon="expandSeachBox ? ArrowUp : ArrowDown" @click="changeSearchBoxExpand()">
+            {{ expandSeachBox ? '收起搜索框' : '展开搜索框' }}
+          </el-button>
         </div>
-        <el-form
-          class="search-box-inline"
-          :inline="true"
-          size="small"
-          label-position="right"
-          label-width="6rem"
-          ref="searchFormRef"
-          :model="searchForm"
-        >
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="searchForm.username" clearable />
-          </el-form-item>
-          <el-form-item label="注册时间" prop="registerTimeRange">
-            <el-date-picker
-              v-model="searchForm.registerTimeRange"
-              type="datetimerange"
-              start-placeholder="开始时间（含）"
-              end-placeholder="结束时间（含）"
-            />
-          </el-form-item>
-          <el-form-item label="用户状态" prop="active">
-            <el-select v-model="searchForm.active" clearable>
-              <el-option label="正常" value="true" />
-              <el-option label="冻结" value="false" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="注销状态" prop="isDelete">
-            <el-select v-model="searchForm.isDelete" clearable>
-              <el-option label="正常" value="false" />
-              <el-option label="已注销" value="true" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="包含角色" prop="role">
-            <el-input v-model="searchForm.role" clearable />
-          </el-form-item>
-          <el-form-item label="包含权限" prop="permission">
-            <el-input v-model="searchForm.permission" clearable />
-          </el-form-item>
-          <el-form-item>
-            <el-button :icon="Search" @click="getList(1, formPageSize)">搜索</el-button>
-            <el-button :icon="Brush" @click="reset()">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <div class="search-box-wrap">
+          <el-form
+            class="search-box-inline"
+            :inline="true"
+            size="small"
+            label-position="right"
+            label-width="6rem"
+            ref="searchFormRef"
+            :model="searchForm"
+            v-if="expandSeachBox"
+          >
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="searchForm.username" clearable />
+            </el-form-item>
+            <el-form-item label="昵称" prop="nickname">
+              <el-input v-model="searchForm.nickname" clearable />
+            </el-form-item>
+            <el-form-item label="用户状态" prop="active">
+              <el-select v-model="searchForm.active" clearable>
+                <el-option label="正常" value="true" />
+                <el-option label="冻结" value="false" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="注销状态" prop="isDelete">
+              <el-select v-model="searchForm.isDelete" clearable>
+                <el-option label="正常" value="false" />
+                <el-option label="已注销" value="true" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="searchForm.name" clearable />
+            </el-form-item>
+            <el-form-item label="性别" prop="gender">
+              <el-select v-model="searchForm.gender" clearable>
+                <el-option label="男" value="MALE" />
+                <el-option label="女" value="FEMALE" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="工号" prop="employeeNo">
+              <el-input v-model="searchForm.employeeNo" clearable />
+            </el-form-item>
+            <el-form-item label="手机" prop="phone">
+              <el-input v-model="searchForm.phone" clearable />
+            </el-form-item>
+            <el-form-item label="电子邮箱" prop="email">
+              <el-input v-model="searchForm.email" clearable />
+            </el-form-item>
+            <el-form-item label="注册时间" prop="registerTimeRange">
+              <el-date-picker
+                v-model="searchForm.registerTimeRange"
+                type="datetimerange"
+                start-placeholder="开始时间（含）"
+                end-placeholder="结束时间（含）"
+              />
+            </el-form-item>
+            <el-form-item label="包含角色" prop="role">
+              <el-input v-model="searchForm.role" clearable />
+            </el-form-item>
+            <el-form-item label="包含权限" prop="permission">
+              <el-input v-model="searchForm.permission" clearable />
+            </el-form-item>
+            <el-form-item>
+              <el-button :icon="Search" @click="getList(1, formPageSize)">搜索</el-button>
+              <el-button :icon="Brush" @click="reset()">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
         <div class="table-wrap">
           <el-table
             height="100%"
@@ -61,9 +88,17 @@
             v-loading="loading"
             border
           >
-            <el-table-column label="用户ID" prop="id" width="160" />
-            <el-table-column label="用户名" prop="username" />
-            <el-table-column label="状态" align="center" width="85">
+            <el-table-column label="用户ID" prop="id" min-width="160" />
+            <el-table-column label="头像" align="center" min-width="70">
+              <template #default="scope">
+                <div class="avatar-wrap">
+                  <el-avatar shape="circle" :size="40" :src="notEmpty(scope.row.avatar) ? scope.row.avatar : FailPicture" />
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="用户名" prop="username" min-width="160" />
+            <el-table-column label="昵称" prop="nickname" min-width="160" />
+            <el-table-column label="状态" align="center" min-width="85">
               <template #default="scope">
                 <el-tag v-if="scope.row.isDelete" type="info">已注销</el-tag>
                 <el-tag v-else :type="scope.row.active ? 'success' : 'danger'">
@@ -71,7 +106,17 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="注册时间" align="center" width="175">
+            <el-table-column label="姓名" prop="name" min-width="160" />
+            <el-table-column label="性别" align="center" prop="gender" min-width="55">
+              <template #default="scope">
+                <span v-if="notEmpty(scope.row.gender) && scope.row.gender === 'MALE'">男</span>
+                <span v-else-if="notEmpty(scope.row.gender) && scope.row.gender === 'FEMALE'">女</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="工号" prop="employeeNo" min-width="160" />
+            <el-table-column label="手机" prop="phone" min-width="160" />
+            <el-table-column label="电子邮箱" prop="email" min-width="250" />
+            <el-table-column label="注册时间" align="center" min-width="175">
               <template #default="scope">
                 {{ new Date(scope.row.registerTime).toLocaleString() }}
               </template>
@@ -113,26 +158,46 @@
 </template>
 
 <script setup>
+import FailPicture from '@/assets/images/fail_picture.png'
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Refresh, Search, Brush, Edit, Delete, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
 import AddUser from './AddUser.vue'
 import EditUser from './EditUser.vue'
 import BindRole from './BindRole.vue'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
+import { notEmpty } from '@/utils/common'
 
 const Api = useApiStore()
 
 // ---------- 搜索表单数据定义 ----------
+const SEARCH_BOX_KEY = 'iam.user_manage.expandSearchBox'
+const expandSeachBox = ref(Storage.get(SEARCH_BOX_KEY) ? Storage.get(SEARCH_BOX_KEY) : false)
+function changeSearchBoxExpand() {
+  expandSeachBox.value = !expandSeachBox.value
+}
+watch(
+  () => expandSeachBox.value,
+  (value, oldValue) => {
+    Storage.set(SEARCH_BOX_KEY, value)
+  },
+  { immediate: true }
+)
 const SEARCHED_KEY = 'iam.user_manage.searched'
 const SEARCH_FORM_KEY = 'iam.user_manage.searchForm'
 const searched = ref(Storage.get(SEARCHED_KEY) || false)
 const searchFormRef = ref()
 const deafultSearchForm = {
   username: null,
+  nickname: null,
+  name: null,
   active: null,
   isDelete: null,
+  gender: null,
+  employeeNo: null,
+  phone: null,
+  email: null,
   registerTimeRange: null,
   role: null,
   permission: null
@@ -185,8 +250,14 @@ async function getList(num, size) {
     loading.value = true
     const condition = {
       username: searchForm.value.username,
+      nickname: searchForm.value.nickname,
       active: searchForm.value.active,
       isDelete: searchForm.value.isDelete,
+      name: searchForm.value.name,
+      gender: searchForm.value.gender,
+      employeeNo: searchForm.value.employeeNo,
+      phone: searchForm.value.phone,
+      email: searchForm.value.email,
       stRegisterTime: searchForm.value.registerTimeRange != null ? searchForm.value.registerTimeRange[0] : null,
       edRegisterTime: searchForm.value.registerTimeRange != null ? searchForm.value.registerTimeRange[1] : null,
       role: searchForm.value.role,
@@ -353,7 +424,7 @@ function tableRow() {
  */
 const searchBoxHeight = ref('0rem')
 onMounted(() => {
-  const searchBoxDOM = document.getElementsByClassName('search-box-inline')[0]
+  const searchBoxDOM = document.getElementsByClassName('search-box-wrap')[0]
   const resizeObserver = new ResizeObserver(entries => {
     searchBoxHeight.value = '' + entries[0].contentRect.height / 10 + 'rem'
   })
@@ -390,15 +461,16 @@ onMounted(() => {
         align-items: center;
       }
 
-      .search-box-inline {
+      .search-box-wrap {
         margin-top: 2rem;
-
-        // 在版本2.5.0之后，el-select的默认宽度更改为100%，当使用内联形式时，宽度将显示异常。
-        // 为了保持显示正常, 您需要手动配置el-select的宽度，例如：
-        .el-form-item {
-          .el-input,
-          .el-select {
-            width: 20rem;
+        .search-box-inline {
+          // 在版本2.5.0之后，el-select的默认宽度更改为100%，当使用内联形式时，宽度将显示异常。
+          // 为了保持显示正常, 您需要手动配置el-select的宽度，例如：
+          .el-form-item {
+            .el-input,
+            .el-select {
+              width: 20rem;
+            }
           }
         }
       }
@@ -414,6 +486,14 @@ onMounted(() => {
         // 减去条件搜索框高度: 计算得到
         --search-box-height: v-bind(searchBoxHeight);
         height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 2.4rem - 4.4rem - 6.7rem - var(--search-box-height));
+
+        .avatar-wrap {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
 
       .pagination-wrap {
