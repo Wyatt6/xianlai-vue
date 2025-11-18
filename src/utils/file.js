@@ -15,12 +15,11 @@ export async function getAvatarImage(filename) {
   if (isEmpty(filename)) {
     return null
   } else {
-    return await Axios.get('/api/iam/user/downloadAvatar', {
+    const result = await Axios.get('/api/iam/user/downloadAvatar', {
       params: { filename },
       headers: { Accept: 'image/*' },
       responseType: 'blob'
-    }).then(result => {
-      return URL.createObjectURL(result.data)
     })
+    return URL.createObjectURL(result.data)
   }
 }

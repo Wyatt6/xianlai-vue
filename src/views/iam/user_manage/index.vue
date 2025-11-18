@@ -92,7 +92,7 @@
             <el-table-column label="头像" align="center" min-width="70">
               <template #default="scope">
                 <div class="avatar-wrap">
-                  <el-avatar shape="circle" :size="40" :src="notEmpty(scope.row.avatar) ? scope.row.avatar : FailPicture" />
+                  <el-avatar shape="circle" :size="40" :src="scope.row.avatarImg" />
                 </div>
               </template>
             </el-table-column>
@@ -167,7 +167,8 @@ import EditUser from './EditUser.vue'
 import BindRole from './BindRole.vue'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
-import { notEmpty } from '@/utils/common'
+import { isEmpty, notEmpty } from '@/utils/common'
+import { getAvatarImage } from '@/utils/file'
 
 const Api = useApiStore()
 
@@ -239,6 +240,16 @@ watch(
   { immediate: true }
 )
 
+async function getAllAvatarImages() {
+  for (let i = 0; i < formList.value.length; i++) {
+    const avatar = formList.value[i].avatar
+    formList.value[i].avatarImg = FailPicture
+    if (notEmpty(avatar)) {
+      formList.value[i].avatarImg = await getAvatarImage(avatar)
+    }
+  }
+}
+
 /**
  * 条件查询用户列表分页渲染表格
  * @param num 页码（注意：num是服务器页码，下标从0开始）
@@ -266,7 +277,7 @@ async function getList(num, size) {
     console.log('条件查询用户列表分页数据')
     Api.request.iam.user
       .getPageConditionally({ pageNum: num - 1, pageSize: size }, condition) // 注意：服务器页码，下标从0开始，所以-1
-      .then(result => {
+      .then(async result => {
         if (result && result.success) {
           console.log('成功获取用户列表分页数据，渲染表格')
           const { pageNum, pageSize, totalPages, totalElements, content } = result.data
@@ -276,6 +287,7 @@ async function getList(num, size) {
           formTotalPages.value = totalPages
           formTotalElements.value = totalElements
           formList.value = content
+          await getAllAvatarImages()
           success = true
         } else {
           console.log('获取用户列表失败')
