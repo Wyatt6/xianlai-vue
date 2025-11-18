@@ -4,6 +4,9 @@
     <div class="navbar-right">
       <el-dropdown class="dropdown-menu-wrap" trigger="click">
         <div class="username-wrap">
+          <div class="avatar-wrap">
+            <el-avatar shape="circle" :size="35" :src="avatarImg" />
+          </div>
           <span style="color: #303133; font-size: 1.5rem" class="username-box">{{ username }}</span>
           <LocalIcon name="ri-arrow-drop-down-fill" size="2.5rem" color="#303133" />
         </div>
@@ -25,6 +28,7 @@
 </template>
 
 <script setup>
+import FailPicture from '@/assets/images/fail_picture.png'
 import Hamburger from './Hamburger.vue'
 import LocalIcon from '@/components/LocalIcon/index.vue'
 import { ref } from 'vue'
@@ -35,6 +39,7 @@ import { usePathStore } from '@/stores/path'
 import { useResetStore } from '@/stores/reset'
 import Storage from '@/utils/storage'
 import { hasText, notEmpty } from '@/utils/common'
+import { getAvatarImage } from '@/utils/file'
 
 const router = useRouter()
 const System = useSystemStore()
@@ -42,6 +47,7 @@ const Api = useApiStore()
 const Path = usePathStore()
 const Reset = useResetStore()
 
+const avatarImg = ref(FailPicture)
 const username = ref('unknown')
 if (notEmpty(Storage.get(Storage.keys.USER))) {
   const user = Storage.get(Storage.keys.USER)
@@ -50,6 +56,9 @@ if (notEmpty(Storage.get(Storage.keys.USER))) {
 if (notEmpty(Storage.get(Storage.keys.PROFILE))) {
   const profile = Storage.get(Storage.keys.PROFILE)
   if (hasText(profile.nickname)) username.value = profile.nickname
+  getAvatarImage(profile.avatar).then(result => {
+    avatarImg.value = result
+  })
 }
 
 /**
@@ -111,6 +120,23 @@ async function logout() {
         align-items: center;
         justify-content: right;
         position: relative;
+
+        .avatar-wrap {
+          // width: 100%;
+          // height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 1rem;
+
+          // 禁止头像图片拖动
+          :deep(.el-avatar img) {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+          }
+        }
 
         .username-box {
           max-width: 18rem;

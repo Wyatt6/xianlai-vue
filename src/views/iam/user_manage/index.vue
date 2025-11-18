@@ -167,7 +167,7 @@ import EditUser from './EditUser.vue'
 import BindRole from './BindRole.vue'
 import Storage from '@/utils/storage'
 import { useApiStore } from '@/apis'
-import { isEmpty, notEmpty } from '@/utils/common'
+import { notEmpty } from '@/utils/common'
 import { getAvatarImage } from '@/utils/file'
 
 const Api = useApiStore()
@@ -505,6 +505,14 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
+
+          // 禁止头像图片拖动
+          :deep(.el-avatar img) {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+          }
         }
       }
 
