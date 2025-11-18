@@ -8,10 +8,10 @@
               <el-scrollbar height="100%">
                 <div class="info-wrap">
                   <div class="avatar-wrap">
-                    <el-avatar shape="circle" :size="150" :src="notEmpty(profile) && notEmpty(profile.avatar) ? profile.avatar : FailPicture" />
+                    <el-avatar shape="circle" :size="150" :src="avatarImg" />
                   </div>
                   <div class="btn-wrap">
-                    <el-button class="btn" @click="changeAvatar()">更换头像</el-button>
+                    <el-button class="btn" @click="showChangeAvatar = true">更换头像</el-button>
                     <el-button class="btn" plain type="danger" @click="showChangePwd = true">修改密码</el-button>
                   </div>
                   <el-divider />
@@ -58,23 +58,25 @@
         </div>
       </el-card>
     </div>
-    <!-- <ChangeAvatar :show="showChangeAvatar" @close="showChangeAvatar = false" /> -->
+    <ChangeAvatar :show="showChangeAvatar" :nowAvatarImg="avatarImg" @close="showChangeAvatar = false" @success="uploadSuccess" />
     <ChangePwd :show="showChangePwd" @close="showChangePwd = false" />
   </div>
 </template>
 
 <script setup>
 import FailPicture from '@/assets/images/fail_picture.png'
-// import ChangeAvatar from './ChangeAvatar'
 import ChangePwd from './ChangePwd.vue'
+import ChangeAvatar from './ChangeAvatar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Storage from '@/utils/storage'
-import { notEmpty } from '@/utils/common'
+import { isEmpty, notEmpty } from '@/utils/common'
+import { getAvatarImage } from '@/utils/file'
 
 const loading = ref(false)
 const user = ref(Storage.get(Storage.keys.USER))
 const profile = ref(Storage.get(Storage.keys.PROFILE))
+const avatarImg = ref(FailPicture)
 const form = ref({
   userId: null,
   avatar: null,
@@ -87,13 +89,7 @@ const form = ref({
   email: null
 })
 const showChangePwd = ref(false)
-
-// // ---------- 头像 ----------
-// // 更换头像对话框
-// const showChangeAvatar = ref(false)
-// const changeAvatar = () => {
-//   showChangeAvatar.value = true
-// }
+const showChangeAvatar = ref(false)
 
 function init() {
   if (notEmpty(profile.value)) {
@@ -109,6 +105,21 @@ function init() {
   }
 }
 init()
+
+async function getAvatarImg() {
+  if (isEmpty(profile.value) || isEmpty(profile.value.avatar)) {
+    return null
+  } else {
+    avatarImg.value = await getAvatarImage(profile.value.avatar)
+  }
+}
+getAvatarImg()
+
+function uploadSuccess(result) {
+  Storage.set(Storage.keys.PROFILE, result.data.profile)
+  profile.value = result.data.profile
+  getAvatarImg()
+}
 
 // const saveProfile = () => {
 //   if (store.state.app.hasProfile) {
@@ -205,6 +216,14 @@ init()
                 margin-bottom: 1rem;
                 display: flex;
                 justify-content: center;
+
+                // 禁止头像图片拖动
+                :deep(.el-avatar img) {
+                  -webkit-user-drag: none;
+                  -khtml-user-drag: none;
+                  -moz-user-drag: none;
+                  -o-user-drag: none;
+                }
               }
 
               .info-detail {
