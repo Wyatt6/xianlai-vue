@@ -36,14 +36,14 @@
                   <div class="info-detail">
                     <el-form :model="form" label-position="right" label-width="auto" label-suffix=":">
                       <el-form-item label="电话号码">
-                        <el-input v-model="form.phone" clearable>
+                        <el-input clearable>
                           <template #append>
                             <el-button @click="ElMessage.error('功能未开发')">更换号码</el-button>
                           </template>
                         </el-input>
                       </el-form-item>
                       <el-form-item label="电子邮箱">
-                        <el-input v-model="form.email" clearable>
+                        <el-input clearable>
                           <template #append>
                             <el-button @click="ElMessage.error('功能未开发')">更换邮箱</el-button>
                           </template>
@@ -69,10 +69,12 @@ import ChangePwd from './ChangePwd.vue'
 import ChangeAvatar from './ChangeAvatar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useApiStore } from '@/apis'
 import Storage from '@/utils/storage'
 import { isEmpty, notEmpty } from '@/utils/common'
 import { getAvatarImage } from '@/utils/file'
 
+const Apis = useApiStore()
 const loading = ref(false)
 const user = ref(Storage.get(Storage.keys.USER))
 const profile = ref(Storage.get(Storage.keys.PROFILE))
@@ -121,47 +123,33 @@ function uploadSuccess(result) {
   getAvatarImg()
 }
 
-// const saveProfile = () => {
-//   if (store.state.app.hasProfile) {
-//     if (profileForm.value.nickname === store.state.app.profile.nickname && profileForm.value.motto === store.state.app.profile.motto) {
-//       ElMessage.error('用户个人信息未变更')
-//       return
-//     }
-//   }
-
-//   profileForm.value.userId = store.state.app.user.id
-//   API.content.profile
-//     .editProfile(profileForm.value)
-//     .then(async res => {
-//       if (res && res.success) {
-//         // 更新store和缓存
-//         const newProfile = store.state.app.profile
-//         const { profile } = res.data
-//         if (profile) {
-//           newProfile.nickname = profile.nickname
-//           newProfile.motto = profile.motto
-//         }
-//         await store.commit('app/setProfile', newProfile)
-//         await Storage.set(AppConst.PROFILE, profile)
-//         initProfileForm()
-
-//         console.log('保存成功')
-//         ElMessage.success('保存成功')
-//       } else {
-//         if (res && res.message != null) {
-//           console.log('修改用户个人信息失败：', res.message)
-//           ElMessage.error(res.message)
-//         } else {
-//           console.log('修改用户个人信息失败')
-//           ElMessage.error('保存失败')
-//         }
-//       }
-//     })
-//     .catch(error => {
-//       console.log(error)
-//       ElMessage.error(error.message)
-//     })
-// }
+const saveProfile = () => {
+  if (notEmpty(profile.value)) {
+    if (form.value.nickname === profile.value.nickname) {
+      ElMessage.error('基础信息未变更')
+      return
+    }
+  }
+  Apis.request.iam.user
+    .editUserInfo(null, {
+      id: user.value.id,
+      nickname: form.value.nickname
+    })
+    .then(result => {
+      if (result && result.success) {
+        console.log('基础信息修改成功')
+        Storage.set(Storage.keys.USER, result.data.user)
+        Storage.set(Storage.keys.PROFILE, result.data.profile)
+        user.value = result.data.user
+        profile.value = result.data.profile
+        init()
+        ElMessage.success('基础信息修改成功')
+      } else {
+        console.log('基础信息修改失败')
+        ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '基础信息修改失败')
+      }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
