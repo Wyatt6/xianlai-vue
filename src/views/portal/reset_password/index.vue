@@ -15,22 +15,23 @@
     </el-steps>
     <div>
       <step1_send_code v-if="nowStep == 0" @next="toNext" />
-      <step2_check_code v-if="nowStep == 1" @pre="toPre" @next="toNext" />
-      <step3_reset_password v-if="nowStep == 2" @first="nowStep = 0" />
+      <!-- <step2_check_code v-if="nowStep == 1" @pre="toPre" @next="toNext" /> -->
+      <!-- <step3_reset_password v-if="nowStep == 2" @first="nowStep = 0" /> -->
     </div>
   </div>
 </template>
 
 <script setup>
 import step1_send_code from './step1_send_code.vue'
-import step2_check_code from './step2_check_code.vue'
-import step3_reset_password from './step3_reset_password.vue'
+// import step2_check_code from './step2_check_code.vue'
+// import step3_reset_password from './step3_reset_password.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import pathTable from '~/router/path_table'
+import { usePathStore } from '@/stores/path'
 
 const loading = ref(false)
 const router = useRouter()
+const Path = usePathStore()
 const nowStep = ref(0)
 
 /**
@@ -52,7 +53,7 @@ function toPre() {
  */
 function toLogin() {
   if (!loading.value) {
-    router.push(pathTable.LOGIN)
+    router.push(Path.data.LOGIN)
   }
 }
 </script>

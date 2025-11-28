@@ -32,15 +32,17 @@
 </template>
 
 <script setup>
-import ASC from '/app_settings_core'
-import Captcha from '~/components/Captcha/index.vue'
+import Captcha from '@/components/Captcha/index.vue'
 import { ref, onMounted } from 'vue'
-import Validator from '~/utils/validator'
-import Storage from '~/utils/storage'
-import Logger from '~/utils/logger'
+import Validator from '@/utils/validator'
+import Storage from '@/utils/storage'
+import Logger from '@/utils/logger'
 import { ElMessage } from 'element-plus'
-import Apis from '~/http/apis'
+import { useOptionStore } from '@/stores/option'
+import { useApiStore } from '@/apis'
 
+const Option = useOptionStore()
+const Apis = useApiStore()
 const loading = ref(false)
 const freezed = ref(false)
 const captchaRef = ref()
@@ -51,8 +53,8 @@ const formModel = ref({
   email: '',
   captcha: ''
 })
-const uMinLen = ASC.settings.portal.minUsernameLen
-const uMaxLen = ASC.settings.portal.maxUsernameLen
+const uMinLen = Option.data.user.username.minLen
+const uMaxLen = Option.data.user.username.maxLen
 const formRules = ref({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
