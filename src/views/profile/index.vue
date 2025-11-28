@@ -36,18 +36,12 @@
                   <div class="info-detail">
                     <el-form :model="form" label-position="right" label-width="auto" label-suffix=":">
                       <el-form-item label="电话号码">
-                        <el-input clearable>
-                          <template #append>
-                            <el-button @click="ElMessage.error('功能未开发')">更换号码</el-button>
-                          </template>
-                        </el-input>
+                        <el-text>{{ notEmpty(profile.phone) ? profile.phone : '暂未设置' }}</el-text>
+                        <el-button type="text" style="margin-left: 2rem">修改电话</el-button>
                       </el-form-item>
                       <el-form-item label="电子邮箱">
-                        <el-input clearable>
-                          <template #append>
-                            <el-button @click="ElMessage.error('功能未开发')">更换邮箱</el-button>
-                          </template>
-                        </el-input>
+                        <el-text>{{ notEmpty(profile.phone) ? profile.email : '暂未设置' }}</el-text>
+                        <el-button type="text" style="margin-left: 2rem">修改邮箱</el-button>
                       </el-form-item>
                     </el-form>
                   </div>
