@@ -59,7 +59,7 @@ if (notEmpty(user)) {
 const nickname = ref('默认用户昵称')
 const profile = Storage.get(Storage.keys.PROFILE)
 if (notEmpty(profile)) {
-  // if (hasText(profile.nickname)) nickname.value = profile.nickname
+  if (hasText(profile.nickname)) nickname.value = profile.nickname
   getAvatarImage(profile.avatar).then(result => {
     avatarImg.value = result
   })
