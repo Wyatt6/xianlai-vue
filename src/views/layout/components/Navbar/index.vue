@@ -7,7 +7,10 @@
           <div class="avatar-wrap">
             <el-avatar shape="circle" :size="35" :src="avatarImg" />
           </div>
-          <span style="color: #303133; font-size: 1.5rem" class="username-box">{{ username }}</span>
+          <div class="username-box">
+            <el-text class="username" truncated size="small" type="info">@{{ username }}</el-text>
+            <el-text class="nickname" truncated size="large">{{ nickname }}</el-text>
+          </div>
           <LocalIcon name="ri-arrow-drop-down-fill" size="2.5rem" color="#303133" />
         </div>
         <template #dropdown>
@@ -49,13 +52,14 @@ const Reset = useResetStore()
 
 const avatarImg = ref(FailPicture)
 const username = ref('unknown')
-if (notEmpty(Storage.get(Storage.keys.USER))) {
-  const user = Storage.get(Storage.keys.USER)
+const user = Storage.get(Storage.keys.USER)
+if (notEmpty(user)) {
   if (hasText(user.username)) username.value = user.username
 }
-if (notEmpty(Storage.get(Storage.keys.PROFILE))) {
-  const profile = Storage.get(Storage.keys.PROFILE)
-  if (hasText(profile.nickname)) username.value = profile.nickname
+const nickname = ref('默认用户昵称')
+const profile = Storage.get(Storage.keys.PROFILE)
+if (notEmpty(profile)) {
+  // if (hasText(profile.nickname)) nickname.value = profile.nickname
   getAvatarImage(profile.avatar).then(result => {
     avatarImg.value = result
   })
@@ -141,6 +145,14 @@ async function logout() {
         .username-box {
           max-width: 18rem;
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
+
+          .username {
+          }
+
+          .nickname {
+          }
         }
       }
     }
