@@ -1,1 +1,1 @@
-<template><div>主页</div></template>
+<template><div></div></template>
