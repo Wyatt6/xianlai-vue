@@ -2,8 +2,8 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['path:add']" @click="showAdd = true">新增</el-button>
-        <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-button size="small" :loading="loading" type="primary" :icon="Plus" v-perm="['path:add']" @click="showAdd = true">新增</el-button>
+        <el-button size="small" :loading="loading" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载路径缓存</el-button>
         <el-form
           class="search-box-inline"
@@ -215,6 +215,16 @@ function onSearch() {
   if (notEmpty(searchForm.value.name)) searched.value = true
   if (notEmpty(searchForm.value.path)) searched.value = true
   getList(1, formPageSize.value)
+}
+
+/**
+ * 回车登录
+ * @param event 键盘事件对象
+ */
+document.onkeydown = event => {
+  if (event.keyCode === 13) {
+    onSearch()
+  }
 }
 
 /**
