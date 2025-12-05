@@ -2,14 +2,14 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['option:add']" @click="showAdd = true">新增</el-button>
-        <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-button size="small" :loading="loading" type="primary" :icon="Plus" v-perm="['option:add']" @click="showAdd = true">新增</el-button>
+        <el-button size="small" :loading="loading" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-button size="small" :icon="Refresh" @click="reloadCache()">重载参数缓存</el-button>
         <div class="tab-wrap" v-loading="loading">
           <el-tabs class="tabs" tab-position="left" type="border-card" v-model="tabsActiveName" @tab-click="onTabClick">
             <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :key="tab.category" :label="tab.label" :name="tab.category">
-              <el-scrollbar height="100%">
-                <div v-for="(item, index) in formList[tab.category]" :key="index">
+              <el-scrollbar class="scoll-wrap" height="100%">
+                <div class="option-wrap" v-for="(item, index) in formList[tab.category]" :key="index">
                   <el-divider v-if="index > 0" />
                   <div class="option-title">
                     <span>{{ item.name }}</span>
@@ -241,40 +241,46 @@ function onTabClick(item) {
             width: 100%;
             height: calc(100% - 2rem);
 
-            .option-title {
-              font-size: 2.4rem;
-              font-weight: 700;
-              display: flex;
-              align-items: center;
-            }
+            .scoll-wrap {
+              .option-wrap {
+                width: 98%;
 
-            .option-sub-title {
-              margin-top: 1rem;
-              font-size: 1.4rem;
-              color: var(--el-text-color-primary);
-            }
+                .option-title {
+                  font-size: 2.4rem;
+                  font-weight: 700;
+                  display: flex;
+                  align-items: center;
+                }
 
-            .option-row {
-              margin-top: 1rem;
-              display: flex;
-              align-items: center;
+                .option-sub-title {
+                  margin-top: 1rem;
+                  font-size: 1.4rem;
+                  color: var(--el-text-color-primary);
+                }
 
-              .row-item-title {
-                font-size: 1.6rem;
-                font-weight: 500;
-                margin-right: 1rem;
-              }
+                .option-row {
+                  margin-top: 1rem;
+                  display: flex;
+                  align-items: center;
 
-              .row-item-sub-title {
-                font-size: 1.6rem;
-                font-weight: 500;
-                color: var(--el-text-color-secondary);
-                margin-right: 1rem;
-              }
+                  .row-item-title {
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                    margin-right: 1rem;
+                  }
 
-              .row-item-value {
-                font-size: 1.6rem;
-                font-weight: 500;
+                  .row-item-sub-title {
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                    color: var(--el-text-color-secondary);
+                    margin-right: 1rem;
+                  }
+
+                  .row-item-value {
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                  }
+                }
               }
             }
           }
