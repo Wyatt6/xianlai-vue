@@ -1,3 +1,4 @@
+<template></template>
 <!-- <template>
   <div class="box-wrap">
     <el-result class="box result" v-if="successReset" icon="success" title="密码已重置">
