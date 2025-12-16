@@ -46,8 +46,6 @@ function initCoverImage() {
     coverUrl = new URL('/', import.meta.url)
     coverUrl.pathname = Option.data.portal.coverImagePath
     coverImage.value = `url(${coverUrl})`
-  } else {
-    coverImage.value = `url(/src/assets/images/portal/default-cover.jpg)`
   }
 }
 initCoverImage()

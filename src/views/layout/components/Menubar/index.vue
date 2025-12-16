@@ -51,7 +51,7 @@ const activeMenuPath = computed(() => {
 /**
  * 菜单栏Logo
  */
-const logoSrc = ref('/src/assets/images/layout/default-logo.png') // TODO 自定义logo
+const logoSrc = ref('/images/layout/logo.png') // TODO 自定义logo
 
 const logoTitleColor = ref(Option.data.menubar.logoTitleColor)
 const logoTitleWeight = ref(Option.data.menubar.logoTitleWeight)
