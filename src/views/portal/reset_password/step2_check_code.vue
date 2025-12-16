@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="box-wrap">
     <el-form class="form-wrap" ref="formRef" :model="formModel" :rules="formRules" :disabled="loading">
       <el-input class="code-input" placeholder="校验码" v-model="formModel.code" size="large" maxlength="6" clearable />
@@ -119,4 +119,4 @@ function toPre() {
     }
   }
 }
-</style>
+</style> -->

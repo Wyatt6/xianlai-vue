@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="box-wrap">
     <el-result class="box result" v-if="successReset" icon="success" title="密码已重置">
       <template #extra>
@@ -33,7 +33,7 @@
 <script setup>
 import ASC from '/app_settings_core'
 import { ref } from 'vue'
-import Validator from '~/utils/validator'
+import Validator from '@/utils/validator'
 import Storage from '~/utils/storage'
 import Logger from '~/utils/logger'
 import { notEmptyString } from '~/utils/common'
@@ -188,4 +188,4 @@ function cancel() {
     }
   }
 }
-</style>
+</style> -->
