@@ -111,6 +111,7 @@
               <template #default="scope">
                 <span v-if="notEmpty(scope.row.gender) && scope.row.gender === 'MALE'">男</span>
                 <span v-else-if="notEmpty(scope.row.gender) && scope.row.gender === 'FEMALE'">女</span>
+                <span v-else>未知</span>
               </template>
             </el-table-column>
             <el-table-column label="工号" prop="employeeNo" min-width="160" />
