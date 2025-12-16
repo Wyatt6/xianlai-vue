@@ -21,4 +21,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // 全局注册自定义指令
 installDirectives(app)
 
-await useSystemStore().initialize(app)
+useSystemStore().initialize(app)
