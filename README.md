@@ -113,3 +113,15 @@ docker run -d --name nginx \
 3. `npm run format` - 格式化所有代码
 4. `npm run lint` - 语法和编码规范校验
 5. `npm run build` - 编译和构建
+
+### 附录A：效果预览
+
+![iShot_2025-12-16_18.35.23](./.md_assets/README/iShot_2025-12-16_18.35.23.png)
+
+![iShot_2025-12-16_18.40.00](./.md_assets/README/iShot_2025-12-16_18.40.00.png)
+
+![iShot_2025-12-16_18.41.00](./.md_assets/README/iShot_2025-12-16_18.41.00.png)
+
+![iShot_2025-12-16_18.41.17](./.md_assets/README/iShot_2025-12-16_18.41.17.png)
+
+![iShot_2025-12-16_18.42.03](./.md_assets/README/iShot_2025-12-16_18.42.03.png)
