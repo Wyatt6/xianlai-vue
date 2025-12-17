@@ -105,7 +105,7 @@ docker run -d --name nginx \
     nginx:1.27.2
 ```
 
-到这里就完成了 XianLai 前端页面基于 Nginx 的部署，打开浏览器输入地址和端口就能访问。
+到这里就完成了 XianLai 前端页面基于 Nginx 的部署，打开浏览器输入地址和端口就能访问。超级管理员初始用户名和密码都是`superadmin`，请及时修改密码。
 
 ## 开发手册
 
