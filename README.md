@@ -114,7 +114,7 @@ docker run -d --name nginx \
 4. `npm run lint` - 语法和编码规范校验
 5. `npm run build` - 编译和构建
 
-### 附录A：效果预览
+## 附录A：效果预览
 
 ![iShot_2025-12-16_18.35.23](./.md_assets/README/iShot_2025-12-16_18.35.23.png)
 
