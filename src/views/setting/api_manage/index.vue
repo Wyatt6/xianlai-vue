@@ -30,8 +30,8 @@
             <el-input v-model="searchForm.url" clearable />
           </el-form-item>
           <el-form-item>
-            <el-button :icon="Search" @click="onSearch()">搜索</el-button>
-            <el-button :icon="Brush" @click="reset()">重置</el-button>
+            <el-button :icon="Search" :loading="loading" @click="onSearch()">搜索</el-button>
+            <el-button :icon="Brush" :loading="loading" @click="reset()">重置</el-button>
           </el-form-item></el-form
         >
         <div class="table-wrap">
