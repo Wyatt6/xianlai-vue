@@ -130,7 +130,7 @@ const form = ref({
 const loading = ref(false)
 // 表单参数初始化函数
 const initForm = () => {
-  title.value = '编辑路由【' + props.nowRow.title + ' (路由ID: ' + props.nowRow.id + ')】'
+  title.value = '编辑路由【' + props.nowRow.name + ' (路由ID: ' + props.nowRow.id + ')】'
   routeList.value = [{ id: 0, title: '根目录', children: props.routes }]
   // 用当前路由数据渲染表单初始数据
   form.value.sortId = props.nowRow.sortId

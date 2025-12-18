@@ -3,8 +3,8 @@
     <div class="card-wrap">
       <el-card class="card" shadow="never">
         <div class="btn-wrap">
-          <el-button size="small" type="primary" :icon="Plus" v-perm="['user:add']" @click="showAdd = true">创建用户</el-button>
-          <el-button size="small" type="success" :icon="Refresh" @click="refresh">刷新</el-button>
+          <el-button size="small" type="primary" :loading="loading" :icon="Plus" v-perm="['user:add']" @click="showAdd = true">创建用户</el-button>
+          <el-button size="small" type="success" :loading="loading" :icon="Refresh" @click="refresh">刷新</el-button>
           <el-button size="small" :icon="expandSeachBox ? ArrowUp : ArrowDown" @click="changeSearchBoxExpand()">
             {{ expandSeachBox ? '收起搜索框' : '展开搜索框' }}
           </el-button>
@@ -71,8 +71,8 @@
               <el-input v-model="searchForm.permission" clearable />
             </el-form-item>
             <el-form-item>
-              <el-button :icon="Search" @click="getList(1, formPageSize)">搜索</el-button>
-              <el-button :icon="Brush" @click="reset()">重置</el-button>
+              <el-button :icon="Search" :loading="loading" @click="getList(1, formPageSize)">搜索</el-button>
+              <el-button :icon="Brush" :loading="loading" @click="reset()">重置</el-button>
             </el-form-item>
           </el-form>
         </div>

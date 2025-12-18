@@ -10,18 +10,18 @@
             <el-tab-pane class="tab-page" v-for="tab in tabCtrl" :key="tab.category" :label="tab.label" :name="tab.category">
               <el-scrollbar class="scoll-wrap" height="100%">
                 <div class="option-wrap" v-for="(item, index) in formList[tab.category]" :key="index">
-                  <el-divider v-if="index > 0" />
-                  <div class="option-title">
-                    <span>{{ item.name }}</span>
-                    <el-button-group style="margin-left: 2.5rem" size="small">
-                      <el-button v-perm="['option:edit']" :icon="Edit" plain @click="onEdit(item)" />
-                      <el-button v-perm="['option:delete']" :icon="Delete" type="danger" @click="onDelete(item)" />
-                    </el-button-group>
-                  </div>
-                  <div class="option-sub-title" v-if="notEmpty(item.description)">
-                    <span>{{ item.description }}</span>
-                  </div>
-                  <el-card shadow="never" style="margin-top: 1rem">
+                  <el-card shadow="never" style="margin-bottom: 3rem">
+                    <div class="option-title">
+                      <span>{{ item.name }}</span>
+                      <el-button-group style="margin-left: 2.5rem" size="small">
+                        <el-button v-perm="['option:edit']" :icon="Edit" plain @click="onEdit(item)" />
+                        <el-button v-perm="['option:delete']" :icon="Delete" type="danger" @click="onDelete(item)" />
+                      </el-button-group>
+                    </div>
+                    <div class="option-sub-title" v-if="notEmpty(item.description)">
+                      <span>{{ item.description }}</span>
+                    </div>
+                    <el-divider />
                     <div class="option-row">
                       <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
                       <span class="row-item-title">Key:</span>
@@ -29,12 +29,12 @@
                     </div>
                     <div class="option-row">
                       <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                      <span class="row-item-title">当前参数值:</span>
+                      <span class="row-item-title" style="min-width: 7.5rem">当前参数值:</span>
                       <el-text class="row-item-value" type="primary">{{ item.optionValue }}</el-text>
                     </div>
                     <div class="option-row">
                       <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                      <span class="row-item-title">默认参数值:</span>
+                      <span class="row-item-title" style="min-width: 7.5rem">默认参数值:</span>
                       <el-text class="row-item-value" type="info">{{ item.defaultValue }}</el-text>
                     </div>
                     <div class="option-row">
@@ -253,32 +253,31 @@ function onTabClick(item) {
                 }
 
                 .option-sub-title {
-                  margin-top: 1rem;
+                  margin-top: 1.5rem;
                   font-size: 1.4rem;
                   color: var(--el-text-color-primary);
                 }
 
                 .option-row {
-                  margin-top: 1rem;
+                  margin-bottom: 1rem;
                   display: flex;
                   align-items: center;
 
                   .row-item-title {
-                    font-size: 1.6rem;
+                    font-size: 1.4rem;
                     font-weight: 500;
                     margin-right: 1rem;
                   }
 
                   .row-item-sub-title {
-                    font-size: 1.6rem;
+                    font-size: 1.4rem;
                     font-weight: 500;
                     color: var(--el-text-color-secondary);
                     margin-right: 1rem;
                   }
 
                   .row-item-value {
-                    font-size: 1.6rem;
-                    font-weight: 500;
+                    font-size: 1.4rem;
                   }
                 }
               }
