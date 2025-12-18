@@ -29,12 +29,12 @@
                     </div>
                     <div class="option-row">
                       <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                      <span class="row-item-title" style="min-width: 9rem">当前参数值:</span>
+                      <span class="row-item-title" style="min-width: 7.5rem">当前参数值:</span>
                       <el-text class="row-item-value" type="primary">{{ item.optionValue }}</el-text>
                     </div>
                     <div class="option-row">
                       <LocalIcon name="ri-arrow-right-s-fill" size="1.6rem" />
-                      <span class="row-item-title" style="min-width: 9rem">默认参数值:</span>
+                      <span class="row-item-title" style="min-width: 7.5rem">默认参数值:</span>
                       <el-text class="row-item-value" type="info">{{ item.defaultValue }}</el-text>
                     </div>
                     <div class="option-row">
@@ -246,7 +246,7 @@ function onTabClick(item) {
                 width: 98%;
 
                 .option-title {
-                  font-size: 2.6rem;
+                  font-size: 2.4rem;
                   font-weight: 700;
                   display: flex;
                   align-items: center;
@@ -254,7 +254,7 @@ function onTabClick(item) {
 
                 .option-sub-title {
                   margin-top: 1.5rem;
-                  font-size: 1.6rem;
+                  font-size: 1.4rem;
                   color: var(--el-text-color-primary);
                 }
 
@@ -264,21 +264,20 @@ function onTabClick(item) {
                   align-items: center;
 
                   .row-item-title {
-                    font-size: 1.6rem;
+                    font-size: 1.4rem;
                     font-weight: 500;
                     margin-right: 1rem;
                   }
 
                   .row-item-sub-title {
-                    font-size: 1.6rem;
+                    font-size: 1.4rem;
                     font-weight: 500;
                     color: var(--el-text-color-secondary);
                     margin-right: 1rem;
                   }
 
                   .row-item-value {
-                    font-size: 1.6rem;
-                    font-weight: 400;
+                    font-size: 1.4rem;
                   }
                 }
               }
