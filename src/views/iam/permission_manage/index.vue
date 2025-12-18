@@ -2,8 +2,8 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <el-card class="card" shadow="never">
-        <el-button size="small" type="primary" :icon="Plus" v-perm="['permission:add']" @click="showAdd = true">新增</el-button>
-        <el-button size="small" type="success" :icon="Refresh" @click="refresh()">刷新</el-button>
+        <el-button size="small" type="primary" :loading="loading" :icon="Plus" v-perm="['permission:add']" @click="showAdd = true">新增</el-button>
+        <el-button size="small" type="success" :loading="loading" :icon="Refresh" @click="refresh()">刷新</el-button>
         <el-form
           class="search-box-inline"
           :inline="true"
@@ -23,8 +23,8 @@
             <el-input v-model="searchForm.description" clearable />
           </el-form-item>
           <el-form-item>
-            <el-button :icon="Search" @click="onSearch()">搜索</el-button>
-            <el-button :icon="Brush" @click="reset()">重置</el-button>
+            <el-button :icon="Search" :loading="loading" @click="onSearch()">搜索</el-button>
+            <el-button :icon="Brush" :loading="loading" @click="reset()">重置</el-button>
           </el-form-item>
         </el-form>
         <div class="table-wrap">
