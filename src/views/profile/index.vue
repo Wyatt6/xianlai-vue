@@ -35,9 +35,9 @@
                   <el-divider />
                   <div class="info-detail">
                     <el-form :model="form" label-position="right" label-width="auto" label-suffix=":">
-                      <el-form-item label="电话号码">
+                      <el-form-item label="手机号码">
                         <el-text>{{ notEmpty(profile.phone) ? profile.phone : '暂未设置' }}</el-text>
-                        <el-button type="text" style="margin-left: 2rem">修改电话</el-button>
+                        <el-button type="text" style="margin-left: 2rem">修改号码</el-button>
                       </el-form-item>
                       <el-form-item label="电子邮箱">
                         <el-text>{{ notEmpty(profile.phone) ? profile.email : '暂未设置' }}</el-text>
