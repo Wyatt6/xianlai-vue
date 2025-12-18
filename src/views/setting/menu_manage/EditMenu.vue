@@ -69,7 +69,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="立即生效" prop="active">
+      <el-form-item label="生效" prop="active">
         <el-switch v-model="form.active" />
       </el-form-item>
     </el-form>
