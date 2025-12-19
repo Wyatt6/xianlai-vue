@@ -76,7 +76,7 @@
             <el-table-column label="手机" prop="phone" min-width="160" />
             <el-table-column label="电子邮箱" prop="email" min-width="250" />
             <el-table-column label="排序ID" align="center" prop="sortId" min-width="80" />
-            <el-table-column label="备注" prop="description" min-width="320" />
+            <el-table-column label="备注" prop="remark" min-width="320" />
             <el-table-column label="操作" align="center" width="100" fixed="right">
               <template #default="scope">
                 <el-button-group size="small">
@@ -103,11 +103,13 @@
       </el-card>
     </div>
     <AddSecretCode :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
+    <EditSecretCode :show="showEdit" :nowRow="nowRow" @close="showEdit = false" @afterEdit="afterEdit" />
   </div>
 </template>
 
 <script setup>
 import AddSecretCode from './AddSecretCode.vue'
+import EditSecretCode from './EditSecretCode.vue'
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
@@ -249,28 +251,36 @@ async function refresh() {
   }
 }
 
-// /**
-//  * 编辑角色
-//  */
-// const showEdit = ref(false)
-// function onEdit(row) {
-//   showEdit.value = true
-//   nowRow.value = row
-// }
-// // 编辑角色后处理，回显数据
-// function afterEdit(role) {
-//   for (let i = 0; i < formList.value.length; i++) {
-//     if (role.id === formList.value[i].id) {
-//       formList.value[i].sortId = role.sortId
-//       formList.value[i].identifier = role.identifier
-//       formList.value[i].name = role.name
-//       formList.value[i].active = role.active
-//       formList.value[i].description = role.description
-//       break
-//     }
-//   }
-//   currRowKey.value = role.id
-// }
+/**
+ * 编辑密码条目
+ */
+const showEdit = ref(false)
+function onEdit(row) {
+  showEdit.value = true
+  nowRow.value = row
+}
+// 编辑密码条目后处理，回显数据
+function afterEdit(secretCode) {
+  for (let i = 0; i < formList.value.length; i++) {
+    if (secretCode.id === formList.value[i].id) {
+      formList.value[i].sortId = secretCode.sortId
+      formList.value[i].category = secretCode.category
+      formList.value[i].title = secretCode.title
+      formList.value[i].username = secretCode.username
+      formList.value[i].code = secretCode.code
+      formList.value[i].tips = secretCode.tips
+      formList.value[i].twoFAS = secretCode.twoFAS
+      formList.value[i].appleId = secretCode.appleId
+      formList.value[i].wechat = secretCode.wechat
+      formList.value[i].alipay = secretCode.alipay
+      formList.value[i].phone = secretCode.phone
+      formList.value[i].email = secretCode.email
+      formList.value[i].remark = secretCode.remark
+      break
+    }
+  }
+  currRowKey.value = secretCode.id
+}
 
 /**
  * 删除密码条目
@@ -281,16 +291,16 @@ function onDelete(row) {
   const message = '删除后数据不可恢复！<br>请确认是否删除密码条目【' + (notEmpty(category) ? category + ' / ' : '') + title + '】？'
   ElMessageBox.confirm(message, '删除密码条目', { type: 'warning', dangerouslyUseHTMLString: true })
     .then(() => {
-      //       Api.request.toolkit.codebook.delete({ roleId: id }).then(result => {
-      //         if (result && result.success) {
-      //           const succMesg = '成功删除角色【' + identifier + (name ? ' / ' + name : '') + '】'
-      //           ElMessage.success(succMesg)
-      //           getList(formPageNum.value, formPageSize.value)
-      //         } else {
-      //           console.log('删除角色失败')
-      //           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除角色失败')
-      //         }
-      //       })
+      Api.request.toolkit.codebook.delete({ secretCodeId: id }).then(result => {
+        if (result && result.success) {
+          const succMesg = '成功删除密码条目【' + (notEmpty(category) ? category + ' / ' : '') + title + '】'
+          ElMessage.success(succMesg)
+          getList(formPageNum.value, formPageSize.value)
+        } else {
+          console.log('删除密码条目失败')
+          ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除密码条目失败')
+        }
+      })
     })
     .catch(() => {
       // 点击“取消”不做动作
