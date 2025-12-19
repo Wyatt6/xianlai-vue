@@ -3,9 +3,17 @@
     <div class="card-wrap">
       <el-card class="card" shadow="never">
         <div class="top-row-wrap">
-          <el-button size="small" type="primary" :loading="loading" :icon="Plus" v-perm="['role:add']" @click="showAdd = true">新增</el-button>
-          <el-button size="small" type="success" :loading="loading" :icon="Refresh" @click="refresh()">刷新</el-button>
-          <span class="warning-text">请不要保存任何未经加密处理的密码、密钥等敏感信息！！</span>
+          <div style="display: flex; align-items: center">
+            <el-button size="small" type="primary" :loading="loading" :icon="Plus" v-perm="['role:add']" @click="showAdd = true">新增</el-button>
+            <el-button size="small" type="success" :loading="loading" :icon="Refresh" @click="refresh()">刷新</el-button>
+            <span class="warning-text">请不要保存任何未经加密处理的密码、密钥等敏感信息！！</span>
+          </div>
+          <div style="display: flex; align-items: center">
+            <el-text>加密解密程序下载：</el-text>
+            <el-link type="primary" target="_blank" href="https://github.com/Wyatt6/xianlai-pwutil">Github</el-link>
+            <span>&nbsp;&nbsp;</span>
+            <el-link type="primary" target="_blank" href="https://gitee.com/wyatt6/xianlai-pwutil">Gitee</el-link>
+          </div>
         </div>
         <el-form
           class="search-box-inline"
@@ -379,6 +387,7 @@ onMounted(() => {
       .top-row-wrap {
         display: flex;
         align-items: center;
+        justify-content: space-between;
 
         .warning-text {
           margin-left: 5rem;
@@ -407,11 +416,12 @@ onMounted(() => {
         // 减去Navbar高度: $navbar-height
         // 减去Tagbar高度: $tagbar-height
         // 减去新增、刷新按钮高度: 2.4rem
+        // 减去加密解密程序下载链接高度: 2.4rem
         // 减去翻页组件高度: 4.4rem
         // 减去调整值: 6.7rem
         // 减去条件搜索框高度: 计算得到
         --search-box-height: v-bind(searchBoxHeight);
-        height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 2.4rem - 4.4rem - 6.7rem - var(--search-box-height));
+        height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 2.4rem - 3.1rem - 4.4rem - 6.7rem - var(--search-box-height));
       }
 
       .pagination-wrap {
