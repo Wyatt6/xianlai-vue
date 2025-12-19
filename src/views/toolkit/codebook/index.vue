@@ -40,7 +40,6 @@
             border
           >
             <el-table-column label="序号" align="center" min-width="60" type="index" :index="getIndex" />
-            <el-table-column label="排序ID" align="center" prop="sortId" min-width="80" />
             <el-table-column label="分组" prop="category" min-width="100" />
             <el-table-column label="名称" prop="title" min-width="200" />
             <el-table-column label="用户名" prop="username" min-width="200" />
@@ -76,6 +75,7 @@
             </el-table-column>
             <el-table-column label="手机" prop="phone" min-width="160" />
             <el-table-column label="电子邮箱" prop="email" min-width="250" />
+            <el-table-column label="排序ID" align="center" prop="sortId" min-width="80" />
             <el-table-column label="备注" prop="description" min-width="320" />
             <el-table-column label="操作" align="center" width="100" fixed="right">
               <template #default="scope">
@@ -102,10 +102,12 @@
         </div>
       </el-card>
     </div>
+    <AddSecretCode :show="showAdd" @close="showAdd = false" @afterAdd="afterAdd" />
   </div>
 </template>
 
 <script setup>
+import AddSecretCode from './AddSecretCode.vue'
 import { ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Refresh, Search, Brush, Edit, Delete } from '@element-plus/icons-vue'
@@ -222,20 +224,20 @@ function reset() {
   getList(1, formPageSize.value)
 }
 
-// /**
-//  * 新增角色
-//  */
-// const showAdd = ref(false)
-// async function afterAdd(role, rowNum) {
-//   searchForm.value = deafultSearchForm
-//   searched.value = false
-//   searchFormRef.value.resetFields()
-//   // 查询新角色所在分页
-//   formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
-//   await getList(formPageNum.value, formPageSize.value)
-//   // 选中最新增加的角色记录
-//   currRowKey.value = role.id
-// }
+/**
+ * 新增密码条目
+ */
+const showAdd = ref(false)
+async function afterAdd(secretCode, rowNum) {
+  searchForm.value = deafultSearchForm
+  searched.value = false
+  searchFormRef.value.resetFields()
+  // 查询新角色所在分页
+  formPageNum.value = Math.floor((rowNum - 1) / formPageSize.value) + 1
+  await getList(formPageNum.value, formPageSize.value)
+  // 选中最新增加的角色记录
+  currRowKey.value = secretCode.id
+}
 
 /**
  * 刷新表格
@@ -270,30 +272,30 @@ async function refresh() {
 //   currRowKey.value = role.id
 // }
 
-// /**
-//  * 删除角色
-//  * @param row 当前行
-//  */
-// function onDelete(row) {
-//   const { id, identifier, name } = row
-//   const message = '删除后数据不可恢复！<br>请确认是否删除角色【' + identifier + (name ? ' / ' + name : '') + '】？'
-//   ElMessageBox.confirm(message, '删除角色', { type: 'warning', dangerouslyUseHTMLString: true })
-//     .then(() => {
-//       Api.request.iam.role.delete({ roleId: id }).then(result => {
-//         if (result && result.success) {
-//           const succMesg = '成功删除角色【' + identifier + (name ? ' / ' + name : '') + '】'
-//           ElMessage.success(succMesg)
-//           getList(formPageNum.value, formPageSize.value)
-//         } else {
-//           console.log('删除角色失败')
-//           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除角色失败')
-//         }
-//       })
-//     })
-//     .catch(() => {
-//       // 点击“取消”不做动作
-//     })
-// }
+/**
+ * 删除密码条目
+ * @param row 当前行
+ */
+function onDelete(row) {
+  const { id, category, title } = row
+  const message = '删除后数据不可恢复！<br>请确认是否删除密码条目【' + (notEmpty(category) ? category + ' / ' : '') + title + '】？'
+  ElMessageBox.confirm(message, '删除密码条目', { type: 'warning', dangerouslyUseHTMLString: true })
+    .then(() => {
+      //       Api.request.toolkit.codebook.delete({ roleId: id }).then(result => {
+      //         if (result && result.success) {
+      //           const succMesg = '成功删除角色【' + identifier + (name ? ' / ' + name : '') + '】'
+      //           ElMessage.success(succMesg)
+      //           getList(formPageNum.value, formPageSize.value)
+      //         } else {
+      //           console.log('删除角色失败')
+      //           ElMessage.error(result && result.data.failMessage ? result.data.failMessage : '删除角色失败')
+      //         }
+      //       })
+    })
+    .catch(() => {
+      // 点击“取消”不做动作
+    })
+}
 
 /**
  * 计算序号
