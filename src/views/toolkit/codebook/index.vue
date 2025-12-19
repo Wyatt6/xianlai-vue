@@ -4,7 +4,7 @@
       <el-card class="card" shadow="never">
         <div class="top-row-wrap">
           <div style="display: flex; align-items: center">
-            <el-button size="small" type="primary" :loading="loading" :icon="Plus" v-perm="['role:add']" @click="showAdd = true">新增</el-button>
+            <el-button size="small" type="primary" :loading="loading" :icon="Plus" @click="showAdd = true">新增</el-button>
             <el-button size="small" type="success" :loading="loading" :icon="Refresh" @click="refresh()">刷新</el-button>
             <span class="warning-text">请不要保存任何未经加密处理的密码、密钥等敏感信息！！</span>
           </div>
