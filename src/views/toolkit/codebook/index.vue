@@ -48,11 +48,11 @@
             border
           >
             <el-table-column label="序号" align="center" min-width="60" type="index" :index="getIndex" />
-            <el-table-column label="分组" prop="category" min-width="200" />
+            <el-table-column label="分组" prop="category" min-width="180" />
             <el-table-column label="名称" prop="title" min-width="200" />
             <el-table-column label="用户名" prop="username" min-width="200" />
             <el-table-column label="加密密码" prop="code" min-width="300" />
-            <el-table-column label="密钥提示" prop="tips" min-width="120" />
+            <el-table-column label="密钥提示" prop="tips" min-width="130" />
             <el-table-column label="双因子" align="center" min-width="80">
               <template #default="scope">
                 <el-tag :type="scope.row.twoFAS ? 'success' : 'danger'">
