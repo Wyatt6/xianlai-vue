@@ -48,10 +48,10 @@
             border
           >
             <el-table-column label="序号" align="center" min-width="60" type="index" :index="getIndex" />
-            <el-table-column label="分组" prop="category" min-width="100" />
+            <el-table-column label="分组" prop="category" min-width="200" />
             <el-table-column label="名称" prop="title" min-width="200" />
             <el-table-column label="用户名" prop="username" min-width="200" />
-            <el-table-column label="加密密码" prop="code" min-width="250" />
+            <el-table-column label="加密密码" prop="code" min-width="300" />
             <el-table-column label="密钥提示" prop="tips" min-width="120" />
             <el-table-column label="双因子" align="center" min-width="80">
               <template #default="scope">
@@ -416,12 +416,11 @@ onMounted(() => {
         // 减去Navbar高度: $navbar-height
         // 减去Tagbar高度: $tagbar-height
         // 减去新增、刷新按钮高度: 2.4rem
-        // 减去加密解密程序下载链接高度: 2.4rem
         // 减去翻页组件高度: 4.4rem
         // 减去调整值: 6.7rem
         // 减去条件搜索框高度: 计算得到
         --search-box-height: v-bind(searchBoxHeight);
-        height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 2.4rem - 3.1rem - 4.4rem - 6.7rem - var(--search-box-height));
+        height: calc(100vh - vars.$navbar-height - vars.$tagbar-height - 2.4rem - 4.4rem - 6.7rem - var(--search-box-height));
       }
 
       .pagination-wrap {
