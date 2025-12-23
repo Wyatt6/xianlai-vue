@@ -30,6 +30,9 @@
           <el-form-item label="名称" prop="title">
             <el-input v-model="searchForm.title" clearable />
           </el-form-item>
+          <el-form-item label="备注" prop="title">
+            <el-input v-model="searchForm.remark" clearable />
+          </el-form-item>
           <el-form-item>
             <el-button :icon="Search" :loading="loading" @click="onSearch()">搜索</el-button>
             <el-button :icon="Brush" :loading="loading" @click="reset()">重置</el-button>
@@ -53,6 +56,7 @@
             <el-table-column label="用户名" prop="username" min-width="200" />
             <el-table-column label="加密密码" prop="code" min-width="300" />
             <el-table-column label="密钥提示" prop="tips" min-width="130" />
+            <el-table-column label="地址" prop="address" min-width="320" />
             <el-table-column label="双因子" align="center" min-width="80">
               <template #default="scope">
                 <el-tag :type="scope.row.twoFAS ? 'success' : 'danger'">
@@ -134,7 +138,8 @@ const searched = ref(Storage.get(SEARCHED_KEY) || false)
 const searchFormRef = ref()
 const deafultSearchForm = {
   category: null,
-  title: null
+  title: null,
+  remark: null
 }
 const searchForm = ref(Storage.get(SEARCHED_KEY) ? Storage.get(SEARCH_FORM_KEY) : deafultSearchForm)
 watch(
@@ -185,7 +190,8 @@ async function getList(num, size) {
     loading.value = true
     const condition = {
       category: searchForm.value.category,
-      title: searchForm.value.title
+      title: searchForm.value.title,
+      remark: searchForm.value.remark
     }
     console.log('条件查询密码本分页数据')
     Api.request.toolkit.codebook
@@ -221,6 +227,7 @@ function onSearch() {
   searched.value = false
   if (notEmpty(searchForm.value.category)) searched.value = true
   if (notEmpty(searchForm.value.title)) searched.value = true
+  if (notEmpty(searchForm.value.remark)) searched.value = true
   getList(1, formPageSize.value)
 }
 
@@ -277,6 +284,7 @@ function afterEdit(secretCode) {
       formList.value[i].username = secretCode.username
       formList.value[i].code = secretCode.code
       formList.value[i].tips = secretCode.tips
+      formList.value[i].address = secretCode.address
       formList.value[i].twoFAS = secretCode.twoFAS
       formList.value[i].appleId = secretCode.appleId
       formList.value[i].wechat = secretCode.wechat

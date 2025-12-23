@@ -17,6 +17,9 @@
         <el-form-item label="密钥提示" prop="tips">
           <el-input v-model="form.tips" clearable />
         </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input type="textarea" :rows="2" v-model="form.address" clearable />
+        </el-form-item>
         <el-form-item label="双因子">
           <el-switch v-model="form.twoFAS" />
         </el-form-item>
@@ -84,6 +87,7 @@ const form = ref({
   username: null,
   code: null,
   tips: null,
+  address: null,
   twoFAS: null,
   appleId: null,
   wechat: null,
@@ -105,6 +109,7 @@ function initForm() {
   form.value.username = props.nowRow.username
   form.value.code = props.nowRow.code
   form.value.tips = props.nowRow.tips
+  form.value.address = props.nowRow.address
   form.value.twoFAS = props.nowRow.twoFAS
   form.value.appleId = props.nowRow.appleId
   form.value.wechat = props.nowRow.wechat
@@ -141,6 +146,7 @@ function onConfirm() {
         form.value.username == props.nowRow.username &&
         form.value.code == props.nowRow.code &&
         form.value.tips == props.nowRow.tips &&
+        form.value.address == props.nowRow.address &&
         form.value.twoFAS == props.nowRow.twoFAS &&
         form.value.appleId == props.nowRow.appleId &&
         form.value.wechat == props.nowRow.wechat &&
@@ -162,6 +168,7 @@ function onConfirm() {
         username: form.value.username,
         code: form.value.code,
         tips: form.value.tips,
+        address: form.value.address,
         twoFAS: form.value.twoFAS,
         appleId: form.value.appleId,
         wechat: form.value.wechat,

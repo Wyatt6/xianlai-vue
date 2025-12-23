@@ -17,6 +17,9 @@
         <el-form-item label="密钥提示" prop="tips">
           <el-input v-model="form.tips" clearable />
         </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input type="textarea" :rows="2" v-model="form.address" clearable />
+        </el-form-item>
         <el-form-item label="双因子">
           <el-switch v-model="form.twoFAS" />
         </el-form-item>
@@ -79,6 +82,7 @@ const form = ref({
   username: null,
   code: null,
   tips: null,
+  address: null,
   twoFAS: false,
   appleId: false,
   wechat: false,
@@ -99,6 +103,7 @@ watch(
       form.value.username = null
       form.value.code = null
       form.value.tips = null
+      form.value.address = null
       form.value.twoFAS = false
       form.value.appleId = false
       form.value.wechat = false
