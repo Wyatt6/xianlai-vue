@@ -154,6 +154,7 @@ async function logout() {
           }
 
           .nickname {
+            font-weight: 500;
           }
         }
       }
